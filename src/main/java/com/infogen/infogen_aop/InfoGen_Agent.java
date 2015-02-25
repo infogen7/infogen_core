@@ -38,13 +38,14 @@ public class InfoGen_Agent {
 			help();
 			return;
 		}
-
+		InfoGen_Transformer transformer = new InfoGen_Transformer(infogen_advice);
 		synchronized (add_transformer_lock) {
-			InfoGen_Transformer transformer = new InfoGen_Transformer(infogen_advice);
 			try {
+				Class<?> reload_class = ClassLoader.getSystemClassLoader().loadClass(class_name);
+
 				inst.addTransformer(transformer, true);
 				System.out.println("重新加载class文件 -> " + class_name);
-				inst.retransformClasses(ClassLoader.getSystemClassLoader().loadClass(class_name));
+				inst.retransformClasses(reload_class);
 			} catch (Exception e) {
 				System.out.println("重新加载class文件失败 :");
 				e.printStackTrace();
