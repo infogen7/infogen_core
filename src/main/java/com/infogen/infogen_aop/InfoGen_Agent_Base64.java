@@ -10,9 +10,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
- * @author larry
- * @email larrylv@outlook.com
- * @version 创建时间 2015年2月11日 上午11:42:11
+ * @author larry/larrylv@outlook.com/创建时间 2015年2月27日 上午11:47:39
+ * @since 1.0
+ * @version 1.0
  */
 public class InfoGen_Agent_Base64 {
 	@SuppressWarnings("restriction")

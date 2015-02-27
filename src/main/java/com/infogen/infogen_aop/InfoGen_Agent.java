@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 
 /**
- * @author larry
- * @email larrylv@outlook.com
- * @version 创建时间 2015年2月10日 下午6:28:06
+ * @author larry/larrylv@outlook.com/创建时间 2015年2月27日 上午11:47:39
+ * @since 1.0
+ * @version 1.0
  */
 public class InfoGen_Agent {
 	private transient static String add_transformer_lock = "";

@@ -7,6 +7,7 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javassist.ClassPool;
@@ -14,9 +15,9 @@ import javassist.CtClass;
 import javassist.CtMethod;
 
 /**
- * @author larry
- * @email larrylv@outlook.com
- * @version 创建时间 2015年2月10日 下午6:28:44
+ * @author larry/larrylv@outlook.com/创建时间 2015年2月27日 上午11:47:39
+ * @since 1.0
+ * @version 1.0
  */
 public class InfoGen_Transformer implements ClassFileTransformer {
 	private transient String transform_lock = "";
@@ -42,23 +43,26 @@ public class InfoGen_Transformer implements ClassFileTransformer {
 			} else {
 				try {
 					CtClass ct_class = class_pool.get(class_name);
-					CtMethod ct_method = ct_class.getDeclaredMethod(infogen_advice.getMethod_name());
-					String long_local_variable = infogen_advice.getLong_local_variable();
-					if (long_local_variable != null) {
-						ct_method.addLocalVariable(long_local_variable, CtClass.longType);
-					}
-					String insert_before = infogen_advice.getInsert_before();
-					if (insert_before != null) {
-						ct_method.insertBefore(insert_before);
-					}
-					String insert_after = infogen_advice.getInsert_after();
-					if (insert_after != null) {
-						ct_method.insertAfter(insert_after);
-					}
-					String add_catch = infogen_advice.getAdd_catch();
-					if (add_catch != null) {
-						CtClass ctClass = class_pool.get("java.lang.Throwable");
-						ct_method.addCatch(add_catch, ctClass);
+					List<InfoGen_Agent_Advice_Method> methods = infogen_advice.getMethods();
+					for (InfoGen_Agent_Advice_Method infogen_agent_advice_method : methods) {
+						CtMethod ct_method = ct_class.getDeclaredMethod(infogen_agent_advice_method.getMethod_name());
+						String long_local_variable = infogen_agent_advice_method.getLong_local_variable();
+						if (long_local_variable != null) {
+							ct_method.addLocalVariable(long_local_variable, CtClass.longType);
+						}
+						String insert_before = infogen_agent_advice_method.getInsert_before();
+						if (insert_before != null) {
+							ct_method.insertBefore(insert_before);
+						}
+						String insert_after = infogen_agent_advice_method.getInsert_after();
+						if (insert_after != null) {
+							ct_method.insertAfter(insert_after);
+						}
+						String add_catch = infogen_agent_advice_method.getAdd_catch();
+						if (add_catch != null) {
+							CtClass ctClass = class_pool.get("java.lang.Throwable");
+							ct_method.addCatch(add_catch, ctClass);
+						}
 					}
 					class_name_map.put(class_name, ct_class.toBytecode());
 					return class_name_map.get(class_name);
