@@ -6,41 +6,63 @@
 
 # 使用示例
 
-	private void infogen_logger_attach(String class_name, String method_name, String user_defined) throws AgentLoadException, AgentInitializationException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		public void attach(Class<?> clazz) {
+		
+		String class_name = clazz.getName();
+		List<InfoGen_Agent_Advice_Method> methods = new ArrayList<>();
+		Method[] declaredMethods = clazz.getDeclaredMethods();
+		for (Method method : declaredMethods) {
+			methods.add(infogen_logger_attach(class_name, method.getName(), infogen_logger[0].value()));
+		}
+		if (methods.isEmpty()) {
+			return;
+		}
+
 		InfoGen_Agent_Advice infogen_advice = new InfoGen_Agent_Advice();
 		infogen_advice.setClass_name(class_name);
-		infogen_advice.setMethod_name(method_name);
+		infogen_advice.setMethods(methods);
+		InfoGen_Agent.class_advice_map.put(class_name, infogen_advice);
+		try {
+			loadAgent.invoke(virtualmachine_instance, new Object[] { agent_path, class_name });
+		} catch (Exception e) {
+			logger.error("注入代码失败", e);
+		}
+	}
 
-		infogen_advice.setLong_local_variable("infogen_logger_attach_start_millis");
-		infogen_advice.setInsert_before("infogen_logger_attach_start_millis =System.currentTimeMillis();");
+	private InfoGen_Agent_Advice_Method infogen_logger_attach(String class_name, String method_name, String user_defined) {
+
+		InfoGen_Agent_Advice_Method method = new InfoGen_Agent_Advice_Method();
+
+		method.setMethod_name(method_name);
+
+		method.setLong_local_variable("infogen_logger_attach_start_millis");
+		method.setInsert_before("infogen_logger_attach_start_millis =System.currentTimeMillis();");
 
 		StringBuilder sbd = new StringBuilder();
-		sbd.append("com.infogen.InfoGen_AOP.getInstance().infogen_logger_insert_after_call_back(");
+		sbd.append("com.infogen.aop.InfoGen_AOP.getInstance().infogen_logger_insert_after_call_back(");
 		sbd.append("\"").append(class_name).append("\"").append(",");
 		sbd.append("\"").append(method_name).append("\"").append(",");
 		sbd.append("\"").append(user_defined).append("\"").append(",");
 		sbd.append("infogen_logger_attach_start_millis, System.currentTimeMillis());");
-		infogen_advice.setInsert_after(sbd.toString());
+		method.setInsert_after(sbd.toString());
 
 		sbd.setLength(0);
-		sbd.append("com.infogen.InfoGen_AOP.getInstance().infogen_logger_add_catch_call_back(");
+		sbd.append("com.infogen.aop.InfoGen_AOP.getInstance().infogen_logger_add_catch_call_back(");
 		sbd.append("\"").append(class_name).append("\"").append(",");
 		sbd.append("\"").append(method_name).append("\"").append(",");
 		sbd.append("\"").append(user_defined).append("\"").append(",");
 		sbd.append("$e);throw $e;");
-		infogen_advice.setAdd_catch(sbd.toString());
+		method.setAdd_catch(sbd.toString());
 
-		loadAgent.invoke(virtualmachine_instance, new Object[] { agent_path, InfoGen_Agent_Base64.to_base64(infogen_advice).replace("\n", "") });
+		return method;
 	}
 
 	public void infogen_logger_insert_after_call_back(String class_name, String method_name, String user_defined, long start_millis, long end_millis) {
 		StringBuilder sbd = new StringBuilder();
 		sbd.append(class_name).append(",").append(method_name).append(",").append(end_millis - start_millis);
-		producer.send(new KeyedMessage<String, String>(InfoGen_Configuration.logger_topic_execution_time, class_name, sbd.toString()));
 	}
 
 	public void infogen_logger_add_catch_call_back(String class_name, String method_name, String user_defined, Throwable e) {
 		StringBuilder sbd = new StringBuilder();
 		sbd.append(class_name).append(",").append(method_name).append(",").append(e.getMessage()).append(",").append(Tool_Core.stacktrace(e));
-		producer.send(new KeyedMessage<String, String>(InfoGen_Configuration.logger_topic_exception, class_name, sbd.toString()));
 	}

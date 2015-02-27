@@ -3,8 +3,9 @@
  */
 package com.infogen.infogen_aop;
 
-import java.io.IOException;
 import java.lang.instrument.Instrumentation;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年2月27日 上午11:47:39
@@ -12,45 +13,35 @@ import java.lang.instrument.Instrumentation;
  * @version 1.0
  */
 public class InfoGen_Agent {
+	public static Map<String, InfoGen_Agent_Advice> class_advice_map = new HashMap<>();
 	private transient static String add_transformer_lock = "";
 
-	public static void agentmain(String agentArgs, Instrumentation inst) {
-
-		if (null == agentArgs || agentArgs.length() == 0) {
-			System.out.println("参数不能为空:");
-			help();
-			return;
-		}
-
-		InfoGen_Agent_Advice infogen_advice = null;
+	public static void agentmain(String class_name, Instrumentation inst) {
 		try {
-			infogen_advice = (InfoGen_Agent_Advice) InfoGen_Agent_Base64.to_Object(agentArgs, InfoGen_Agent_Advice.class);
-		} catch (ClassNotFoundException | IOException e) {
-			System.out.println("参数转换失败 :");
-			help();
-			e.printStackTrace();
-			return;
-		}
-
-		String class_name = infogen_advice.getClass_name();
-		if (null == class_name || class_name.length() == 0) {
-			System.out.println("class_name 参数为空:");
-			help();
-			return;
-		}
-		InfoGen_Transformer transformer = new InfoGen_Transformer(infogen_advice);
-		synchronized (add_transformer_lock) {
-			try {
-				Class<?> reload_class = ClassLoader.getSystemClassLoader().loadClass(class_name);
-
-				inst.addTransformer(transformer, true);
-				System.out.println("重新加载class文件 -> " + class_name);
-				inst.retransformClasses(reload_class);
-			} catch (Exception e) {
-				System.out.println("重新加载class文件失败 :");
-				e.printStackTrace();
+			if (null == class_name || class_name.length() == 0) {
+				System.out.println("参数不能为空:");
+				help();
+				return;
 			}
-			inst.removeTransformer(transformer);
+
+			InfoGen_Agent_Advice infogen_advice = class_advice_map.get(class_name);
+			InfoGen_Transformer transformer = new InfoGen_Transformer(infogen_advice);
+			synchronized (add_transformer_lock) {
+				try {
+					Class<?> reload_class = ClassLoader.getSystemClassLoader().loadClass(class_name);
+
+					inst.addTransformer(transformer, true);
+					System.out.println("重新加载class文件 -> " + class_name);
+					inst.retransformClasses(reload_class);
+				} catch (Exception e) {
+					System.out.println("重新加载class文件失败 :");
+					e.printStackTrace();
+				}
+				inst.removeTransformer(transformer);
+			}
+		} catch (Exception e) {
+			System.out.println("重新加载class文件失败 :");
+			e.printStackTrace();
 		}
 	}
 
@@ -60,11 +51,12 @@ public class InfoGen_Agent {
 	private static void help() {
 		System.out.println("eg -> ");
 		System.out.println("Infogen_Agent_Advice infogen_advice = new Infogen_Agent_Advice();");
-		System.out.println("infogen_advice.setClass_name(\"com.infogen.Service\");");
-		System.out.println("infogen_advice.setMethod_name(\"aop\");");
+		System.out.println("infogen_advice.setClass_name(class_name);");
+		System.out.println("infogen_advice.setMethod_name(method_name);");
 		System.out.println("infogen_advice.setInsert_before(\"Integer i = ($w)6;System.out.println($1+i);\");");
 		System.out.println("infogen_advice.setInsert_after(\"System.out.println(\"after\");\");");
 		System.out.println("infogen_advice.setAdd_catch(\"System.out.println(\"error\");throw $e;\");");
-		System.out.println("vm.loadAgent(Infogen_Agent_Path.path(), Infogen_Agent_Base64.to_base64(infogen_advice));");
+		System.out.println("InfoGen_Agent.class_advice_map.put(class_name, infogen_advice);");
+		System.out.println("vm.loadAgent(Infogen_Agent_Path.path(),class_name);");
 	}
 }
