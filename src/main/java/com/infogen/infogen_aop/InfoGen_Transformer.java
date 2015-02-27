@@ -23,10 +23,10 @@ public class InfoGen_Transformer implements ClassFileTransformer {
 	private transient String transform_lock = "";
 
 	private Map<String, byte[]> class_name_map = new HashMap<>();
-	private InfoGen_Agent_Advice infogen_advice = null;
+	private InfoGen_Agent_Advice_Class infogen_advice = null;
 	private ClassPool class_pool = ClassPool.getDefault();
 
-	public InfoGen_Transformer(InfoGen_Agent_Advice infogen_advice) {
+	public InfoGen_Transformer(InfoGen_Agent_Advice_Class infogen_advice) {
 		this.infogen_advice = infogen_advice;
 	}
 

@@ -12,7 +12,7 @@ import java.util.List;
  * @since 1.0
  * @version 1.0
  */
-public class InfoGen_Agent_Advice implements Serializable {
+public class InfoGen_Agent_Advice_Class implements Serializable {
 	private static final long serialVersionUID = -8990106273196548492L;
 	private String class_name;
 	private List<InfoGen_Agent_Advice_Method> methods = new ArrayList<>();

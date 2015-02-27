@@ -13,7 +13,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class InfoGen_Agent {
-	public static Map<String, InfoGen_Agent_Advice> class_advice_map = new HashMap<>();
+	public static Map<String, InfoGen_Agent_Advice_Class> class_advice_map = new HashMap<>();
 	private transient static String add_transformer_lock = "";
 
 	public static void agentmain(String class_name, Instrumentation inst) {
@@ -24,7 +24,7 @@ public class InfoGen_Agent {
 				return;
 			}
 
-			InfoGen_Agent_Advice infogen_advice = class_advice_map.get(class_name);
+			InfoGen_Agent_Advice_Class infogen_advice = class_advice_map.get(class_name);
 			InfoGen_Transformer transformer = new InfoGen_Transformer(infogen_advice);
 			synchronized (add_transformer_lock) {
 				try {
