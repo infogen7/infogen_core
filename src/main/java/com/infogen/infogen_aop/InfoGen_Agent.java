@@ -4,7 +4,7 @@
 package com.infogen.infogen_aop;
 
 import java.lang.instrument.Instrumentation;
-import java.util.HashMap;
+import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
@@ -13,35 +13,42 @@ import java.util.Map;
  * @version 1.0
  */
 public class InfoGen_Agent {
-	public static Map<String, InfoGen_Agent_Advice_Class> class_advice_map = new HashMap<>();
 	private transient static String add_transformer_lock = "";
 
 	public static void agentmain(String class_name, Instrumentation inst) {
-		try {
-			if (null == class_name || class_name.length() == 0) {
-				System.out.println("参数不能为空:");
-				help();
-				return;
-			}
-
-			InfoGen_Agent_Advice_Class infogen_advice = class_advice_map.get(class_name);
-			InfoGen_Transformer transformer = new InfoGen_Transformer(infogen_advice);
-			synchronized (add_transformer_lock) {
+		if (null == class_name || class_name.length() == 0) {
+			System.out.println("参数不能为空:");
+			help();
+			return;
+		}
+		Class<?>[] allLoadedClasses = inst.getAllLoadedClasses();
+		for (Class<?> clazz : allLoadedClasses) {
+			if (clazz.getName().equals("com.infogen.aop.InfoGen_AOP")) {
 				try {
-					Class<?> reload_class = ClassLoader.getSystemClassLoader().loadClass(class_name);
+					Field field = clazz.getField("class_advice_map");
+					@SuppressWarnings("unchecked")
+					Map<String, String> class_advice_map = (Map<String, String>) field.get(clazz);
+					String infogen_advice = class_advice_map.get(class_name);
+					if (infogen_advice != null) {
+						synchronized (add_transformer_lock) {
+							try {
+								InfoGen_Transformer transformer = new InfoGen_Transformer(Tool_Jackson.toObject(infogen_advice, InfoGen_Agent_Advice_Class.class), clazz);
+								inst.addTransformer(transformer, true);
+								System.out.println("重新加载class文件 -> " + class_name);
+								inst.retransformClasses(clazz);
+								inst.removeTransformer(transformer);
+							} catch (Exception e) {
+								System.out.println("重新加载class文件失败 :");
+								e.printStackTrace();
+							}
+						}
 
-					inst.addTransformer(transformer, true);
-					System.out.println("重新加载class文件 -> " + class_name);
-					inst.retransformClasses(reload_class);
-				} catch (Exception e) {
+					}
+				} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 					System.out.println("重新加载class文件失败 :");
 					e.printStackTrace();
 				}
-				inst.removeTransformer(transformer);
 			}
-		} catch (Exception e) {
-			System.out.println("重新加载class文件失败 :");
-			e.printStackTrace();
 		}
 	}
 

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -24,10 +25,12 @@ public class InfoGen_Transformer implements ClassFileTransformer {
 
 	private Map<String, byte[]> class_name_map = new HashMap<>();
 	private InfoGen_Agent_Advice_Class infogen_advice = null;
+	private Class<?> reload_class = null;
 	private ClassPool class_pool = ClassPool.getDefault();
 
-	public InfoGen_Transformer(InfoGen_Agent_Advice_Class infogen_advice) {
+	public InfoGen_Transformer(InfoGen_Agent_Advice_Class infogen_advice, Class<?> reload_class) {
 		this.infogen_advice = infogen_advice;
+		this.reload_class = reload_class;
 	}
 
 	@Override
@@ -42,6 +45,7 @@ public class InfoGen_Transformer implements ClassFileTransformer {
 				return bytecode;
 			} else {
 				try {
+					class_pool.insertClassPath(new ClassClassPath(reload_class));// war包下使用必须
 					CtClass ct_class = class_pool.get(class_name);
 					List<InfoGen_Agent_Advice_Method> methods = infogen_advice.getMethods();
 					for (InfoGen_Agent_Advice_Method infogen_agent_advice_method : methods) {
