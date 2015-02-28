@@ -14,9 +14,8 @@ public class InfoGen_Agent_Path {
 	// file:/home/xxx/workspace/infogen/lib/infogen_agent.jar
 	public static String path() {
 		String location = InfoGen_Agent_Path.class.getProtectionDomain().getCodeSource().getLocation().getFile();
-		location = location.replace("file:", "");
-		if (System.getProperty("os.name").indexOf("Windows") != -1) {
-			location = location.substring(1);
+		if (location.contains(".jar!")) {
+			location = location.substring(0, location.indexOf(".jar!")).concat(".jar");
 		}
 		return location;
 	}
