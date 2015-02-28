@@ -11,7 +11,7 @@
 	<url>https://github.com/larrylgq/infogen_aop</url>
 	<description>提供最基础的工具类</description>
 	<licenses>
-		<license>  
+		<license>
 			<name>The Apache Software License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
@@ -133,6 +133,37 @@
 								</goals>
 							</execution>
 						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.2</version>
+						<configuration>
+							<source>1.8</source>
+							<target>1.8</target>
+							<encoding>UTF-8</encoding>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<version>2.5</version>
+						<configuration>
+							<jarName>infogen_aop-${project.version}</jarName>
+							<archive>
+								<manifest>
+									<!-- 往Manifest.MF文件中添加ClassPath -->
+									<addClasspath>true</addClasspath>
+								</manifest>
+								<manifestEntries>
+									<Manifest-Version>${project.version}-SNAPSHOT</Manifest-Version>
+									<Archiver-Version>${project.version}-Release</Archiver-Version>
+									<Agent-Class>com.infogen.infogen_aop.InfoGen_Agent</Agent-Class>
+									<Can-Redefine-Classes>true</Can-Redefine-Classes>
+									<Can-Retransform-Classes>true</Can-Retransform-Classes>
+									<Premain-Class>com.infogen.infogen_aop.InfoGen_Agent</Premain-Class>
+								</manifestEntries>
+							</archive>
+						</configuration>
 					</plugin>
 				</plugins>
 
