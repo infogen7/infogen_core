@@ -4,7 +4,7 @@
 
 	<groupId>com.github.larrylgq</groupId>
 	<artifactId>infogen_aop</artifactId>
-	<version>V1.0.00R150228</version>
+	<version>V1.0.00R150301</version>
 	<packaging>jar</packaging>
 
 	<name>infogen_aop</name>
