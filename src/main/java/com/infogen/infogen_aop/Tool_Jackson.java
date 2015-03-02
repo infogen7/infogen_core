@@ -15,9 +15,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * @author larry
- * @email larrylv@outlook.com
- * @version 创建时间 2015年2月15日 上午11:57:38
+ * 
+ * @author larry/larrylv@outlook.com/创建时间 2015年3月2日 下午2:10:25
+ * @since 1.0
+ * @version 1.0
  */
 public class Tool_Jackson {
 	public static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -30,7 +31,7 @@ public class Tool_Jackson {
 		objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
 		// 允许反斜杆等字符
 		objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-		//允许出现对象中没有的字段
+		// 允许出现对象中没有的字段
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
