@@ -1,12 +1,14 @@
 /**
  * 
  */
-package com.infogen.infogen_aop;
+package com.infogen.aop.agent;
 
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Field;
 import java.util.Map;
+
+import com.infogen.aop.tools.Tool_Jackson;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年2月27日 上午11:47:39
@@ -22,11 +24,11 @@ public class InfoGen_Agent {
 			help();
 			return;
 		}
+		// Caused by: java.lang.ClassCastException: com.infogen.aop.agent.InfoGen_Agent_Advice_Class cannot be cast to com.infogen.aop.agent.InfoGen_Agent_Advice_Class
 		InfoGen_Agent_Advice_Class infogen_agent_advice_class = null;
-
 		Class<?>[] allLoadedClasses = inst.getAllLoadedClasses();
 		for (Class<?> clazz : allLoadedClasses) {
-			if (clazz.getName().equals("com.infogen.infogen_aop.InfoGen_Agent_Cache")) {
+			if (clazz.getName().equals("com.infogen.aop.agent.InfoGen_Agent_Cache")) {
 				try {
 					Field field = clazz.getField("class_advice_map");
 					@SuppressWarnings("unchecked")

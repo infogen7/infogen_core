@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.infogen.infogen_aop;
+package com.infogen.aop.agent;
 
 import java.io.Serializable;
 
