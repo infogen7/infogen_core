@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -49,7 +50,7 @@ public class InfoGen_AOP {
 	}
 
 	// ///////////////////////////////////////////////////////////component_scan/////////////////////////////////////////////////
-	private Set<Class<?>> classes;
+	private Set<Class<?>> classes = new LinkedHashSet<>();
 
 	public Set<Class<?>> getClasses() {
 		return classes;
