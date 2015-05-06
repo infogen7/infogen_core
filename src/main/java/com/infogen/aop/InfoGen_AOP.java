@@ -1,8 +1,3 @@
-/**
- * @author larry/larrylv@outlook.com
- * @date 创建时间 2015年4月30日 下午2:03:45
- * @version 1.0
- */
 package com.infogen.aop;
 
 import java.io.IOException;
@@ -14,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -56,22 +52,26 @@ public class InfoGen_AOP {
 		return classes;
 	}
 
-	private Map<Class<Annotation>, InfoGen_AOP_Handle> advices = new HashMap<>();
+	private Map<Class<Annotation>, InfoGen_AOP_Handle> advice_methods = new HashMap<>();
 
 	@SuppressWarnings("unchecked")
-	public void add_advice(Object clazz, InfoGen_AOP_Handle instance) {
+	public void add_advice_method(Object clazz, InfoGen_AOP_Handle instance) {
 		Objects.requireNonNull(clazz);
 		Objects.requireNonNull(instance);
 		try {
-			advices.put((Class<Annotation>) clazz, instance);
+			advice_methods.put((Class<Annotation>) clazz, instance);
 		} catch (java.lang.ClassCastException e) {
 			logger.error("clazz 不是注解类型", e);
 		}
 	}
 
+	public void config(Properties properties) {
+
+	}
+
 	public void start() {
 		classes.forEach((clazz) -> {
-			InfoGen_Advice.getInstance().attach(clazz, advices);
+			InfoGen_Advice.getInstance().attach(clazz, advice_methods);
 		});
 	}
 

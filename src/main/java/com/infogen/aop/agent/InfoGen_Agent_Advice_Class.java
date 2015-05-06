@@ -16,6 +16,7 @@ public class InfoGen_Agent_Advice_Class implements Serializable {
 	private static final long serialVersionUID = -8990106273196548492L;
 	private String class_name;
 	private List<InfoGen_Agent_Advice_Method> methods = new ArrayList<>();
+	private List<InfoGen_Agent_Advice_Field> fields = new ArrayList<>();
 
 	public String getClass_name() {
 		return class_name;
@@ -31,6 +32,14 @@ public class InfoGen_Agent_Advice_Class implements Serializable {
 
 	public void setMethods(List<InfoGen_Agent_Advice_Method> methods) {
 		this.methods = methods;
+	}
+
+	public List<InfoGen_Agent_Advice_Field> getFields() {
+		return fields;
+	}
+
+	public void setFields(List<InfoGen_Agent_Advice_Field> fields) {
+		this.fields = fields;
 	}
 
 }

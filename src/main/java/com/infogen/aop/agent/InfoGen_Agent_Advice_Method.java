@@ -17,6 +17,7 @@ public class InfoGen_Agent_Advice_Method implements Serializable {
 	private String insert_before;
 	private String insert_after;
 	private String add_catch;
+	private String annotation;
 
 	public String getMethod_name() {
 		return method_name;
@@ -44,6 +45,14 @@ public class InfoGen_Agent_Advice_Method implements Serializable {
 
 	public String getInsert_after() {
 		return insert_after;
+	}
+
+	public String getAnnotation() {
+		return annotation;
+	}
+
+	public void setAnnotation(String annotation) {
+		this.annotation = annotation;
 	}
 
 	public void setInsert_after(String insert_after) {

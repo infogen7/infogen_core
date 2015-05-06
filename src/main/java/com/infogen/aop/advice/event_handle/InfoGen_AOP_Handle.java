@@ -1,5 +1,10 @@
 package com.infogen.aop.advice.event_handle;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+import com.infogen.aop.agent.InfoGen_Agent_Advice_Field;
 import com.infogen.aop.agent.InfoGen_Agent_Advice_Method;
 
 /**
@@ -9,7 +14,7 @@ import com.infogen.aop.agent.InfoGen_Agent_Advice_Method;
  */
 public abstract class InfoGen_AOP_Handle {
 
-	public abstract InfoGen_Agent_Advice_Method attach(String class_name, String method_name, String user_defined);
+	public abstract InfoGen_Agent_Advice_Method attach_method(String class_name, Method method, Annotation annotation);
 
-	public abstract InfoGen_Agent_Advice_Method attach(String class_name, String method_name);
+	public abstract InfoGen_Agent_Advice_Field attach_field(String class_name, Field field, Annotation annotation);
 }

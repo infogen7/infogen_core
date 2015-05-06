@@ -13,6 +13,7 @@ import java.util.Map;
 import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.CtConstructor;
 import javassist.CtMethod;
 
 /**
@@ -23,7 +24,7 @@ import javassist.CtMethod;
 public class InfoGen_Transformer implements ClassFileTransformer {
 	private transient String transform_lock = "";
 
-	private Map<String, byte[]> class_name_map = new HashMap<>();
+	public static Map<String, byte[]> class_name_map = new HashMap<>();
 	private InfoGen_Agent_Advice_Class infogen_advice = null;
 	private Class<?> reload_class = null;
 	private ClassPool class_pool = ClassPool.getDefault();
@@ -47,6 +48,16 @@ public class InfoGen_Transformer implements ClassFileTransformer {
 				try {
 					class_pool.insertClassPath(new ClassClassPath(reload_class));// war包下使用必须
 					CtClass ct_class = class_pool.get(class_name);
+
+					List<InfoGen_Agent_Advice_Field> fields = infogen_advice.getFields();
+					for (InfoGen_Agent_Advice_Field infoGen_Agent_Advice_Field : fields) {
+						String insertAfter = new StringBuilder("this.").append(infoGen_Agent_Advice_Field.getField_name()).append(" = ").append(infoGen_Agent_Advice_Field.getValue()).toString();
+						CtConstructor[] constructors = ct_class.getConstructors();
+						for (CtConstructor ctConstructor : constructors) {
+							ctConstructor.insertAfter(insertAfter);
+						}
+					}
+
 					List<InfoGen_Agent_Advice_Method> methods = infogen_advice.getMethods();
 					for (InfoGen_Agent_Advice_Method infogen_agent_advice_method : methods) {
 						CtMethod ct_method = ct_class.getDeclaredMethod(infogen_agent_advice_method.getMethod_name());
@@ -68,6 +79,7 @@ public class InfoGen_Transformer implements ClassFileTransformer {
 							ct_method.addCatch(add_catch, ctClass);
 						}
 					}
+
 					class_name_map.put(class_name, ct_class.toBytecode());
 					return class_name_map.get(class_name);
 				} catch (Throwable e) {
