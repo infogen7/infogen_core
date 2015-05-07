@@ -4,8 +4,8 @@
 package com.infogen.aop.agent;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年2月27日 上午11:47:39
@@ -15,8 +15,8 @@ import java.util.List;
 public class InfoGen_Agent_Advice_Class implements Serializable {
 	private static final long serialVersionUID = -8990106273196548492L;
 	private String class_name;
-	private List<InfoGen_Agent_Advice_Method> methods = new ArrayList<>();
-	private List<InfoGen_Agent_Advice_Field> fields = new ArrayList<>();
+	private Set<InfoGen_Agent_Advice_Method> methods = new HashSet<>();
+	private Set<InfoGen_Agent_Advice_Field> fields = new HashSet<>();
 
 	public String getClass_name() {
 		return class_name;
@@ -26,19 +26,19 @@ public class InfoGen_Agent_Advice_Class implements Serializable {
 		this.class_name = class_name;
 	}
 
-	public List<InfoGen_Agent_Advice_Method> getMethods() {
+	public Set<InfoGen_Agent_Advice_Method> getMethods() {
 		return methods;
 	}
 
-	public void setMethods(List<InfoGen_Agent_Advice_Method> methods) {
+	public void setMethods(Set<InfoGen_Agent_Advice_Method> methods) {
 		this.methods = methods;
 	}
 
-	public List<InfoGen_Agent_Advice_Field> getFields() {
+	public Set<InfoGen_Agent_Advice_Field> getFields() {
 		return fields;
 	}
 
-	public void setFields(List<InfoGen_Agent_Advice_Field> fields) {
+	public void setFields(Set<InfoGen_Agent_Advice_Field> fields) {
 		this.fields = fields;
 	}
 

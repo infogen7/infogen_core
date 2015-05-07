@@ -13,11 +13,19 @@ import java.io.Serializable;
 public class InfoGen_Agent_Advice_Method implements Serializable {
 	private static final long serialVersionUID = -57940195739144408L;
 	private String method_name;
+	private String annotation;
 	private String long_local_variable;
 	private String insert_before;
 	private String insert_after;
 	private String add_catch;
-	private String annotation;
+
+	public static void main(String[] args) {
+
+	}
+
+	public void setAnnotation(String annotation) {
+		this.annotation = annotation;
+	}
 
 	public String getMethod_name() {
 		return method_name;
@@ -49,10 +57,6 @@ public class InfoGen_Agent_Advice_Method implements Serializable {
 
 	public String getAnnotation() {
 		return annotation;
-	}
-
-	public void setAnnotation(String annotation) {
-		this.annotation = annotation;
 	}
 
 	public void setInsert_after(String insert_after) {

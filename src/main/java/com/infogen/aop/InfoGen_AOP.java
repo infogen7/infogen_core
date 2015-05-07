@@ -1,15 +1,10 @@
 package com.infogen.aop;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -18,7 +13,6 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 import com.infogen.aop.advice.InfoGen_Advice;
-import com.infogen.aop.advice.event_handle.InfoGen_AOP_Handle;
 import com.infogen.aop.util.NativePath;
 
 /**
@@ -52,26 +46,9 @@ public class InfoGen_AOP {
 		return classes;
 	}
 
-	private Map<Class<Annotation>, InfoGen_AOP_Handle> advice_methods = new HashMap<>();
-
-	@SuppressWarnings("unchecked")
-	public void add_advice_method(Object clazz, InfoGen_AOP_Handle instance) {
-		Objects.requireNonNull(clazz);
-		Objects.requireNonNull(instance);
-		try {
-			advice_methods.put((Class<Annotation>) clazz, instance);
-		} catch (java.lang.ClassCastException e) {
-			logger.error("clazz 不是注解类型", e);
-		}
-	}
-
-	public void config(Properties properties) {
-
-	}
-
-	public void start() {
+	public void start(InfoGen_Advice infogen_advice) {
 		classes.forEach((clazz) -> {
-			InfoGen_Advice.getInstance().attach(clazz, advice_methods);
+			infogen_advice.attach(clazz);
 		});
 	}
 
