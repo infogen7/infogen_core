@@ -33,7 +33,7 @@ public class InfoGen_AOP {
 
 	private InfoGen_AOP() {
 		try {
-			find_all_class();
+			classes = auto_scan_absolute(NativePath.get_class_path());
 		} catch (IOException e) {
 			logger.error("扫描class失败:", e);
 		}
@@ -46,6 +46,10 @@ public class InfoGen_AOP {
 		return classes;
 	}
 
+	public void addClasses(Class<?> clazz) {
+		classes.add(clazz);
+	}
+
 	public void start(InfoGen_Advice infogen_advice) {
 		classes.forEach((clazz) -> {
 			infogen_advice.attach(clazz);
@@ -55,10 +59,10 @@ public class InfoGen_AOP {
 	private Pattern anonymous_inner_class_compile = Pattern.compile("^*[$][0-9]+\\.class$");
 
 	@SuppressWarnings("resource")
-	private Set<Class<?>> find_all_class() throws IOException {
-		String get_class_path = NativePath.get_class_path();
-		if (get_class_path.endsWith(".jar")) {
-			Enumeration<JarEntry> entries = new JarFile(get_class_path).entries();
+	private Set<Class<?>> auto_scan_absolute(String class_path) throws IOException {
+		Set<Class<?>> classes = new LinkedHashSet<>();
+		if (class_path.endsWith(".jar")) {
+			Enumeration<JarEntry> entries = new JarFile(class_path).entries();
 			while (entries.hasMoreElements()) {
 				JarEntry entry = entries.nextElement();
 				String class_name = entry.getName();
@@ -74,7 +78,7 @@ public class InfoGen_AOP {
 				}
 			}
 		} else {
-			Files.walk(Paths.get(get_class_path)).filter((path) -> {
+			Files.walk(Paths.get(class_path)).filter((path) -> {
 				String path_string = path.toString();
 				return path_string.endsWith(".class") && !anonymous_inner_class_compile.matcher(path_string).find();
 			}).forEach((name) -> {
