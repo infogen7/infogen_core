@@ -112,7 +112,12 @@ public class InfoGen_Advice {
 					Annotation annotation = annotations[0];
 					InfoGen_Agent_Advice_Method attach_method = value.attach_method(class_name, method, annotation);
 					if (attach_method != null) {
-						attach_method.setAnnotation(annotation.toString());
+						Class<?>[] parameterTypes = method.getParameterTypes();
+						StringBuilder stringbuilder = new StringBuilder();
+						for (Class<?> type : parameterTypes) {
+							stringbuilder.append(type.getName()).append(" ");
+						}
+						attach_method.setMethod_parameters(stringbuilder.toString().trim());
 						methods.add(attach_method);
 					}
 				}

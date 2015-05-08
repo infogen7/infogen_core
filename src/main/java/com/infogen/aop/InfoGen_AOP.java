@@ -50,7 +50,7 @@ public class InfoGen_AOP {
 		classes.add(clazz);
 	}
 
-	public void start(InfoGen_Advice infogen_advice) {
+	public void add_advice(InfoGen_Advice infogen_advice) {
 		classes.forEach((clazz) -> {
 			infogen_advice.attach(clazz);
 		});
