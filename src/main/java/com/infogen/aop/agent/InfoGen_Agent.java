@@ -29,7 +29,7 @@ public class InfoGen_Agent {
 						Field field = loadedClasse.getField("class_advice_map");
 						@SuppressWarnings("unchecked")
 						Map<String, String> class_advice_map = (Map<String, String>) field.get(loadedClasse);
-						for (String infogen_advice : class_advice_map.keySet()) {
+						for (String infogen_advice : class_advice_map.values()) {
 							infogen_agent_advice_class = Tool_Jackson.toObject(infogen_advice, InfoGen_Agent_Advice_Class.class);
 							for (Class<?> clazz : allLoadedClasses) {
 								if (clazz.getName().equals(infogen_agent_advice_class.getClass_name())) {
