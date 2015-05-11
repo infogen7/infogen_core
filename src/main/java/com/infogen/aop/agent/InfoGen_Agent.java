@@ -19,50 +19,39 @@ public class InfoGen_Agent {
 	private transient static String add_transformer_lock = "";
 
 	public static void agentmain(String class_name, Instrumentation inst) {
-		if (null == class_name || class_name.length() == 0) {
-			System.out.println("参数不能为空:");
-			help();
-			return;
-		}
 		// Caused by: java.lang.ClassCastException: com.infogen.aop.agent.InfoGen_Agent_Advice_Class cannot be cast to com.infogen.aop.agent.InfoGen_Agent_Advice_Class
 		InfoGen_Agent_Advice_Class infogen_agent_advice_class = null;
-		Class<?>[] allLoadedClasses = inst.getAllLoadedClasses();
-		for (Class<?> clazz : allLoadedClasses) {
-			if (clazz.getName().equals("com.infogen.aop.agent.InfoGen_Agent_Cache")) {
-				try {
-					Field field = clazz.getField("class_advice_map");
-					@SuppressWarnings("unchecked")
-					Map<String, String> class_advice_map = (Map<String, String>) field.get(clazz);
-					String infogen_advice = class_advice_map.get(class_name);
-					if (infogen_advice != null) {
-						infogen_agent_advice_class = Tool_Jackson.toObject(infogen_advice, InfoGen_Agent_Advice_Class.class);
-					}
-				} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | IOException e) {
-					System.out.println("重新加载class文件失败 :");
-					e.printStackTrace();
-				}
-			}
-		}
-
-		if (infogen_agent_advice_class != null) {
-			for (Class<?> clazz : allLoadedClasses) {
-				if (clazz.getName().equals(infogen_agent_advice_class.getClass_name())) {
-					synchronized (add_transformer_lock) {
-						try {
-							InfoGen_Transformer transformer = new InfoGen_Transformer(infogen_agent_advice_class, clazz);
-							inst.addTransformer(transformer, true);
-							System.out.println("重新加载class文件 -> " + class_name);
-							inst.retransformClasses(clazz);
-							inst.removeTransformer(transformer);
-						} catch (Exception e) {
-							System.out.println("重新加载class文件失败 :");
-							e.printStackTrace();
+		synchronized (add_transformer_lock) {
+			Class<?>[] allLoadedClasses = inst.getAllLoadedClasses();
+			for (Class<?> loadedClasse : allLoadedClasses) {
+				if (loadedClasse.getName().equals("com.infogen.aop.agent.InfoGen_Agent_Cache")) {
+					try {
+						Field field = loadedClasse.getField("class_advice_map");
+						@SuppressWarnings("unchecked")
+						Map<String, String> class_advice_map = (Map<String, String>) field.get(loadedClasse);
+						for (String infogen_advice : class_advice_map.keySet()) {
+							infogen_agent_advice_class = Tool_Jackson.toObject(infogen_advice, InfoGen_Agent_Advice_Class.class);
+							for (Class<?> clazz : allLoadedClasses) {
+								if (clazz.getName().equals(infogen_agent_advice_class.getClass_name())) {
+									try {
+										InfoGen_Transformer transformer = new InfoGen_Transformer(infogen_agent_advice_class, clazz);
+										inst.addTransformer(transformer, true);
+										System.out.println("重新加载class文件 -> " + class_name);
+										inst.retransformClasses(clazz);
+										inst.removeTransformer(transformer);
+									} catch (Exception e) {
+										System.out.println("重新加载class文件失败 :");
+										e.printStackTrace();
+									}
+								}
+							}
 						}
+					} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | IOException e) {
+						System.out.println("重新加载class文件失败 :");
+						e.printStackTrace();
 					}
 				}
 			}
-		} else {
-			System.out.println("没有对应的advice对象->" + class_name);
 		}
 
 	}
@@ -70,7 +59,7 @@ public class InfoGen_Agent {
 	public static void premain(String agentArgs, Instrumentation inst) {
 	}
 
-	private static void help() {
+	public static void help() {
 		System.out.println("eg -> ");
 		System.out.println("Infogen_Agent_Advice infogen_advice = new Infogen_Agent_Advice();");
 		System.out.println("infogen_advice.setClass_name(class_name);");
