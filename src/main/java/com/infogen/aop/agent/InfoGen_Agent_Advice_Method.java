@@ -18,6 +18,7 @@ public class InfoGen_Agent_Advice_Method implements Serializable {
 	private String insert_before;
 	private String insert_after;
 	private String add_catch;
+	private String set_exception_types;
 
 	public static void main(String[] args) {
 
@@ -69,6 +70,14 @@ public class InfoGen_Agent_Advice_Method implements Serializable {
 
 	public void setAdd_catch(String add_catch) {
 		this.add_catch = add_catch;
+	}
+
+	public String getSet_exception_types() {
+		return set_exception_types;
+	}
+
+	public void setSet_exception_types(String set_exception_types) {
+		this.set_exception_types = set_exception_types;
 	}
 
 }

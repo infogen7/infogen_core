@@ -18,7 +18,7 @@ import com.infogen.aop.tools.Tool_Jackson;
 public class InfoGen_Agent {
 	private transient static String add_transformer_lock = "";
 
-	public static void agentmain(String class_name, Instrumentation inst) {
+	public static void agentmain(String args, Instrumentation inst) {
 		// Caused by: java.lang.ClassCastException: com.infogen.aop.agent.InfoGen_Agent_Advice_Class cannot be cast to com.infogen.aop.agent.InfoGen_Agent_Advice_Class
 		InfoGen_Agent_Advice_Class infogen_agent_advice_class = null;
 		synchronized (add_transformer_lock) {
@@ -32,7 +32,8 @@ public class InfoGen_Agent {
 						for (String infogen_advice : class_advice_map.values()) {
 							infogen_agent_advice_class = Tool_Jackson.toObject(infogen_advice, InfoGen_Agent_Advice_Class.class);
 							for (Class<?> clazz : allLoadedClasses) {
-								if (clazz.getName().equals(infogen_agent_advice_class.getClass_name())) {
+								String class_name = infogen_agent_advice_class.getClass_name();
+								if (clazz.getName().equals(class_name)) {
 									try {
 										InfoGen_Transformer transformer = new InfoGen_Transformer(infogen_agent_advice_class, clazz);
 										inst.addTransformer(transformer, true);
