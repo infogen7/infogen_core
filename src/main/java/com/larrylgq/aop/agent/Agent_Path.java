@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.infogen.aop.agent;
+package com.larrylgq.aop.agent;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年2月27日 上午11:47:39

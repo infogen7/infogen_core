@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.infogen.aop.util;
+package com.larrylgq.aop.util;
 
 import java.net.URL;
 import java.net.URLClassLoader;

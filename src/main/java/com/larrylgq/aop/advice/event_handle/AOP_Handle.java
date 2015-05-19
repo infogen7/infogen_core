@@ -1,11 +1,11 @@
-package com.infogen.aop.advice.event_handle;
+package com.larrylgq.aop.advice.event_handle;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import com.infogen.aop.agent.Agent_Advice_Field;
-import com.infogen.aop.agent.Agent_Advice_Method;
+import com.larrylgq.aop.agent.Agent_Advice_Field;
+import com.larrylgq.aop.agent.Agent_Advice_Method;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年4月29日 下午3:35:56
