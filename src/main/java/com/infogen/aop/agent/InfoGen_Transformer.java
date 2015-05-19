@@ -81,19 +81,12 @@ public class InfoGen_Transformer implements ClassFileTransformer {
 						}
 						String set_exception_types = infogen_agent_advice_method.getSet_exception_types();
 						if (set_exception_types != null) {
-							for (CtClass ctClass : ct_method.getExceptionTypes()) {
-								System.out.println(ctClass.getName());
-							}
 							String[] split = set_exception_types.trim().split(",");
 							CtClass[] types = new CtClass[split.length];
 							for (int i = 0; i < split.length; i++) {
 								types[i] = class_pool.get(split[i]);
 							}
 							ct_method.setExceptionTypes(types);
-
-							for (CtClass ctClass : ct_method.getExceptionTypes()) {
-								System.out.println(ctClass.getName());
-							}
 						}
 
 					}
