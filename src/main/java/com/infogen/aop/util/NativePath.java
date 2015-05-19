@@ -11,9 +11,9 @@ import org.apache.log4j.Logger;
 /**
  * 获取linux和windows平台下各种发布测试环境下基于classpath的路径
  * 
- * @author larry
- * @email larrylv@outlook.com
- * @version 创建时间 2014年11月24日 下午4:11:57
+ * @author larry/larrylv@outlook.com/创建时间 2015年5月19日 上午11:51:48
+ * @since 1.0
+ * @version 1.0
  */
 public class NativePath {
 	public static final Logger logger = Logger.getLogger(NativePath.class.getName());
@@ -21,11 +21,11 @@ public class NativePath {
 	/**
 	 * 获取配置文件路径
 	 * 
-	 * @see class path为jar包的情况下,路径指向与jar包同级目录
-	 * @see jetty jar包独立部署方式,需要在maven中添加resources配置<targetPath>${project.build.directory }</targetPath>
-	 * @see tomcat发布,需要将配置文件放在/WEB-INF下面
+	 * class path为jar包的情况下,路径指向与jar包同级目录 jetty jar包独立部署方式,需要在maven中添加resources配置targetPath {project.build.directory} tomcat发布,需要将配置文件放在/WEB-INF下面
+	 * 
 	 * @param path
-	 * @return
+	 *            相对路径
+	 * @return 绝对路径
 	 */
 	public static Path get(String path) {
 		if (path.startsWith("/")) {
@@ -52,7 +52,7 @@ public class NativePath {
 	/**
 	 * 当前启动项目的class path (jar包地址或末尾不包含/的class文件夹地址)
 	 * 
-	 * @return
+	 * @return classpath
 	 */
 	public static String get_class_path() {
 		String java_class_path = System.getProperty("java.class.path");

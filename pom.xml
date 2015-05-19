@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.infogen</groupId>
+	<groupId>com.github.larrylgq</groupId>
 	<artifactId>infogen_aop</artifactId>
-	<version>V1.0.00R150430</version>
+	<version>V1.0.00R150519</version>
 	<packaging>jar</packaging>
 
 	<name>infogen_aop</name>

@@ -18,9 +18,9 @@ import org.jsoup.select.Elements;
 /**
  * 解析html
  * 
- * @author larry
- * @email larry.lv.word@gmail.com
- * @version 创建时间 2013-6-14 下午3:56:48
+ * @author larry/larrylv@outlook.com/创建时间 2015年5月19日 下午12:01:04
+ * @since 1.0
+ * @version 1.0
  */
 @Deprecated
 public class Tool_XML {
@@ -72,7 +72,17 @@ public class Tool_XML {
 	}
 
 	// ///////////////////////////////////////////////////////////////公有方法/////////////////////////////////////////////////////////////////////////////
-	/** 获取安全方法链的 elements */
+	/**
+	 * 获取安全方法链的 elements
+	 * 
+	 * @param attrbute
+	 *            说明
+	 * @param doc
+	 *            文档对象
+	 * @param aql
+	 *            查找语句
+	 * @return 找到的文档对象列表
+	 */
 	public static Elements elements(String attrbute, Element doc, String aql) {
 		logger.debug("#获取 html 节点组 safety ".concat(aql));
 		Elements elements = new Elements();
@@ -87,7 +97,6 @@ public class Tool_XML {
 		return elements;
 	}
 
-	/** 获取安全方法链的值，方法中出现错误,或者返回值为空时返回传入的 value */
 	/**
 	 * 根据jsoup 语句
 	 * 
@@ -99,7 +108,7 @@ public class Tool_XML {
 	 *            解析文档的 jsoup 分析语句
 	 * @param default_result
 	 *            如果根据 分析语句没有获得结果所返回的默认值
-	 * @return
+	 * @return 获取安全方法链的值，方法中出现错误,或者返回值为空时返回传入的 value
 	 */
 	public static String value(String attrbute, Element doc, String aql, String default_result) {
 		Object tmp_result = null;
@@ -122,6 +131,7 @@ public class Tool_XML {
 	 *            用于解析的jsoup 语句
 	 * @return 解析结果
 	 * @throws Exception
+	 *             返回运行过程中的异常
 	 */
 	private static Object analysis(Element doc, String aql) throws Exception {
 		Object result = doc;
@@ -144,12 +154,13 @@ public class Tool_XML {
 	}
 
 	/**
-	 * 根据 Element 获取值
-	 * 
 	 * @param element
+	 *            doc对象
 	 * @param args_string
-	 * @return
+	 *            查找参数
+	 * @return 根据 Element 获取值
 	 * @throws ParseException
+	 *             解析异常
 	 */
 	private static Object by_element(Element element, String args_string) throws ParseException {
 		args_string = args_string.trim();
@@ -187,12 +198,13 @@ public class Tool_XML {
 	}
 
 	/**
-	 * 根据 Elements 获取值
-	 * 
 	 * @param elements
+	 *            文档对象
 	 * @param args_string
-	 * @return
+	 *            查找参数
+	 * @return 根据 Elements 获取值
 	 * @throws ParseException
+	 *             解析异常
 	 */
 	private static Object by_elements(Elements elements, String args_string) throws ParseException {
 		args_string = args_string.trim();
@@ -212,9 +224,9 @@ public class Tool_XML {
 			return elements.text();
 		} else if (parse.hasOption(option_attr.getOpt())) {
 			return elements.attr(parse.getOptionValue(option_attr.getOpt()));
-		}else if (parse.hasOption(option_html.getOpt())) {
+		} else if (parse.hasOption(option_html.getOpt())) {
 			return elements.html();
-		}  else {
+		} else {
 			logger.warn("#方法不能识别该参数:".concat(args_string));
 			return null;
 		}
@@ -222,7 +234,14 @@ public class Tool_XML {
 
 	// /////////////////////////////映射 html 页面/////////////////////////////////////
 	/**
-	 * 映射本地的 html 文件为 document
+	 * 
+	 * @param path_html
+	 *            路径
+	 * @param encoding
+	 *            编码格式
+	 * @return 映射本地的 html 文件为 document
+	 * @throws IOException
+	 *             读取文件异常
 	 */
 	public static Document create_bypath(String path_html, String encoding) throws IOException {
 		File input = new File(path_html);
@@ -230,6 +249,12 @@ public class Tool_XML {
 		return doc;
 	}
 
+	/**
+	 * 
+	 * @param source
+	 *            文本文件
+	 * @return 生成的文档对象
+	 */
 	public static Document create(String source) {
 		source = source == null ? "" : source;
 		Document doc = Jsoup.parse(source);

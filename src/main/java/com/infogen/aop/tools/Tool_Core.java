@@ -25,18 +25,17 @@ import org.apache.log4j.Logger;
 /**
  * 基本工具方法
  * 
- * @author larry
- * @email larry.lv.word@gmail.com
- * @version 创建时间 2013-4-1 下午4:16:43
+ * @author larry/larrylv@outlook.com/创建时间 2015年5月19日 上午11:52:17
+ * @since 1.0
+ * @version 1.0
  */
 public class Tool_Core {
 	public static Logger logger = Logger.getLogger(Tool_Core.class.getName());
 
 	/**
-	 * 拼接打印 exception 栈内容
-	 * 
 	 * @param e
-	 * @return
+	 *            异常类
+	 * @return 拼接打印 exception 栈内容
 	 */
 	public static String stacktrace(Throwable e) {
 		StringBuilder stack_trace = new StringBuilder();
@@ -58,6 +57,7 @@ public class Tool_Core {
 	 * 创建文件并自动补全文件路径的缺失文件夹
 	 * 
 	 * @param paths
+	 *            文件路径
 	 */
 	public static void prepare_files(Path... paths) {
 		for (Path path : paths) {
@@ -72,11 +72,11 @@ public class Tool_Core {
 	}
 
 	/**
-	 * 加载文件为字符串
-	 * 
 	 * @param path
-	 * @return
+	 *            文件路径
+	 * @return 加载文件为字符串
 	 * @throws IOException
+	 *             读取文件异常
 	 */
 	public static String load_file(Path path) throws IOException {
 		// 获取缓存的服务配置
@@ -88,12 +88,13 @@ public class Tool_Core {
 	}
 
 	/**
-	 * MD5
-	 * 
 	 * @param password
+	 *            密码
 	 * @param salt
-	 * @return
+	 *            盐值
+	 * @return MD5
 	 * @throws NoSuchAlgorithmException
+	 *             加密异常
 	 */
 	public static String MD5(String password, String salt) throws NoSuchAlgorithmException {
 		MessageDigest instance = MessageDigest.getInstance("MD5");
@@ -112,9 +113,7 @@ public class Tool_Core {
 	}
 
 	/**
-	 * 获取本机IP
-	 * 
-	 * @return
+	 * @return 获取本机IP
 	 */
 	public static String getLocalIP() {
 		String ip = null;
@@ -153,9 +152,7 @@ public class Tool_Core {
 	}
 
 	/**
-	 * 获取本机主机名
-	 * 
-	 * @return
+	 * @return 获取本机主机名
 	 */
 	public static String getHostName() {
 		if (System.getenv("COMPUTERNAME") != null) {
@@ -177,14 +174,10 @@ public class Tool_Core {
 	}
 
 	/**
-	 * @trim
-	 * @替换中文空格的特殊字符为普通空格
-	 * @去掉字符串中前后的空格，并将中间多个连续的空格合并成一个
-	 * @去掉开头出现的空格
 	 * @param string
-	 * @return
+	 *            输入字符串
+	 * @return trim 替换中文空格的特殊字符为普通空格 去掉字符串中前后的空格，并将中间多个连续的空格合并成一个 去掉开头出现的空格
 	 */
-
 	public static String trim(String string) {
 		if (string == null) {
 			return null;
@@ -201,10 +194,10 @@ public class Tool_Core {
 	}
 
 	/**
-	 * IP转成数字类型
 	 * 
 	 * @param string_ip
-	 * @return
+	 *            ip的string类型
+	 * @return IP转成数字类型
 	 */
 	@Deprecated
 	public long ip_to_long(String string_ip) {
@@ -227,8 +220,10 @@ public class Tool_Core {
 	 * 通配符匹配
 	 * 
 	 * @param pattern
+	 *            规则
 	 * @param str
-	 * @return
+	 *            验证字符串
+	 * @return 是否验证成功
 	 */
 	@Deprecated
 	public static boolean pattern_match(String pattern, String str) {

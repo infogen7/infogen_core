@@ -9,9 +9,9 @@ import java.net.URLClassLoader;
 /**
  * 自定义类加载器
  * 
- * @author larry
- * @email larrylv@outlook.com
- * @version 创建时间 2015年2月25日 下午2:05:56
+ * @author larry/larrylv@outlook.com/创建时间 2015年5月19日 上午11:49:39
+ * @since 1.0
+ * @version 1.0
  */
 public class InfoGen_ClassLoader extends URLClassLoader {
 

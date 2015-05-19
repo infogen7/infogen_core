@@ -18,9 +18,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * json转换
  * 
- * @author larry
- * @email larrylv@outlook.com
- * @version 创建时间 2015年2月15日 上午11:57:38
+ * @author larry/larrylv@outlook.com/创建时间 2015年5月19日 下午12:00:41
+ * @since 1.0
+ * @version 1.0
  */
 public class Tool_Jackson {
 	public static Logger logger = Logger.getLogger(Tool_Jackson.class.getName());
