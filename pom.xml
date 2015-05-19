@@ -105,10 +105,10 @@
 						<manifestEntries>
 							<Manifest-Version>${project.version}-SNAPSHOT</Manifest-Version>
 							<Archiver-Version>${project.version}-Release</Archiver-Version>
-							<Agent-Class>com.infogen.aop.agent.InfoGen_Agent</Agent-Class>
+							<Agent-Class>com.infogen.aop.agent.AOP_Agent</Agent-Class>
 							<Can-Redefine-Classes>true</Can-Redefine-Classes>
 							<Can-Retransform-Classes>true</Can-Retransform-Classes>
-							<Premain-Class>com.infogen.aop.agent.InfoGen_Agent</Premain-Class>
+							<Premain-Class>com.infogen.aop.agent.AOP_Agent</Premain-Class>
 						</manifestEntries>
 					</archive>
 				</configuration>
