@@ -13,13 +13,13 @@ import java.net.URLClassLoader;
  * @since 1.0
  * @version 1.0
  */
-public class InfoGen_ClassLoader extends URLClassLoader {
+public class AOP_ClassLoader extends URLClassLoader {
 
-	public InfoGen_ClassLoader(URL[] urls) {
+	public AOP_ClassLoader(URL[] urls) {
 		super(urls);
 	}
 
-	public InfoGen_ClassLoader(URL[] urls, ClassLoader parent) {
+	public AOP_ClassLoader(URL[] urls, ClassLoader parent) {
 		super(urls, parent);
 	}
 

@@ -11,6 +11,6 @@ import java.util.Map;
  * @since 1.0
  * @version 1.0
  */
-public class InfoGen_Agent_Cache {
+public class Agent_Cache {
 	public static Map<String, String> class_advice_map = new HashMap<>();
 }

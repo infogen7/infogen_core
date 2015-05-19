@@ -22,14 +22,14 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import com.infogen.aop.advice.event_handle.InfoGen_AOP_Handle;
-import com.infogen.aop.agent.InfoGen_Agent_Advice_Class;
-import com.infogen.aop.agent.InfoGen_Agent_Advice_Field;
-import com.infogen.aop.agent.InfoGen_Agent_Advice_Method;
-import com.infogen.aop.agent.InfoGen_Agent_Cache;
-import com.infogen.aop.agent.InfoGen_Agent_Path;
+import com.infogen.aop.advice.event_handle.AOP_Handle;
+import com.infogen.aop.agent.Agent_Advice_Class;
+import com.infogen.aop.agent.Agent_Advice_Field;
+import com.infogen.aop.agent.Agent_Advice_Method;
+import com.infogen.aop.agent.Agent_Cache;
+import com.infogen.aop.agent.Agent_Path;
 import com.infogen.aop.tools.Tool_Jackson;
-import com.infogen.aop.util.InfoGen_ClassLoader;
+import com.infogen.aop.util.AOP_ClassLoader;
 import com.infogen.aop.util.NativePath;
 
 /**
@@ -37,22 +37,22 @@ import com.infogen.aop.util.NativePath;
  * @since 1.0
  * @version 1.0
  */
-public class InfoGen_AOP {
-	public final static Logger logger = Logger.getLogger(InfoGen_AOP.class.getName());
+public class AOP {
+	public final static Logger logger = Logger.getLogger(AOP.class.getName());
 
 	private static class InnerInstance {
-		public static InfoGen_AOP instance = new InfoGen_AOP();
+		public static AOP instance = new AOP();
 	}
 
-	public static InfoGen_AOP getInstance() {
+	public static AOP getInstance() {
 		return InnerInstance.instance;
 	}
 
-	private static InfoGen_ClassLoader classLoader = new InfoGen_ClassLoader(new URL[] {}, null);
+	private static AOP_ClassLoader classLoader = new AOP_ClassLoader(new URL[] {}, null);
 	private static Method loadAgent = null;
 	private static Object virtualmachine_instance = null;
 
-	private InfoGen_AOP() {
+	private AOP() {
 		try {
 			classes = auto_scan_absolute(NativePath.get_class_path());
 
@@ -85,10 +85,10 @@ public class InfoGen_AOP {
 	}
 
 	// 面向切面
-	private Map<Class<Annotation>, InfoGen_AOP_Handle> advice_methods = new HashMap<>();
+	private Map<Class<Annotation>, AOP_Handle> advice_methods = new HashMap<>();
 
 	@SuppressWarnings("unchecked")
-	public void add_advice_method(Object clazz, InfoGen_AOP_Handle instance) {
+	public void add_advice_method(Object clazz, AOP_Handle instance) {
 		Objects.requireNonNull(clazz);
 		Objects.requireNonNull(instance);
 		try {
@@ -99,14 +99,14 @@ public class InfoGen_AOP {
 	}
 
 	// 依赖注入
-	private Map<String, Set<InfoGen_Agent_Advice_Field>> map_autowireds = new HashMap<>();
+	private Map<String, Set<Agent_Advice_Field>> map_autowireds = new HashMap<>();
 
 	public void add_autowired_field(String class_name, String field_name, String value) {
-		InfoGen_Agent_Advice_Field infogen_agent_advice_field = new InfoGen_Agent_Advice_Field();
+		Agent_Advice_Field infogen_agent_advice_field = new Agent_Advice_Field();
 		infogen_agent_advice_field.setField_name(field_name);
 		infogen_agent_advice_field.setValue(value);
 
-		Set<InfoGen_Agent_Advice_Field> orDefault = map_autowireds.getOrDefault(class_name, new HashSet<InfoGen_Agent_Advice_Field>());
+		Set<Agent_Advice_Field> orDefault = map_autowireds.getOrDefault(class_name, new HashSet<Agent_Advice_Field>());
 		orDefault.add(infogen_agent_advice_field);
 		map_autowireds.put(class_name, orDefault);
 	}
@@ -114,18 +114,18 @@ public class InfoGen_AOP {
 	//
 	public void attach(Class<?> clazz) {
 		String class_name = clazz.getName();
-		Set<InfoGen_Agent_Advice_Method> methods = new HashSet<>();
+		Set<Agent_Advice_Method> methods = new HashSet<>();
 
 		Method[] declaredMethods = clazz.getDeclaredMethods();
 		for (Method method : declaredMethods) {
-			for (Entry<Class<Annotation>, InfoGen_AOP_Handle> advice : advice_methods.entrySet()) {
+			for (Entry<Class<Annotation>, AOP_Handle> advice : advice_methods.entrySet()) {
 				Class<Annotation> key = advice.getKey();
-				InfoGen_AOP_Handle value = advice.getValue();
+				AOP_Handle value = advice.getValue();
 
 				Annotation[] annotations = method.getAnnotationsByType(key);
 				if (annotations.length != 0) {
 					Annotation annotation = annotations[0];
-					InfoGen_Agent_Advice_Method attach_method = value.attach_method(class_name, method, annotation);
+					Agent_Advice_Method attach_method = value.attach_method(class_name, method, annotation);
 					if (attach_method != null) {
 						Class<?>[] parameterTypes = method.getParameterTypes();
 						StringBuilder stringbuilder = new StringBuilder();
@@ -139,16 +139,16 @@ public class InfoGen_AOP {
 			}
 		}
 
-		Set<InfoGen_Agent_Advice_Field> fields = map_autowireds.getOrDefault(class_name, new HashSet<InfoGen_Agent_Advice_Field>());
+		Set<Agent_Advice_Field> fields = map_autowireds.getOrDefault(class_name, new HashSet<Agent_Advice_Field>());
 
 		if (methods.isEmpty() && fields.isEmpty()) {
 			return;
 		}
-		InfoGen_Agent_Advice_Class infogen_advice = new InfoGen_Agent_Advice_Class();
+		Agent_Advice_Class infogen_advice = new Agent_Advice_Class();
 		infogen_advice.setClass_name(class_name);
 		infogen_advice.setMethods(methods);
 		infogen_advice.setFields(fields);
-		InfoGen_Agent_Cache.class_advice_map.put(class_name, Tool_Jackson.toJson(infogen_advice));
+		Agent_Cache.class_advice_map.put(class_name, Tool_Jackson.toJson(infogen_advice));
 	}
 
 	//
@@ -158,7 +158,7 @@ public class InfoGen_AOP {
 		});
 
 		try {
-			loadAgent.invoke(virtualmachine_instance, new Object[] { InfoGen_Agent_Path.path(), "" });
+			loadAgent.invoke(virtualmachine_instance, new Object[] { Agent_Path.path(), "" });
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			logger.error("注入代码失败", e);
 		}

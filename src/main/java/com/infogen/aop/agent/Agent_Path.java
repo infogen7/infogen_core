@@ -8,12 +8,12 @@ package com.infogen.aop.agent;
  * @since 1.0
  * @version 1.0
  */
-public class InfoGen_Agent_Path {
+public class Agent_Path {
 
 	// file:/home/xxx/.m2/repository/com/infogen/infogen_agent/V1.0.00R150210/infogen_agent-V1.0.00R150210.jar
 	// file:/home/xxx/workspace/infogen/lib/infogen_agent.jar!xxxx.class
 	public static String path() {
-		String location = InfoGen_Agent_Path.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+		String location = Agent_Path.class.getProtectionDomain().getCodeSource().getLocation().getFile();
 		location = location.replace("file:", "");
 		if (System.getProperty("os.name").indexOf("Windows") != -1) {
 			location = location.substring(1);

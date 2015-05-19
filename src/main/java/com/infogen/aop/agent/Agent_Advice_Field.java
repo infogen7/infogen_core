@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @since 1.0
  * @version 1.0
  */
-public class InfoGen_Agent_Advice_Field implements Serializable {
+public class Agent_Advice_Field implements Serializable {
 	private static final long serialVersionUID = 4011923307122937602L;
 	private String field_name;
 	private String value;

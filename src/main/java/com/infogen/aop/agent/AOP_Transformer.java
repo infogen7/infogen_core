@@ -19,13 +19,13 @@ import javassist.CtMethod;
  * @since 1.0
  * @version 1.0
  */
-public class InfoGen_Transformer implements ClassFileTransformer {
+public class AOP_Transformer implements ClassFileTransformer {
 
-	private InfoGen_Agent_Advice_Class infogen_advice = null;
+	private Agent_Advice_Class infogen_advice = null;
 	private Class<?> reload_class = null;
 	private ClassPool class_pool = ClassPool.getDefault();
 
-	public InfoGen_Transformer(InfoGen_Agent_Advice_Class infogen_advice, Class<?> reload_class) {
+	public AOP_Transformer(Agent_Advice_Class infogen_advice, Class<?> reload_class) {
 		this.infogen_advice = infogen_advice;
 		this.reload_class = reload_class;
 	}
@@ -42,8 +42,8 @@ public class InfoGen_Transformer implements ClassFileTransformer {
 			ct_class.defrost();
 
 			//
-			Set<InfoGen_Agent_Advice_Field> fields = infogen_advice.getFields();
-			for (InfoGen_Agent_Advice_Field infoGen_Agent_Advice_Field : fields) {
+			Set<Agent_Advice_Field> fields = infogen_advice.getFields();
+			for (Agent_Advice_Field infoGen_Agent_Advice_Field : fields) {
 				String insertAfter = new StringBuilder("this.").append(infoGen_Agent_Advice_Field.getField_name()).append(" = ").append(infoGen_Agent_Advice_Field.getValue()).toString();
 				CtConstructor[] constructors = ct_class.getConstructors();
 				for (CtConstructor ctConstructor : constructors) {
@@ -52,8 +52,8 @@ public class InfoGen_Transformer implements ClassFileTransformer {
 			}
 
 			//
-			Set<InfoGen_Agent_Advice_Method> methods = infogen_advice.getMethods();
-			for (InfoGen_Agent_Advice_Method infogen_agent_advice_method : methods) {
+			Set<Agent_Advice_Method> methods = infogen_advice.getMethods();
+			for (Agent_Advice_Method infogen_agent_advice_method : methods) {
 				CtMethod[] declaredMethods = ct_class.getDeclaredMethods(infogen_agent_advice_method.getMethod_name());
 				for (CtMethod ct_method : declaredMethods) {
 					CtClass[] parameterTypes = ct_method.getParameterTypes();
