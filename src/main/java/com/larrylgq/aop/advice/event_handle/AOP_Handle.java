@@ -1,10 +1,8 @@
 package com.larrylgq.aop.advice.event_handle;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import com.larrylgq.aop.agent.Agent_Advice_Field;
 import com.larrylgq.aop.agent.Agent_Advice_Method;
 
 /**
@@ -15,6 +13,4 @@ import com.larrylgq.aop.agent.Agent_Advice_Method;
 public abstract class AOP_Handle {
 
 	public abstract Agent_Advice_Method attach_method(String class_name, Method method, Annotation annotation);
-
-	public abstract Agent_Advice_Field attach_field(String class_name, Field field, Annotation annotation);
 }
