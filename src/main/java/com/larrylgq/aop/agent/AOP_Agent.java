@@ -50,6 +50,7 @@ public class AOP_Agent {
 					} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | IOException e) {
 						System.out.println("重新加载class文件失败 :");
 						e.printStackTrace();
+						help();
 					}
 				}
 			}
