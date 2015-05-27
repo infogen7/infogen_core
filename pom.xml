@@ -4,7 +4,7 @@
 
 	<groupId>com.github.larrylgq</groupId>
 	<artifactId>infogen_aop</artifactId>
-	<version>V1.0.00R150520</version>
+	<version>V1.0.00R150521</version>
 	<packaging>jar</packaging>
 
 	<name>infogen_aop</name>
@@ -105,10 +105,10 @@
 						<manifestEntries>
 							<Manifest-Version>${project.version}-SNAPSHOT</Manifest-Version>
 							<Archiver-Version>${project.version}-Release</Archiver-Version>
-							<Agent-Class>com.infogen.aop.agent.AOP_Agent</Agent-Class>
+							<Agent-Class>com.larrylgq.aop.agent.AOP_Agent</Agent-Class>
 							<Can-Redefine-Classes>true</Can-Redefine-Classes>
 							<Can-Retransform-Classes>true</Can-Retransform-Classes>
-							<Premain-Class>com.infogen.aop.agent.AOP_Agent</Premain-Class>
+							<Premain-Class>com.larrylgq.aop.agent.AOP_Agent</Premain-Class>
 						</manifestEntries>
 					</archive>
 				</configuration>

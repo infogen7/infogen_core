@@ -62,13 +62,8 @@ public class AOP_Agent {
 
 	public static void help() {
 		System.out.println("eg -> ");
-		System.out.println("Infogen_Agent_Advice infogen_advice = new Infogen_Agent_Advice();");
-		System.out.println("infogen_advice.setClass_name(class_name);");
-		System.out.println("infogen_advice.setMethod_name(method_name);");
-		System.out.println("infogen_advice.setInsert_before(\"Integer i = ($w)6;System.out.println($1+i);\");");
-		System.out.println("infogen_advice.setInsert_after(\"System.out.println(\"after\");\");");
-		System.out.println("infogen_advice.setAdd_catch(\"System.out.println(\"error\");throw $e;\");");
-		System.out.println("InfoGen_Agent.class_advice_map.put(class_name, infogen_advice);");
-		System.out.println("vm.loadAgent(Infogen_Agent_Path.path(),class_name);");
+		System.out.println("AOP.getInstance().add_advice_method(Authc.class, new InfoGen_AOP_Handle_Authc());");
+		System.out.println("AOP.getInstance().add_autowired_field(\"com.infogen.infogen_demo.service.Signup\", \"user_dao\", \"new com.infogen.infogen_demo.dao.User_DAO_Impl();\");");
+		System.out.println("AOP.getInstance().advice();");
 	}
 }
