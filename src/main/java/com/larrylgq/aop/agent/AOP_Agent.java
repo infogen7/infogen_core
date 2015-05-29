@@ -24,7 +24,7 @@ public class AOP_Agent {
 		synchronized (add_transformer_lock) {
 			Class<?>[] allLoadedClasses = inst.getAllLoadedClasses();
 			for (Class<?> loadedClasse : allLoadedClasses) {
-				if (loadedClasse.getName().equals("com.infogen.aop.agent.InfoGen_Agent_Cache")) {
+				if (loadedClasse.getName().equals("com.larrylgq.aop.agent.Agent_Cache")) {
 					try {
 						Field field = loadedClasse.getField("class_advice_map");
 						@SuppressWarnings("unchecked")
