@@ -19,6 +19,7 @@ public class AOP_Agent {
 	private transient static String add_transformer_lock = "";
 
 	public static void agentmain(String args, Instrumentation inst) {
+		instrumentation = inst;
 		// Caused by: java.lang.ClassCastException: com.infogen.aop.agent.InfoGen_Agent_Advice_Class cannot be cast to com.infogen.aop.agent.InfoGen_Agent_Advice_Class
 		Agent_Advice_Class infogen_agent_advice_class = null;
 		synchronized (add_transformer_lock) {
