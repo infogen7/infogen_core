@@ -58,7 +58,14 @@ public class AOP_Agent {
 
 	}
 
-	public static void premain(String agentArgs, Instrumentation inst) {
+	private static Instrumentation instrumentation;
+
+	public static void premain(String args, Instrumentation inst) {
+		instrumentation = inst;
+	}
+
+	public static long getObjectSize(Object o) {
+		return instrumentation.getObjectSize(o);
 	}
 
 	public static void help() {
