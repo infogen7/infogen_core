@@ -8,11 +8,8 @@ import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.Map;
-import java.util.Set;
 
 import com.larrylgq.aop.tools.Tool_Jackson;
 
@@ -71,66 +68,86 @@ public class AOP_Agent {
 		instrumentation = inst;
 	}
 
-	public static long getObjectSize(Object o) {
-		return instrumentation.getObjectSize(o);
+	/**
+	 * Calls java.lang.instrument.Instrument.getObjectSize(object).
+	 * 
+	 * @param object
+	 *            the object to size
+	 * @return an implementation-specific approximation of the amount of storage consumed by the specified object.
+	 * 
+	 * @see java#lang#instrument#Instrument#Instrumentation#getObjectSize(Object objectToSize)
+	 */
+	public static long sizeOf(Object object) {
+		if (instrumentation == null) {
+			return -1;
+		}
+
+		return instrumentation.getObjectSize(object);
 	}
 
-	public static long getFullObjectSize(Object o) {
-		// 递归计算当前对象占用空间总大小，包括当前类和超类的实例字段大小以及实例字段引用对象大小
-		Set<Object> visited = new HashSet<Object>();
-		Deque<Object> deque = new ArrayDeque<Object>();
-		deque.add(o);
-		long size = 0L;
-		while (deque.size() > 0) {
-			Object obj = deque.poll();
-			// sizeOf的时候已经计基本类型和引用的长度，包括数组
-			size += skipObject(visited, obj) ? 0L : getObjectSize(obj);
-			Class<?> tmpObjClass = obj.getClass();
-			if (tmpObjClass.isArray()) {
-				// [I , [F 基本类型名字长度是2
-				if (tmpObjClass.getName().length() > 2) {
-					for (int i = 0, len = Array.getLength(obj); i < len; i++) {
-						Object tmp = Array.get(obj, i);
-						if (tmp != null) {
-							// 非基本类型需要深度遍历其对象
-							deque.add(Array.get(obj, i));
-						}
-					}
-				}
-			} else {
-				while (tmpObjClass != null) {
-					Field[] fields = tmpObjClass.getDeclaredFields();
-					for (Field field : fields) {
-						if (Modifier.isStatic(field.getModifiers()) // 静态不计
-								|| field.getType().isPrimitive()) { // 基本类型不重复计
-							continue;
-						}
+	/**
+	 * Calculates full size of object iterating over its hierarchy graph.
+	 * 
+	 * @param obj
+	 *            object to calculate size of
+	 * @return object size
+	 */
+	public static long deepSizeOf(Object obj) {
+		Map<Object, Object> visited = new IdentityHashMap<Object, Object>();
+		long result = internalSizeOf(obj, visited);
+		visited.clear();
+		return result;
+	}
 
-						field.setAccessible(true);
-						Object fieldValue;
-						try {
-							fieldValue = field.get(obj);
-						} catch (IllegalArgumentException | IllegalAccessException e) {
-							continue;
-						}
-						if (fieldValue == null) {
-							continue;
-						}
-						deque.add(fieldValue);
-					}
-					tmpObjClass = tmpObjClass.getSuperclass();
+	private static boolean skipObject(Object obj, Map<Object, Object> visited) {
+		return (obj == null) || visited.containsKey(obj);
+	}
+
+	private static long internalSizeOf(Object obj, Map<Object, Object> visited) {
+		if (skipObject(obj, visited)) {
+			return 0;
+		}
+		visited.put(obj, null);
+
+		long result = 0;
+		// get size of object + primitive variables + member pointers
+		result += sizeOf(obj);
+
+		// process all array elements
+		Class<?> clazz = obj.getClass();
+		if (clazz.isArray()) {
+			if (clazz.getName().length() != 2) {// skip primitive type array
+				int length = Array.getLength(obj);
+				for (int i = 0; i < length; i++) {
+					result += internalSizeOf(Array.get(obj, i), visited);
 				}
 			}
+			return result;
 		}
-		return size;
-	}
 
-	static boolean skipObject(Set<Object> visited, Object obj) {
-		// String.intern的对象不计；计算过的不计
-		if (obj instanceof String && obj == ((String) obj).intern()) {
-			return true;
+		// process all fields of the object
+		while (clazz != null) {
+			Field[] fields = clazz.getDeclaredFields();
+			for (int i = 0; i < fields.length; i++) {
+				if (!Modifier.isStatic(fields[i].getModifiers())) {
+					if (fields[i].getType().isPrimitive()) {
+						continue; // skip primitive fields
+					} else {
+						fields[i].setAccessible(true);
+						try {
+							// objects to be estimated are put to stack
+							Object objectToAdd = fields[i].get(obj);
+							if (objectToAdd != null) {
+								result += internalSizeOf(objectToAdd, visited);
+							}
+						} catch (IllegalAccessException ex) {
+						}
+					}
+				}
+			}
+			clazz = clazz.getSuperclass();
 		}
-		return visited.contains(obj);
+		return result;
 	}
 
 	public static void help() {
