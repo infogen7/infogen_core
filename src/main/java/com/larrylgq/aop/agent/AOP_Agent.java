@@ -98,12 +98,8 @@ public class AOP_Agent {
 		return result;
 	}
 
-	private static boolean skipObject(Object obj, Map<Object, Object> visited) {
-		return (obj == null) || visited.containsKey(obj);
-	}
-
 	private static long internalSizeOf(Object obj, Map<Object, Object> visited) {
-		if (skipObject(obj, visited)) {
+		if (obj == null || visited.containsKey(obj)) {
 			return 0;
 		}
 		visited.put(obj, null);
@@ -136,9 +132,7 @@ public class AOP_Agent {
 						try {
 							// objects to be estimated are put to stack
 							Object objectToAdd = fields[i].get(obj);
-							if (objectToAdd != null) {
-								result += internalSizeOf(objectToAdd, visited);
-							}
+							result += internalSizeOf(objectToAdd, visited);
 						} catch (IllegalAccessException ex) {
 						}
 					}
