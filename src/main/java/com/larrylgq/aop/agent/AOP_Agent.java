@@ -75,7 +75,6 @@ public class AOP_Agent {
 	 *            the object to size
 	 * @return an implementation-specific approximation of the amount of storage consumed by the specified object.
 	 * 
-	 * @see java#lang#instrument#Instrument#Instrumentation#getObjectSize(Object objectToSize)
 	 */
 	public static long sizeOf(Object object) {
 		if (instrumentation == null) {
