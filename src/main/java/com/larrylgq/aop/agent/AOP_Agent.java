@@ -75,14 +75,8 @@ public class AOP_Agent {
 		return instrumentation.getObjectSize(o);
 	}
 
-	/**
-	 * 递归计算当前对象占用空间总大小，包括当前类和超类的实例字段大小以及实例字段引用对象大小
-	 * 
-	 * @param objP
-	 * @return
-	 * @throws IllegalAccessException
-	 */
 	public static long getFullObjectSize(Object o) {
+		// 递归计算当前对象占用空间总大小，包括当前类和超类的实例字段大小以及实例字段引用对象大小
 		Set<Object> visited = new HashSet<Object>();
 		Deque<Object> deque = new ArrayDeque<Object>();
 		deque.add(o);
@@ -131,14 +125,8 @@ public class AOP_Agent {
 		return size;
 	}
 
-	/**
-	 * String.intern的对象不计；计算过的不计
-	 *
-	 * @param visited
-	 * @param obj
-	 * @return
-	 */
 	static boolean skipObject(Set<Object> visited, Object obj) {
+		// String.intern的对象不计；计算过的不计
 		if (obj instanceof String && obj == ((String) obj).intern()) {
 			return true;
 		}
