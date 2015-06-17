@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @version 1.0
  */
 public class Tool_Jackson {
-	public static Logger logger = Logger.getLogger(Tool_Jackson.class.getName());
+	private static Logger logger = Logger.getLogger(Tool_Jackson.class.getName());
 	private final static ObjectMapper objectMapper = new ObjectMapper();
 
 	static {

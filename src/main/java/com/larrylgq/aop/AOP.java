@@ -38,7 +38,7 @@ import com.larrylgq.aop.util.NativePath;
  * @version 1.0
  */
 public class AOP {
-	public final static Logger logger = Logger.getLogger(AOP.class.getName());
+	private final static Logger logger = Logger.getLogger(AOP.class.getName());
 
 	private static class InnerInstance {
 		public static AOP instance = new AOP();
@@ -192,8 +192,7 @@ public class AOP {
 				try {
 					classes.add(Thread.currentThread().getContextClassLoader().loadClass(class_name));
 				} catch (ClassNotFoundException e) {
-					logger.info("加载class失败:");
-					e.printStackTrace();
+					logger.error("加载class失败:", e);
 				}
 			}
 		} else {
@@ -210,8 +209,7 @@ public class AOP {
 				try {
 					classes.add(Thread.currentThread().getContextClassLoader().loadClass(class_name));
 				} catch (Exception e) {
-					logger.info("加载class失败:");
-					e.printStackTrace();
+					logger.error("加载class失败:", e);
 				}
 			});
 		}

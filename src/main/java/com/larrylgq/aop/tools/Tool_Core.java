@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public class Tool_Core {
-	public static Logger logger = Logger.getLogger(Tool_Core.class.getName());
+	private static Logger logger = Logger.getLogger(Tool_Core.class.getName());
 
 	/**
 	 * @param e

@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public class NativePath {
-	public static final Logger logger = Logger.getLogger(NativePath.class.getName());
+	private static final Logger logger = Logger.getLogger(NativePath.class.getName());
 
 	/**
 	 * 获取配置文件路径
