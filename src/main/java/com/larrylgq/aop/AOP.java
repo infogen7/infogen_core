@@ -38,10 +38,10 @@ import com.larrylgq.aop.util.NativePath;
  * @version 1.0
  */
 public class AOP {
-	private final static Logger logger = Logger.getLogger(AOP.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(AOP.class.getName());
 
 	private static class InnerInstance {
-		public static AOP instance = new AOP();
+		public static final AOP instance = new AOP();
 	}
 
 	public static AOP getInstance() {
@@ -59,7 +59,7 @@ public class AOP {
 			String port = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
 
 			String java_home = System.getProperty("java.home");
-			logger.info("java.home  => " + java_home);
+			LOGGER.info("java.home  => " + java_home);
 			if (System.getProperty("os.name").indexOf("Windows") != -1) {
 				if (java_home.contains("jdk")) {
 					java_home = java_home.replace("jre", "").concat("lib/tools.jar");
@@ -70,7 +70,7 @@ public class AOP {
 				java_home = java_home.replace("jre", "").concat("lib/tools.jar");
 			}
 
-			logger.info("jdk home dir => " + java_home);
+			LOGGER.info("jdk home dir => " + java_home);
 			classLoader.addJar(Paths.get(java_home).toUri().toURL());
 			Class<?> clazz = classLoader.loadClass("com.sun.tools.attach.VirtualMachine");
 			Method attach = clazz.getMethod("attach", new Class[] { String.class });
@@ -80,7 +80,7 @@ public class AOP {
 			// detach = clazz.getMethod("detach", new Class[] {});
 			classLoader.close();
 		} catch (Exception e) {
-			logger.error("初始化AOP失败", e);
+			LOGGER.error("初始化AOP失败", e);
 		}
 	}
 
@@ -94,7 +94,7 @@ public class AOP {
 		try {
 			advice_methods.put((Class<Annotation>) clazz, instance);
 		} catch (java.lang.ClassCastException e) {
-			logger.error("clazz 不是注解类型", e);
+			LOGGER.error("clazz 不是注解类型", e);
 		}
 	}
 
@@ -160,7 +160,7 @@ public class AOP {
 		try {
 			loadAgent.invoke(virtualmachine_instance, new Object[] { Agent_Path.path(), "" });
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			logger.error("注入代码失败", e);
+			LOGGER.error("注入代码失败", e);
 		}
 	}
 
@@ -192,7 +192,7 @@ public class AOP {
 				try {
 					classes.add(Thread.currentThread().getContextClassLoader().loadClass(class_name));
 				} catch (ClassNotFoundException e) {
-					logger.error("加载class失败:", e);
+					LOGGER.error("加载class失败:", e);
 				}
 			}
 		} else {
@@ -209,7 +209,7 @@ public class AOP {
 				try {
 					classes.add(Thread.currentThread().getContextClassLoader().loadClass(class_name));
 				} catch (Exception e) {
-					logger.error("加载class失败:", e);
+					LOGGER.error("加载class失败:", e);
 				}
 			});
 		}

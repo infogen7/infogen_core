@@ -24,7 +24,7 @@ import org.jsoup.select.Elements;
  */
 @Deprecated
 public class Tool_XML {
-	private static Logger logger = Logger.getLogger(Tool_XML.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(Tool_XML.class.getName());
 
 	private static String ARGS_SEPARATOR = " ";
 	private static CommandLineParser parser = new GnuParser();
@@ -84,7 +84,7 @@ public class Tool_XML {
 	 * @return 找到的文档对象列表
 	 */
 	public static Elements elements(String attrbute, Element doc, String aql) {
-		logger.debug("#获取 html 节点组 safety ".concat(aql));
+		LOGGER.debug("#获取 html 节点组 safety ".concat(aql));
 		Elements elements = new Elements();
 		try {
 			Object tmp_result = analysis(doc, aql);
@@ -92,7 +92,7 @@ public class Tool_XML {
 				elements = (Elements) tmp_result;
 			}
 		} catch (Exception e) {
-			logger.debug("#获取所有节点 错误: ".concat(attrbute));
+			LOGGER.debug("#获取所有节点 错误: ".concat(attrbute));
 		}
 		return elements;
 	}
@@ -115,7 +115,7 @@ public class Tool_XML {
 		try {
 			tmp_result = analysis(doc, aql);
 		} catch (Exception e) {
-			logger.info("#获取 xml 节点 错误: ".concat(attrbute));
+			LOGGER.info("#获取 xml 节点 错误: ".concat(attrbute));
 		}
 		default_result = (tmp_result == null || tmp_result.toString().isEmpty()) ? default_result : tmp_result.toString().trim().replaceAll("\"", "");
 		return default_result;
@@ -192,7 +192,7 @@ public class Tool_XML {
 		} else if (parse.hasOption(option_html.getOpt())) {
 			return element.html();
 		} else {
-			logger.warn("#方法不能识别该参数:".concat(args_string));
+			LOGGER.warn("#方法不能识别该参数:".concat(args_string));
 			return null;
 		}
 	}
@@ -227,7 +227,7 @@ public class Tool_XML {
 		} else if (parse.hasOption(option_html.getOpt())) {
 			return elements.html();
 		} else {
-			logger.warn("#方法不能识别该参数:".concat(args_string));
+			LOGGER.warn("#方法不能识别该参数:".concat(args_string));
 			return null;
 		}
 	}

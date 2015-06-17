@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @version 1.0
  */
 public class Tool_Jackson {
-	private static Logger logger = Logger.getLogger(Tool_Jackson.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(Tool_Jackson.class.getName());
 	private final static ObjectMapper objectMapper = new ObjectMapper();
 
 	static {
@@ -44,7 +44,7 @@ public class Tool_Jackson {
 		try {
 			return objectMapper.writeValueAsString(object);
 		} catch (JsonProcessingException e) {
-			logger.error("对象转json失败", e);
+			LOGGER.error("对象转json失败", e);
 		}
 		return "";
 	}

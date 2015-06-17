@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public class NativePath {
-	private static final Logger logger = Logger.getLogger(NativePath.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(NativePath.class.getName());
 
 	/**
 	 * 获取配置文件路径
@@ -45,7 +45,7 @@ public class NativePath {
 			java_class_path = java_class_path.concat("/");
 		}
 		java_class_path = java_class_path.concat(path);
-		logger.info("final path ---> :".concat(java_class_path));
+		LOGGER.info("final path ---> :".concat(java_class_path));
 		return Paths.get(java_class_path);
 	}
 
@@ -56,8 +56,8 @@ public class NativePath {
 	 */
 	public static String get_class_path() {
 		String java_class_path = System.getProperty("java.class.path");
-		logger.debug("java_class_path -> :".concat(java_class_path));
-		logger.debug(System.getProperty("os.name"));
+		LOGGER.debug("java_class_path -> :".concat(java_class_path));
+		LOGGER.debug(System.getProperty("os.name"));
 		if (System.getProperty("os.name").indexOf("Windows") != -1) {
 			int indexof_classes = java_class_path.indexOf("\\classes");
 			if (indexof_classes != -1) {
@@ -67,7 +67,7 @@ public class NativePath {
 				if (indexof_separator != -1) {
 					java_class_path = java_class_path.substring(indexof_separator + 1);
 				}
-				logger.debug("windows code start --> :".concat(java_class_path));
+				LOGGER.debug("windows code start --> :".concat(java_class_path));
 			} else {
 				String webroot = NativePath.class.getResource("").getFile();
 				webroot = webroot.replace("file:/", "");
@@ -75,14 +75,14 @@ public class NativePath {
 				if (indexof_web_inf != -1) {
 					// WEB容器启动
 					java_class_path = webroot.substring(0, indexof_web_inf).concat("/WEB-INF/classes");
-					logger.debug("windows server start --> :".concat(java_class_path));
+					LOGGER.debug("windows server start --> :".concat(java_class_path));
 				} else {
 					int comma = java_class_path.indexOf(";");
 					if (comma > 0) {
 						java_class_path = java_class_path.substring(0, comma);
 					}
 					// JAR包启动
-					logger.debug("windows jar start --> :".concat(java_class_path));
+					LOGGER.debug("windows jar start --> :".concat(java_class_path));
 				}
 			}
 		} else {// LINUX
@@ -94,7 +94,7 @@ public class NativePath {
 				if (indexof_separator != -1) {
 					java_class_path = java_class_path.substring(indexof_separator + 1);
 				}
-				logger.debug("linux code start --> :".concat(java_class_path));
+				LOGGER.debug("linux code start --> :".concat(java_class_path));
 			} else {
 				String webroot = NativePath.class.getResource("").getFile();
 				webroot = webroot.replace("file:", "");
@@ -102,14 +102,14 @@ public class NativePath {
 				if (indexof_web_inf != -1) {
 					// WEB容器启动
 					java_class_path = webroot.substring(0, indexof_web_inf).concat("/WEB-INF/classes");
-					logger.debug("linux server start --> :".concat(java_class_path));
+					LOGGER.debug("linux server start --> :".concat(java_class_path));
 				} else {
 					int comma = java_class_path.indexOf(":");
 					if (comma > 0) {
 						java_class_path = java_class_path.substring(0, comma);
 					}
 					// JAR包启动
-					logger.debug("linux jar start --> :".concat(java_class_path));
+					LOGGER.debug("linux jar start --> :".concat(java_class_path));
 				}
 			}
 		}

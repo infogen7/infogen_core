@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public class Tool_Core {
-	private static Logger logger = Logger.getLogger(Tool_Core.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(Tool_Core.class.getName());
 
 	/**
 	 * @param e
@@ -66,7 +66,7 @@ public class Tool_Core {
 					Files.createFile(path);
 				}
 			} catch (IOException e) {
-				logger.error("创建依赖文件夹失败", e);
+				LOGGER.error("创建依赖文件夹失败", e);
 			}
 		}
 	}
