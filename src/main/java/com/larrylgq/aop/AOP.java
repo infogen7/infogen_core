@@ -48,9 +48,9 @@ public class AOP {
 		return InnerInstance.instance;
 	}
 
-	private static AOP_ClassLoader classLoader = new AOP_ClassLoader(new URL[] {}, null);
-	private static Method loadAgent = null;
-	private static Object virtualmachine_instance = null;
+	private static final AOP_ClassLoader classLoader = new AOP_ClassLoader(new URL[] {}, null);
+	private Method loadAgent = null;
+	private Object virtualmachine_instance = null;
 
 	private AOP() {
 		try {
