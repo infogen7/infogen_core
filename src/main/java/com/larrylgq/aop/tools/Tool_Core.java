@@ -80,7 +80,7 @@ public class Tool_Core {
 	 */
 	public static String load_file(Path path) throws IOException {
 		// 获取缓存的服务配置
-		StringBuffer sbf = new StringBuffer();
+		StringBuilder sbf = new StringBuilder();
 		Files.lines(path, StandardCharsets.UTF_8).forEach(line -> {
 			sbf.append(line);
 		});
