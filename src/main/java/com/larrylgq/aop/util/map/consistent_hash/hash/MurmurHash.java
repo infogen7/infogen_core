@@ -18,8 +18,6 @@ public class MurmurHash implements HashFunction {
 	 * 
 	 * @param data
 	 *            The bytes to hash.
-	 * @param seed
-	 *            The seed for the hash.
 	 * @return The 32 bit hash of the bytes in question.
 	 */
 
