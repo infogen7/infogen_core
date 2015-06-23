@@ -1,9 +1,4 @@
-/**
- * @author larry/larrylv@outlook.com
- * @date 创建时间 2015年6月19日 下午4:39:00
- * @version 1.0
- */
-package com.larrylgq.aop.self_describing;
+package com.larrylgq.aop.self_description;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,17 +16,17 @@ import javassist.bytecode.MethodInfo;
 
 import org.apache.log4j.Logger;
 
-import com.larrylgq.aop.self_describing.component.Function;
+import com.larrylgq.aop.self_description.component.Function;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年6月19日 下午4:39:00
  * @since 1.0
  * @version 1.0
  */
-public abstract class Self_Describing {
-	private static final Logger LOGGER = Logger.getLogger(Self_Describing.class.getName());
+public abstract class Self_Description {
+	private static final Logger LOGGER = Logger.getLogger(Self_Description.class.getName());
 
-	public abstract Map<String, Function> self_describing(Set<Class<?>> class_set);
+	public abstract Map<String, Function> self_description(Set<Class<?>> class_set);
 
 	// 使用javassist获取参数名
 	private ClassPool class_pool = ClassPool.getDefault();

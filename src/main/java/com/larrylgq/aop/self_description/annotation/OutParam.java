@@ -1,4 +1,4 @@
-package com.larrylgq.aop.self_describing.annotation;
+package com.larrylgq.aop.self_description.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

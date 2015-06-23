@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.larrylgq.aop.self_describing.component;
+package com.larrylgq.aop.self_description.component;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;

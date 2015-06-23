@@ -1,14 +1,12 @@
 /**
  * 
  */
-package com.larrylgq.aop.self_describing.component;
+package com.larrylgq.aop.self_description.component;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 保存方法的属性描述
@@ -27,18 +25,11 @@ public class Function {
 	private String describe;
 
 	private String tags; // 方法的分类 比如前端，数据库，中间件，测试
-	private Boolean authc = false;
-	private String[] roles = new String[0];
 
 	// 参数
 	private List<InParameter> in_parameters = new ArrayList<>();
 	// 返回值
 	private List<OutParameter> out_parameters = new ArrayList<>();
-
-	@JsonIgnore
-	private transient Method method;
-	@JsonIgnore
-	private transient Object instance;
 
 	public List<InParameter> getIn_parameters() {
 		return in_parameters;
@@ -54,22 +45,6 @@ public class Function {
 
 	public void setOut_parameters(List<OutParameter> out_parameters) {
 		this.out_parameters = out_parameters;
-	}
-
-	public Method getMethod() {
-		return method;
-	}
-
-	public void setMethod(Method method) {
-		this.method = method;
-	}
-
-	public Object getInstance() {
-		return instance;
-	}
-
-	public void setInstance(Object instance) {
-		this.instance = instance;
 	}
 
 	public String getAuthor() {
@@ -118,22 +93,6 @@ public class Function {
 
 	public String getTags() {
 		return tags;
-	}
-
-	public Boolean getAuthc() {
-		return authc;
-	}
-
-	public void setAuthc(Boolean authc) {
-		this.authc = authc;
-	}
-
-	public String[] getRoles() {
-		return roles;
-	}
-
-	public void setRoles(String[] roles) {
-		this.roles = roles;
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.larrylgq.aop.self_describing.enum0;
+package com.larrylgq.aop.self_description.enum0;
 
 /**
  * 是否是必须的参数
