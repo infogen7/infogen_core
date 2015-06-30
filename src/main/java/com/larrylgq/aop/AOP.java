@@ -80,7 +80,7 @@ public class AOP {
 			// detach = clazz.getMethod("detach", new Class[] {});
 			classLoader.close();
 		} catch (Exception e) {
-			LOGGER.error("初始化AOP失败", e);
+			LOGGER.error("初始化AOP失败-如遇到找不到VirtualMachine类,请检查是否只安装了JRE没有安装JDK", e);
 		}
 	}
 
