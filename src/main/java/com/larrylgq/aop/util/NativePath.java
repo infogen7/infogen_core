@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.larrylgq.aop.util;
 
 import java.nio.file.Path;
@@ -9,7 +6,7 @@ import java.nio.file.Paths;
 import org.apache.log4j.Logger;
 
 /**
- * 获取linux和windows平台下各种发布测试环境下基于classpath的路径
+ * 获取linux和windows平台下各种发布测试环境下基于classpath的路径 测试过jetty和tomcat
  * 
  * @author larry/larrylv@outlook.com/创建时间 2015年5月19日 上午11:51:48
  * @since 1.0
