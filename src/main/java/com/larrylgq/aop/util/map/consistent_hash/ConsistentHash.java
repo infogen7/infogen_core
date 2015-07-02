@@ -52,7 +52,7 @@ public class ConsistentHash<T extends ShardInfo> {
 	public void add(T shardInfo) {
 		for (int n = 0; n < basic_virtual_node_number * shardInfo.getRatio(); n++) {
 			try {
-				nodes.put(this.algo.hash(new StringBuilder(shardInfo.getName()).append("*").append(shardInfo.getRatio()).append("*").append(n).toString(), charset), shardInfo);
+				nodes.put(this.algo.hash(new StringBuilder(shardInfo.getSeed()).append("*").append(shardInfo.getRatio()).append("*").append(n).toString(), charset), shardInfo);
 			} catch (UnsupportedEncodingException e) {
 				LOGGER.error("添加节点失败", e);
 			}
@@ -62,7 +62,7 @@ public class ConsistentHash<T extends ShardInfo> {
 	public void remove(T shardInfo) {
 		for (int n = 0; n < basic_virtual_node_number * shardInfo.getRatio(); n++) {
 			try {
-				nodes.remove(this.algo.hash(new StringBuilder(shardInfo.getName()).append("*").append(shardInfo.getRatio()).append("*").append(n).toString(), charset));
+				nodes.remove(this.algo.hash(new StringBuilder(shardInfo.getSeed()).append("*").append(shardInfo.getRatio()).append("*").append(n).toString(), charset));
 			} catch (UnsupportedEncodingException e) {
 				LOGGER.error("删除节点失败", e);
 			}
