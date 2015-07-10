@@ -4,7 +4,7 @@
 
 	<groupId>com.github.larrylgq</groupId>
 	<artifactId>infogen_aop</artifactId>
-	<version>V1.1.00R150710</version>
+	<version>V1.1.00R150712</version>
 	<packaging>jar</packaging>
 
 	<name>infogen_aop</name>
@@ -119,15 +119,31 @@
 
 	<profiles>
 		<profile>
-			<id>release</id>
+			<id>develop</id>
+			<properties>
+				<dversion>-SNAPSHOT</dversion>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<distributionManagement>
 				<snapshotRepository>
-					<id>oss</id>
-					<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+					<id>snapshots</id>
+					<name>snapshots repository</name>
+					<url>http://192.168.0.126:8081/nexus/content/repositories/snapshots</url>
 				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>release</id>
+			<properties>
+				<dversion></dversion>
+			</properties>
+			<distributionManagement>
 				<repository>
-					<id>oss</id>
-					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+					<id>releases</id>
+					<name>releases repository</name>
+					<url>http://192.168.0.126:8081/nexus/content/repositories/releases</url>
 				</repository>
 			</distributionManagement>
 			<build>
@@ -146,37 +162,10 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- Javadoc -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>2.10.1</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.6</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
 				</plugins>
 
 			</build>
 		</profile>
+
 	</profiles>
 </project>
