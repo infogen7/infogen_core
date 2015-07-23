@@ -54,6 +54,8 @@ public class AOP_Transformer implements ClassFileTransformer {
 			//
 			Set<Agent_Advice_Method> methods = infogen_advice.getMethods();
 			for (Agent_Advice_Method infogen_agent_advice_method : methods) {
+				System.out.println(ct_class.getName());
+				System.out.println(infogen_agent_advice_method.getMethod_name());
 				CtMethod[] declaredMethods = ct_class.getDeclaredMethods(infogen_agent_advice_method.getMethod_name());
 				for (CtMethod ct_method : declaredMethods) {
 					CtClass[] parameterTypes = ct_method.getParameterTypes();
