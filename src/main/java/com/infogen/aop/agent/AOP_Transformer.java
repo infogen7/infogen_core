@@ -41,7 +41,7 @@ public class AOP_Transformer implements ClassFileTransformer {
 			CtClass ct_class = class_pool.get(class_name);
 			ct_class.defrost();
 
-			//
+			// 注入属性
 			Set<Agent_Advice_Field> fields = infogen_advice.getFields();
 			for (Agent_Advice_Field infoGen_Agent_Advice_Field : fields) {
 				String insertAfter = new StringBuilder("this.").append(infoGen_Agent_Advice_Field.getField_name()).append(" = ").append(infoGen_Agent_Advice_Field.getValue()).toString();
@@ -51,7 +51,7 @@ public class AOP_Transformer implements ClassFileTransformer {
 				}
 			}
 
-			//
+			// 注入方法
 			Set<Agent_Advice_Method> methods = infogen_advice.getMethods();
 			for (Agent_Advice_Method infogen_agent_advice_method : methods) {
 				CtMethod[] declaredMethods = ct_class.getDeclaredMethods(infogen_agent_advice_method.getMethod_name());
