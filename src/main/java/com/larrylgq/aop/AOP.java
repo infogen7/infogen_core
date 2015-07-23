@@ -158,7 +158,7 @@ public class AOP {
 		});
 
 		try {
-			loadAgent.invoke(virtualmachine_instance, new Object[] { Agent_Path.path(), "okokkookokokokoo" });
+			loadAgent.invoke(virtualmachine_instance, new Object[] { Agent_Path.path(), "" });
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			LOGGER.error("注入代码失败", e);
 		}
