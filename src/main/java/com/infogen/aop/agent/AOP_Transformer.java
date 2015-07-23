@@ -54,8 +54,6 @@ public class AOP_Transformer implements ClassFileTransformer {
 			//
 			Set<Agent_Advice_Method> methods = infogen_advice.getMethods();
 			for (Agent_Advice_Method infogen_agent_advice_method : methods) {
-				System.out.println(ct_class.getName());
-				System.out.println(infogen_agent_advice_method.getMethod_name());
 				CtMethod[] declaredMethods = ct_class.getDeclaredMethods(infogen_agent_advice_method.getMethod_name());
 				for (CtMethod ct_method : declaredMethods) {
 					CtClass[] parameterTypes = ct_method.getParameterTypes();
@@ -97,7 +95,7 @@ public class AOP_Transformer implements ClassFileTransformer {
 
 			return ct_class.toBytecode();
 		} catch (Throwable e) {
-			System.out.println("transform 字节码文件错误 :请检查是不是javassist jar包冲突,例如hibernate等都会包含一个版本较低的javassist依赖");
+			System.out.println("transform 字节码文件错误 :请检查是不是javassist jar包冲突,例如hibernate等都会包含一个版本较低的javassist依赖 (使用maven可以尝试将infogen的jar包放到dependencies列表的最上方)");
 			e.printStackTrace();
 			return classfileBuffer;
 		}
