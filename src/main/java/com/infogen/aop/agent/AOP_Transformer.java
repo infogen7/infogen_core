@@ -97,7 +97,7 @@ public class AOP_Transformer implements ClassFileTransformer {
 
 			return ct_class.toBytecode();
 		} catch (Throwable e) {
-			System.out.println("transform 字节码文件错误 :");
+			System.out.println("transform 字节码文件错误 :请检查是不是javassist jar包冲突,例如hibernate等都会包含一个版本较低的javassist依赖");
 			e.printStackTrace();
 			return classfileBuffer;
 		}
