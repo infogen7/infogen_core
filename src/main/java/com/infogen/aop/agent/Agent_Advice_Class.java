@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.larrylgq.aop.agent;
+package com.infogen.aop.agent;
 
 import java.io.Serializable;
 import java.util.HashSet;

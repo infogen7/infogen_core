@@ -1,4 +1,4 @@
-package com.larrylgq.aop.util.map;
+package com.infogen.aop.util.map;
 
 import java.util.ArrayList;
 import java.util.Collection;

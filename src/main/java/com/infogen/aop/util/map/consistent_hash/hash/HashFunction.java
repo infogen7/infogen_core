@@ -1,4 +1,4 @@
-package com.larrylgq.aop.util.map.consistent_hash.hash;
+package com.infogen.aop.util.map.consistent_hash.hash;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;

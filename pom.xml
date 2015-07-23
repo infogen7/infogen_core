@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.larrylgq</groupId>
+	<groupId>com.infogen</groupId>
 	<artifactId>infogen_aop</artifactId>
 	<version>V1.1.04R150723</version>
 	<packaging>jar</packaging>
@@ -107,10 +107,10 @@
 						<manifestEntries>
 							<Manifest-Version>${project.version}-SNAPSHOT</Manifest-Version>
 							<Archiver-Version>${project.version}-Release</Archiver-Version>
-							<Agent-Class>com.larrylgq.aop.agent.AOP_Agent</Agent-Class>
+							<Agent-Class>com.infogen.aop.agent.AOP_Agent</Agent-Class>
 							<Can-Redefine-Classes>true</Can-Redefine-Classes>
 							<Can-Retransform-Classes>true</Can-Retransform-Classes>
-							<Premain-Class>com.larrylgq.aop.agent.AOP_Agent</Premain-Class>
+							<Premain-Class>com.infogen.aop.agent.AOP_Agent</Premain-Class>
 						</manifestEntries>
 					</archive>
 				</configuration>
