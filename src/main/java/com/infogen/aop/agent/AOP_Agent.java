@@ -27,8 +27,10 @@ public class AOP_Agent {
 		Agent_Advice_Class infogen_agent_advice_class = null;
 		synchronized (add_transformer_lock) {
 			Class<?>[] allLoadedClasses = inst.getAllLoadedClasses();
+			Boolean has = false;
 			for (Class<?> loadedClasse : allLoadedClasses) {
-				if (loadedClasse.getName().equals("com.larrylgq.aop.agent.Agent_Cache")) {
+				if (loadedClasse.getName().equals("com.infogen.aop.agent.Agent_Cache")) {
+					has = true;
 					try {
 						Field field = loadedClasse.getField("class_advice_map");
 						@SuppressWarnings("unchecked")
@@ -57,6 +59,9 @@ public class AOP_Agent {
 						help();
 					}
 				}
+			}
+			if (!has) {
+				System.out.println("没有找到com.infogen.aop.agent.Agent_Cache对象");
 			}
 		}
 
