@@ -151,12 +151,17 @@ public class AOP {
 		Agent_Cache.class_advice_map.put(class_name, Tool_Jackson.toJson(infogen_advice));
 	}
 
+	public Boolean isadvice = false;
+	private final String advice_lock = "";
+
 	//
 	public void advice() {
-		classes.forEach((clazz) -> {
-			attach(clazz);
-		});
-
+		isadvice = true;
+		synchronized (advice_lock) {
+			classes.forEach((clazz) -> {
+				attach(clazz);
+			});
+		}
 		try {
 			loadAgent.invoke(virtualmachine_instance, new Object[] { Agent_Path.path(), "" });
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
