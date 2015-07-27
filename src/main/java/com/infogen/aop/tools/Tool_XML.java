@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -22,12 +22,11 @@ import org.jsoup.select.Elements;
  * @since 1.0
  * @version 1.0
  */
-@Deprecated
 public class Tool_XML {
 	private static final Logger LOGGER = Logger.getLogger(Tool_XML.class.getName());
 
 	private static String ARGS_SEPARATOR = " ";
-	private static CommandLineParser parser = new GnuParser();
+	private static CommandLineParser parser = new DefaultParser();
 	public static final Options options = new Options();
 
 	private static final Option option_select = new Option("select", "select", true, "根据 select 查找节点");
@@ -45,7 +44,7 @@ public class Tool_XML {
 	private static final Option option_index = new Option("index", "index", true, "根据 index 查找节点");
 
 	private static final Option option_text = new Option("text", "text", false, "根据 text 查找值");
-	private static final Option option_owntext = new Option("owntext", "owntext", false, "根据 text 查找值");
+	private static final Option option_owntext = new Option("owntext", "owntext", false, "根据 owntext 查找值");
 	private static final Option option_attr = new Option("attr", "attr", true, "根据 attr 查找值");
 	private static final Option option_html = new Option("html", "html", false, "根据html 查找值");
 
