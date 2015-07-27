@@ -95,7 +95,11 @@ public class AOP_Transformer implements ClassFileTransformer {
 
 			return ct_class.toBytecode();
 		} catch (Throwable e) {
-			System.out.println("transform 字节码文件错误 :请检查是不是javassist jar包冲突,例如hibernate等都会包含一个版本较低的javassist依赖 (使用maven可以尝试将infogen的jar包放到dependencies列表的最上方)");
+			System.out.println("transform 字节码文件错误 :");
+			System.out.println("1:请检查是不是javassist jar包冲突,例如hibernate等都会包含一个版本较低的javassist依赖 (使用maven可以尝试将infogen的jar包放到dependencies列表的最上方)");
+			System.out.println("2:如有需要将返回值($_)作为参数调用回调方法,返回值必须是对象类型,否则会报类似");
+			System.out.println("javassist.CannotCompileException: [source error] insert_after_call_back(boolean) not found in com.infogen.tracking.event_handle.InfoGen_AOP_Handle_Execution");
+			System.out.println("的错误.");
 			e.printStackTrace();
 			return classfileBuffer;
 		}
