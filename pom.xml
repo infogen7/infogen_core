@@ -4,7 +4,7 @@
 
 	<groupId>com.infogen</groupId>
 	<artifactId>infogen_aop</artifactId>
-	<version>V1.1.04R150731</version>
+	<version>V1.1.05R150803</version>
 	<packaging>jar</packaging>
 
 	<name>infogen_aop</name>
