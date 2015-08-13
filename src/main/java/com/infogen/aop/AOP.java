@@ -152,7 +152,7 @@ public class AOP {
 	}
 
 	public Boolean isadvice = false;
-	private final String advice_lock = "";
+	private final byte[] advice_lock = new byte[0];
 
 	//
 	public void advice() {

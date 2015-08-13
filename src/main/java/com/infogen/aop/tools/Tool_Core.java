@@ -119,9 +119,9 @@ public class Tool_Core {
 		String ip = null;
 		try {
 			if (System.getProperty("os.name").indexOf("Linux") != -1) {
-				ip = get_local_ip_bystartsWith("eth");
+				ip = get_local_ip_bystartswith("eth");
 				if (ip == null) {
-					ip = get_local_ip_bystartsWith("wlan");
+					ip = get_local_ip_bystartswith("wlan");
 				}
 			} else {
 				ip = InetAddress.getLocalHost().getHostAddress().toString();
@@ -132,7 +132,7 @@ public class Tool_Core {
 		return ip;
 	}
 
-	private static String get_local_ip_bystartsWith(String startsWith) throws SocketException {
+	private static String get_local_ip_bystartswith(String startsWith) throws SocketException {
 		String ip = null;
 		Enumeration<?> e1 = (Enumeration<?>) NetworkInterface.getNetworkInterfaces();
 		while (e1.hasMoreElements()) {
@@ -199,7 +199,6 @@ public class Tool_Core {
 	 *            ip的string类型
 	 * @return IP转成数字类型
 	 */
-	@Deprecated
 	public long ip_to_long(String string_ip) {
 		long[] ip = new long[4];
 		int position1 = string_ip.indexOf(".");
@@ -225,7 +224,6 @@ public class Tool_Core {
 	 *            验证字符串
 	 * @return 是否验证成功
 	 */
-	@Deprecated
 	public static boolean pattern_match(String pattern, String str) {
 		pattern = convertToRegexPattern(pattern);
 		return Pattern.matches(pattern, str);

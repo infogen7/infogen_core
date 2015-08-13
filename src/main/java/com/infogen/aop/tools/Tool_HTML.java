@@ -22,8 +22,8 @@ import org.jsoup.select.Elements;
  * @since 1.0
  * @version 1.0
  */
-public class Tool_XML {
-	private static final Logger LOGGER = Logger.getLogger(Tool_XML.class.getName());
+public class Tool_HTML {
+	private static final Logger LOGGER = Logger.getLogger(Tool_HTML.class.getName());
 
 	private static String ARGS_SEPARATOR = " ";
 	private static CommandLineParser parser = new DefaultParser();
