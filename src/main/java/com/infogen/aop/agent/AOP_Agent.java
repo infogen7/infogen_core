@@ -11,7 +11,7 @@ import java.lang.reflect.Modifier;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import com.infogen.aop.tools.Tool_Jackson;
+import com.infogen.core.tools.Tool_Jackson;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年2月27日 上午11:47:39

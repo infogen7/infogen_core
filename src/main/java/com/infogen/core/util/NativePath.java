@@ -1,4 +1,4 @@
-package com.infogen.aop.util;
+package com.infogen.core.util;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

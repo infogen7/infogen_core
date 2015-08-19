@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.infogen.aop.tools;
+package com.infogen.core.tools;
 
 import java.io.IOException;
 
