@@ -8,7 +8,7 @@
 	<packaging>jar</packaging>
 
 	<name>infogen_core</name>
-	<url>https://github.com/larrylgq/infogen_aop</url>
+	<url>https://github.com/larrylgq/infogen_core</url>
 	<description>提供最基础的工具类</description>
 	<licenses>
 		<license>
@@ -33,6 +33,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -98,7 +103,7 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.5</version>
 				<configuration>
-					<jarName>infogen_aop-${project.version}</jarName>
+					<jarName>infogen_core-${project.version}</jarName>
 					<archive>
 						<manifest>
 							<!-- 往Manifest.MF文件中添加ClassPath -->
