@@ -47,6 +47,7 @@ public class AOP_Transformer implements ClassFileTransformer {
 				String insertAfter = new StringBuilder("this.").append(infoGen_Agent_Advice_Field.getField_name()).append(" = ").append(infoGen_Agent_Advice_Field.getValue()).toString();
 				CtConstructor[] constructors = ct_class.getConstructors();
 				for (CtConstructor ctConstructor : constructors) {
+					System.out.println(insertAfter);
 					ctConstructor.insertAfter(insertAfter);
 				}
 			}
