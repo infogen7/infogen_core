@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.infogen.core.util;
+package com.infogen.aop;
 
 import java.net.URL;
 import java.net.URLClassLoader;
