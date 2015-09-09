@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
@@ -72,15 +71,14 @@ public class ConsistentHash<T extends ShardInfo> {
 	// ////////////////////////////////////////////////////////////////////////get////////////////////////////////////////////////////////////////////////
 
 	public T get(String seed) {
-		SortedMap<Long, T> tail = nodes.tailMap(algo.hash(seed.getBytes(charset)));
-		if (tail.isEmpty()) {
-			Entry<Long, T> firstEntry = nodes.firstEntry();
-			if (firstEntry != null) {
-				return firstEntry.getValue();
-			}
+		Entry<Long, T> entry = nodes.ceilingEntry(algo.hash(seed.getBytes(charset)));
+		if (entry == null) {
+			entry = nodes.firstEntry();
+		}
+		if (entry == null) {
 			return null;
 		}
-		return tail.get(tail.firstKey());
+		return entry.getValue();
 	}
 
 	public Collection<ShardInfo> getAllShardInfo() {
