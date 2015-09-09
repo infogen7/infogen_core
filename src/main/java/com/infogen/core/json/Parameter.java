@@ -1,4 +1,4 @@
-package com.infogen.core.util;
+package com.infogen.core.json;
 
 import java.util.HashMap;
 
@@ -26,7 +26,6 @@ public class Parameter extends HashMap<String, String> {
 	}
 
 	@Override
-	@Deprecated
 	public String put(String key, String value) {
 		super.put(key, value);
 		return value;

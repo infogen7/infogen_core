@@ -1,4 +1,4 @@
-package com.infogen.core.util;
+package com.infogen.core.json;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.infogen.core.tools.Tool_Core;
 import com.infogen.core.tools.Tool_Jackson;
+import com.infogen.core.util.CODE;
 
 /**
  * HTTP协议返回值封装

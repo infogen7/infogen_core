@@ -1,4 +1,4 @@
-package com.infogen.core.util.map.consistent_hash;
+package com.infogen.core.structure.map.consistent_hash;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年6月16日 上午11:35:59

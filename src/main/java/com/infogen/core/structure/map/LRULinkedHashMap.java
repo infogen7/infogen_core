@@ -1,4 +1,4 @@
-package com.infogen.core.util.map;
+package com.infogen.core.structure.map;
 
 import java.util.ArrayList;
 import java.util.Collection;
