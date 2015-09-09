@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.jar.JarEntry;
@@ -55,8 +54,6 @@ public class AOP {
 		try {
 			classes = auto_scan_absolute(NativePath.get_class_path());
 
-			String port = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
-
 			String java_home = System.getProperty("java.home");
 			LOGGER.info("java.home  => " + java_home);
 			if (System.getProperty("os.name").indexOf("Windows") != -1) {
@@ -68,37 +65,36 @@ public class AOP {
 			} else {
 				java_home = java_home.replace("jre", "").concat("lib/tools.jar");
 			}
-
 			LOGGER.info("jdk home dir => " + java_home);
 			classLoader.addJar(Paths.get(java_home).toUri().toURL());
+
 			Class<?> clazz = classLoader.loadClass("com.sun.tools.attach.VirtualMachine");
 			Method attach = clazz.getMethod("attach", new Class[] { String.class });
+			String port = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
 			virtualmachine_instance = attach.invoke(null, new Object[] { port });
 			loadAgent = clazz.getMethod("loadAgent", new Class[] { String.class, String.class });
 			// TODO 如果只加载一次应该在使用完成后close
 			// detach = clazz.getMethod("detach", new Class[] {});
-			classLoader.close();
 		} catch (Exception e) {
 			LOGGER.error("初始化AOP失败-如遇到找不到VirtualMachine类,请检查是否只安装了JRE没有安装JDK", e);
 		}
 	}
 
+	///////////////////////////////////////////////////////////////
 	// 面向切面
-	private Map<Class<Annotation>, AOP_Handle> advice_methods = new HashMap<>();
+	private Map<Class<? extends Annotation>, AOP_Handle> advice_methods = new HashMap<>();
+	// 依赖注入
+	private Map<String, Set<Agent_Advice_Field>> map_autowireds = new HashMap<>();
 
-	@SuppressWarnings("unchecked")
-	public void add_advice_method(Object clazz, AOP_Handle instance) {
+	public void add_advice_method(Class<? extends Annotation> clazz, AOP_Handle instance) {
 		Objects.requireNonNull(clazz);
 		Objects.requireNonNull(instance);
 		try {
-			advice_methods.put((Class<Annotation>) clazz, instance);
+			advice_methods.put(clazz, instance);
 		} catch (java.lang.ClassCastException e) {
 			LOGGER.error("clazz 不是注解类型", e);
 		}
 	}
-
-	// 依赖注入
-	private Map<String, Set<Agent_Advice_Field>> map_autowireds = new HashMap<>();
 
 	public void add_autowired_field(String class_name, String field_name, String value) {
 		Agent_Advice_Field infogen_agent_advice_field = new Agent_Advice_Field();
@@ -110,55 +106,59 @@ public class AOP {
 		map_autowireds.put(class_name, orDefault);
 	}
 
-	//
-	public void attach(Class<?> clazz) {
+	////////////////////////////////////////////////////////////////////////////////////
+	public void generate_agent_advice_class(Class<?> clazz) {
 		String class_name = clazz.getName();
+		Set<Agent_Advice_Field> fields = map_autowireds.getOrDefault(class_name, new HashSet<Agent_Advice_Field>());
 		Set<Agent_Advice_Method> methods = new HashSet<>();
 
 		Method[] declaredMethods = clazz.getDeclaredMethods();
 		for (Method method : declaredMethods) {
-			for (Entry<Class<Annotation>, AOP_Handle> advice : advice_methods.entrySet()) {
-				Class<Annotation> key = advice.getKey();
-				AOP_Handle value = advice.getValue();
+			for (Class<? extends Annotation> key : advice_methods.keySet()) {
+				AOP_Handle handle = advice_methods.get(key);
 
 				Annotation[] annotations = method.getAnnotationsByType(key);
-				if (annotations.length != 0) {
-					Annotation annotation = annotations[0];
-					Agent_Advice_Method attach_method = value.attach_method(class_name, method, annotation);
-					if (attach_method != null) {
-						Class<?>[] parameterTypes = method.getParameterTypes();
-						StringBuilder stringbuilder = new StringBuilder();
-						for (Class<?> type : parameterTypes) {
-							stringbuilder.append(type.getName()).append(" ");
-						}
-						attach_method.setMethod_parameters(stringbuilder.toString().trim());
-						methods.add(attach_method);
-					}
+				if (annotations.length == 0) {
+					continue;
 				}
+
+				Agent_Advice_Method attach_method = handle.attach_method(class_name, method, annotations[0]);
+				if (attach_method == null) {
+					continue;
+				}
+
+				Class<?>[] parameterTypes = method.getParameterTypes();
+				StringBuilder stringbuilder = new StringBuilder();
+				for (Class<?> type : parameterTypes) {
+					stringbuilder.append(type.getName()).append(" ");
+				}
+				attach_method.setMethod_parameters(stringbuilder.toString().trim());
+
+				methods.add(attach_method);
 			}
 		}
-
-		Set<Agent_Advice_Field> fields = map_autowireds.getOrDefault(class_name, new HashSet<Agent_Advice_Field>());
 
 		if (methods.isEmpty() && fields.isEmpty()) {
 			return;
 		}
-		Agent_Advice_Class infogen_advice = new Agent_Advice_Class();
-		infogen_advice.setClass_name(class_name);
-		infogen_advice.setMethods(methods);
-		infogen_advice.setFields(fields);
-		Agent_Cache.class_advice_map.put(class_name, Tool_Jackson.toJson(infogen_advice));
+
+		Agent_Advice_Class infogen_advice_class = new Agent_Advice_Class();
+		infogen_advice_class.setClass_name(class_name);
+		infogen_advice_class.setMethods(methods);
+		infogen_advice_class.setFields(fields);
+
+		Agent_Cache.class_advice_map.put(class_name, Tool_Jackson.toJson(infogen_advice_class));
 	}
 
 	public Boolean isadvice = false;
 	private final byte[] advice_lock = new byte[0];
 
-	//
+	///////////////////////////////////////////////////////////////////////
 	public void advice() {
 		isadvice = true;
 		synchronized (advice_lock) {
 			classes.forEach((clazz) -> {
-				attach(clazz);
+				generate_agent_advice_class(clazz);
 			});
 		}
 		try {
