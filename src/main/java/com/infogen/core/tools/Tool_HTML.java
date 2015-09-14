@@ -9,7 +9,8 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,7 +24,7 @@ import org.jsoup.select.Elements;
  * @version 1.0
  */
 public class Tool_HTML {
-	private static final Logger LOGGER = Logger.getLogger(Tool_HTML.class.getName());
+	private static final Logger LOGGER = LogManager.getLogger(Tool_HTML.class.getName());
 
 	private static String ARGS_SEPARATOR = " ";
 	private static CommandLineParser parser = new DefaultParser();

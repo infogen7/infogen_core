@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.infogen.core.structure.map.consistent_hash.hash.HashFunction;
 
@@ -21,7 +22,7 @@ import com.infogen.core.structure.map.consistent_hash.hash.HashFunction;
  * @version 1.0
  */
 public class ConsistentHash<T extends ShardInfo> {
-	private static final Logger LOGGER = Logger.getLogger(ConsistentHash.class.getName());
+	private static final Logger LOGGER = LogManager.getLogger(ConsistentHash.class.getName());
 	public static final Charset charset = StandardCharsets.UTF_8;
 
 	private HashFunction algo = HashFunction.MURMUR_HASH;

@@ -5,7 +5,8 @@ package com.infogen.core.tools;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -23,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @version 1.0
  */
 public class Tool_Jackson {
-	private static final Logger LOGGER = Logger.getLogger(Tool_Jackson.class.getName());
+	private static final Logger LOGGER = LogManager.getLogger(Tool_Jackson.class.getName());
 	private final static ObjectMapper objectMapper = new ObjectMapper();
 
 	static {

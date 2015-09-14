@@ -20,7 +20,8 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 基本工具方法
@@ -30,7 +31,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public class Tool_Core {
-	private static final Logger LOGGER = Logger.getLogger(Tool_Core.class.getName());
+	private static final Logger LOGGER = LogManager.getLogger(Tool_Core.class.getName());
 
 	/**
 	 * @param e

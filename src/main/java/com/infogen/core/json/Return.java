@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.infogen.core.tools.Tool_Core;
@@ -20,7 +21,7 @@ import com.infogen.core.util.CODE;
  */
 public class Return extends JSONObject {
 	private static final long serialVersionUID = 2203513787220720192L;
-	private static final Logger LOGGER = Logger.getLogger(Return.class.getName());
+	private static final Logger LOGGER = LogManager.getLogger(Return.class.getName());
 
 	public enum Return_Fields {
 		success, code, note

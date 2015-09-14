@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -20,7 +21,7 @@ import com.infogen.core.tools.Tool_Jackson;
  */
 public class JSONObject extends HashMap<String, Object> {
 	private static final long serialVersionUID = -3927973692243736378L;
-	private static final Logger LOGGER = Logger.getLogger(JSONObject.class.getName());
+	private static final Logger LOGGER = LogManager.getLogger(JSONObject.class.getName());
 
 	public static JSONObject create(String json) throws JsonParseException, JsonMappingException, IOException {
 		JSONObject jo = new JSONObject();

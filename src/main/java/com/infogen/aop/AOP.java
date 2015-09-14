@@ -19,7 +19,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.infogen.aop.advice.event_handle.AOP_Handle;
 import com.infogen.aop.agent.Agent_Advice_Class;
@@ -36,7 +37,7 @@ import com.infogen.core.util.NativePath;
  * @version 1.0
  */
 public class AOP {
-	private final static Logger LOGGER = Logger.getLogger(AOP.class.getName());
+	private final static Logger LOGGER = LogManager.getLogger(AOP.class.getName());
 
 	private static class InnerInstance {
 		public static final AOP instance = new AOP();
