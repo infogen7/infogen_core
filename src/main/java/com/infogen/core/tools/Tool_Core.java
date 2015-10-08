@@ -101,7 +101,7 @@ public class Tool_Core {
 		MessageDigest instance = MessageDigest.getInstance("MD5");
 		instance.update((password + "{" + salt.toString() + "}").getBytes(Charset.forName("UTF-8")));
 		char hexDigits[] = { // 用来将字节转换成 16 进制表示的字符
-		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 		byte tmp[] = instance.digest(); // MD5 的计算结果是一个 128 位的长整数，用字节表示就是 16 个字节
 		char str[] = new char[16 * 2]; // 每个字节用 16 进制表示的话，使用两个字符，所以表示成 16 进制需要 32 个字符
 		int k = 0; // 表示转换结果中对应的字符位置
@@ -116,39 +116,23 @@ public class Tool_Core {
 	/**
 	 * @return 获取本机IP
 	 */
-	public static String getLocalIP() {
+	public static String getLocalIP(String... nic_names) {
+		if (nic_names == null) {
+			nic_names = new String[] { "eth", "wlan" };
+		}
 		String ip = null;
 		try {
 			if (System.getProperty("os.name").indexOf("Linux") != -1) {
-				ip = get_local_ip_bystartswith("eth");
-				if (ip == null) {
-					ip = get_local_ip_bystartswith("wlan");
+				for (String nic_name : nic_names) {
+					ip = get_local_ip_bystartswith(nic_name);
+					if (ip != null) {
+						break;
+					}
 				}
 			} else {
 				ip = InetAddress.getLocalHost().getHostAddress().toString();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return ip;
-	}
-
-	/**
-	 * @return 获取指定范围网卡上的IP
-	 */
-	public static String getConfigIP(String p_ifcgs) {
-		String ip = null;
-		String[] ifcgs = p_ifcgs.split(",");
-		try {
-
-			for(String ifcgname :ifcgs){
-				ip= get_local_ip_bystartswith(ifcgname);
-				if(ip!=null){
-					break;
-				}
-			}
-
-		} catch (Exception e) {
+		} catch (SocketException | UnknownHostException e) {
 			e.printStackTrace();
 		}
 		return ip;
@@ -163,8 +147,9 @@ public class Tool_Core {
 				Enumeration<?> e2 = ni.getInetAddresses();
 				while (e2.hasMoreElements()) {
 					InetAddress ia = (InetAddress) e2.nextElement();
-					if (ia instanceof Inet6Address)
+					if (ia instanceof Inet6Address) {
 						continue;
+					}
 					ip = ia.getHostAddress();
 				}
 				break;

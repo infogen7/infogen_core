@@ -100,10 +100,6 @@ public class Return extends JSONObject {
 		return (Boolean) this.getOrDefault(Return_Fields.success.name(), false);
 	}
 
-	// public Boolean get_success() {
-	// 	return (Boolean) this.getOrDefault(Return_Fields.success.name(), false);
-	// }
-
 	public Integer get_code() {
 		return (Integer) this.getOrDefault(Return_Fields.code.name(), CODE.error.code);
 	}
