@@ -117,7 +117,7 @@ public class Tool_Core {
 	 * @return 获取本机IP
 	 */
 	public static String getLocalIP(String... nic_names) {
-		if (nic_names == null) {
+		if (nic_names.length == 0) {
 			nic_names = new String[] { "eth", "wlan" };
 		}
 		String ip = null;
