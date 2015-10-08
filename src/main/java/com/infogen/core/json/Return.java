@@ -27,6 +27,7 @@ public class Return extends JSONObject {
 		success, code, note
 	}
 
+	//////////////////////////////// create//////////////////////////////////
 	public static Return create() {
 		return new Return();
 	}
@@ -50,27 +51,35 @@ public class Return extends JSONObject {
 		return jo;
 	}
 
+	/////////////////////////////////////////// SUCCESS/////////////////////////
+	public static Return SUCCESS(String code, String note) {
+		Return jo = new Return();
+		jo.put(Return_Fields.success.name(), true);
+		jo.put(Return_Fields.code.name(), code);
+		jo.put(Return_Fields.note.name(), note);
+		return jo;
+	}
+
+	public static Return SUCCESS(String json) {
+		Return jo = create(json);
+		jo.put(Return_Fields.success.name(), true);
+		return jo;
+	}
+
 	public static Return SUCCESS(CODE code) {
 		return SUCCESS(code.code, code.note);
 	}
 
-	public static Return SUCCESS(CODE code, Exception e) {
-		return SUCCESS(code.code, Tool_Core.stacktrace(e));
-	}
-
-	public static Return SUCCESS(String code, String note) {
-		Return jo = new Return();
-		jo.put(Return_Fields.success.name(), true);
-		jo.put(Return_Fields.note.name(), note);
-		jo.put(Return_Fields.code.name(), code);
-		return jo;
-	}
-
 	public static Return SUCCESS(Integer code, String note) {
+		return SUCCESS(code.toString(), note);
+	}
+
+	///////////////////////////////////////////////// FAIL////////////////////////////
+	public static Return FAIL(String code, String note) {
 		Return jo = new Return();
-		jo.put(Return_Fields.success.name(), true);
-		jo.put(Return_Fields.note.name(), note);
+		jo.put(Return_Fields.success.name(), false);
 		jo.put(Return_Fields.code.name(), code);
+		jo.put(Return_Fields.note.name(), note);
 		return jo;
 	}
 
@@ -82,22 +91,11 @@ public class Return extends JSONObject {
 		return FAIL(code.code, Tool_Core.stacktrace(e));
 	}
 
-	public static Return FAIL(String code, String note) {
-		Return jo = new Return();
-		jo.put(Return_Fields.success.name(), false);
-		jo.put(Return_Fields.note.name(), note);
-		jo.put(Return_Fields.code.name(), code);
-		return jo;
-	}
-
 	public static Return FAIL(Integer code, String note) {
-		Return jo = new Return();
-		jo.put(Return_Fields.success.name(), false);
-		jo.put(Return_Fields.note.name(), note);
-		jo.put(Return_Fields.code.name(), code);
-		return jo;
+		return FAIL(code.toString(), note);
 	}
 
+	//////////////////////////////////// GETTER SETTER///////////////////////////
 	public Boolean is_success() {
 		return (Boolean) this.getOrDefault(Return_Fields.success.name(), false);
 	}
@@ -114,6 +112,7 @@ public class Return extends JSONObject {
 		return (String) this.getOrDefault(Return_Fields.note.name(), "");
 	}
 
+	//////////////////////// @Override/////////////////////////////////////
 	@Override
 	public Return put(String key, Object value) {
 		super.put(key, value);
