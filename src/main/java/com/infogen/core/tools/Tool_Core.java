@@ -133,6 +133,27 @@ public class Tool_Core {
 		return ip;
 	}
 
+	/**
+	 * @return 获取指定范围网卡上的IP
+	 */
+	public static String getConfigIP(String p_ifcgs) {
+		String ip = null;
+		String[] ifcgs = p_ifcgs.split(",");
+		try {
+
+			for(String ifcgname :ifcgs){
+				ip= get_local_ip_bystartswith(ifcgname);
+				if(ip!=null){
+					break;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ip;
+	}
+
 	private static String get_local_ip_bystartswith(String startsWith) throws SocketException {
 		String ip = null;
 		Enumeration<?> e1 = (Enumeration<?>) NetworkInterface.getNetworkInterfaces();
