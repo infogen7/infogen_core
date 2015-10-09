@@ -124,6 +124,9 @@ public class Tool_Core {
 		try {
 			if (System.getProperty("os.name").indexOf("Linux") != -1) {
 				for (String nic_name : nic_names) {
+					if (nic_name == null) {
+						continue;
+					}
 					ip = get_local_ip_bystartswith(nic_name);
 					if (ip != null) {
 						break;
