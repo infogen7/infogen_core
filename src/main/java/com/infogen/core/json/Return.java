@@ -52,7 +52,8 @@ public class Return extends JSONObject {
 	}
 
 	/////////////////////////////////////////// SUCCESS/////////////////////////
-	public static Return SUCCESS(String code, String note) {
+
+	public static Return SUCCESS(Integer code, String note) {
 		Return jo = new Return();
 		jo.put(Return_Fields.success.name(), true);
 		jo.put(Return_Fields.code.name(), code);
@@ -70,12 +71,8 @@ public class Return extends JSONObject {
 		return SUCCESS(code.code, code.note);
 	}
 
-	public static Return SUCCESS(Integer code, String note) {
-		return SUCCESS(code.toString(), note);
-	}
-
 	///////////////////////////////////////////////// FAIL////////////////////////////
-	public static Return FAIL(String code, String note) {
+	public static Return FAIL(Integer code, String note) {
 		Return jo = new Return();
 		jo.put(Return_Fields.success.name(), false);
 		jo.put(Return_Fields.code.name(), code);
@@ -89,10 +86,6 @@ public class Return extends JSONObject {
 
 	public static Return FAIL(CODE code, Exception e) {
 		return FAIL(code.code, Tool_Core.stacktrace(e));
-	}
-
-	public static Return FAIL(Integer code, String note) {
-		return FAIL(code.toString(), note);
 	}
 
 	//////////////////////////////////// GETTER SETTER///////////////////////////
