@@ -11,6 +11,7 @@
 		AOP.getInstance().advice();
 
 
-
+版本:  V2.0.01R151022
+		1.修改版本号,更新依赖包
 版本:  V2.0.01R150929
 		1.去掉Return中的get_Success方法，避免某些插件扫描时报错
