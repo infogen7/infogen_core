@@ -19,6 +19,7 @@ import com.infogen.core.tools.Tool_Jackson;
  * @version 1.0
  */
 public class AOP_Agent {
+	private static final Agent_Cache agent_cache = new Agent_Cache();
 	private transient static String add_transformer_lock = "";
 
 	public static void agentmain(String args, Instrumentation inst) {
@@ -29,7 +30,7 @@ public class AOP_Agent {
 			Class<?>[] allLoadedClasses = inst.getAllLoadedClasses();
 			Boolean has = false;
 			for (Class<?> loadedClasse : allLoadedClasses) {
-				if (loadedClasse.getName().equals("com.infogen.aop.agent.Agent_Cache")) {
+				if (loadedClasse.getName().equals(agent_cache.getClass().getName())) {
 					has = true;
 					try {
 						Field field = loadedClasse.getField("class_advice_map");
@@ -61,7 +62,7 @@ public class AOP_Agent {
 				}
 			}
 			if (!has) {
-				System.out.println("没有找到com.infogen.aop.agent.Agent_Cache对象");
+				System.out.println("没有找到" + agent_cache.getClass().getName() + "对象");
 			}
 		}
 
