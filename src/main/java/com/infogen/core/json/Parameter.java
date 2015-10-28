@@ -1,6 +1,6 @@
 package com.infogen.core.json;
 
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 
 /**
  * HTTP协议调用端输入参数类
@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @since 1.0
  * @version 1.0
  */
-public class Parameter extends HashMap<String, String> {
+public class Parameter extends IdentityHashMap<String, String> {
 	private static final long serialVersionUID = -5436768657673377874L;
 
 	public static Parameter create() {
