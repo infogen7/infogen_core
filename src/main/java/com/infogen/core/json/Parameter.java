@@ -25,7 +25,7 @@ public class Parameter extends IdentityHashMap<String, String> {
 				identityhashmap.put(new String(key), value);
 			});
 		});
-		return new Parameter();
+		return identityhashmap;
 	}
 
 	public static Parameter create(String key, String value) {
