@@ -47,6 +47,21 @@ public class NativePath {
 		return Paths.get(java_class_path);
 	}
 
+	public static String get_class_path(Class<?> clazz) {
+		String location = clazz.getProtectionDomain().getCodeSource().getLocation().getFile();
+		location = location.replace("file:", "");
+		if (System.getProperty("os.name").indexOf("Windows") != -1) {
+			location = location.substring(1);
+		}
+		if (location.contains(".jar!")) {
+			location = location.substring(0, location.indexOf(".jar!")).concat(".jar");
+		}
+		if (location.endsWith("/")) {
+			location = location.substring(0, location.length() - 1);
+		}
+		return location;
+	}
+
 	/**
 	 * 当前启动项目的class path (jar包地址或末尾不包含/的class文件夹地址)
 	 * 
