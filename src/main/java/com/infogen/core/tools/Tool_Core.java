@@ -114,6 +114,8 @@ public class Tool_Core {
 	}
 
 	/**
+	 * @param nic_names
+	 *            网卡名称的前缀，以","分隔 eg:eth,wlan
 	 * @return 获取本机IP
 	 */
 	public static String getLocalIP(String... nic_names) {
