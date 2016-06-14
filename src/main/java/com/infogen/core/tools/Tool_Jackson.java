@@ -8,12 +8,10 @@ import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -50,12 +48,12 @@ public class Tool_Jackson {
 		return "";
 	}
 
-	public static <T> T toObject(String json, Class<T> valueType) throws JsonParseException, JsonMappingException, IOException {
+	public static <T> T toObject(String json, Class<T> valueType) throws IOException {
 		return objectMapper.readValue(json, valueType);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T toObject(String json, TypeReference<T> typeReference) throws JsonParseException, JsonMappingException, IOException {
+	public static <T> T toObject(String json, TypeReference<T> typeReference) throws  IOException {
 		return (T) objectMapper.readValue(json, typeReference);
 	}
 }
