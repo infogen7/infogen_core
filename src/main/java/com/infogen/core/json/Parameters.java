@@ -11,15 +11,15 @@ import java.util.Map;
  * @since 1.0
  * @version 1.0
  */
-public class Parameter extends IdentityHashMap<String, String> {
+public class Parameters extends IdentityHashMap<String, String> {
 	private static final long serialVersionUID = -5436768657673377874L;
 
-	public static Parameter create() {
-		return new Parameter();
+	public static Parameters create() {
+		return new Parameters();
 	}
 
-	public static Parameter create(Map<String, List<String>> name_value_pair) {
-		Parameter identityhashmap = new Parameter();
+	public static Parameters create(Map<String, List<String>> name_value_pair) {
+		Parameters identityhashmap = new Parameters();
 		name_value_pair.forEach((key, values) -> {
 			values.forEach(value -> {
 				identityhashmap.put(new String(key), value);
@@ -28,11 +28,11 @@ public class Parameter extends IdentityHashMap<String, String> {
 		return identityhashmap;
 	}
 
-	public static Parameter create(String key, String value) {
-		return new Parameter().add(key, value);
+	public static Parameters create(String key, String value) {
+		return new Parameters().add(key, value);
 	}
 
-	public Parameter add(String key, String value) {
+	public Parameters add(String key, String value) {
 		super.put(key, value);
 		return this;
 	}
