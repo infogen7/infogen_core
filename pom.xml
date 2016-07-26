@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.infogen</groupId>
-		<artifactId>infogen_aggregator</artifactId>
+		<artifactId>infogen_combine</artifactId>
 		<version>V1.0</version>
-		<relativePath>../infogen_aggregator</relativePath>
+		<relativePath>../infogen_combine</relativePath>
 	</parent>
 	<artifactId>infogen_core</artifactId>
 	<packaging>jar</packaging>
@@ -49,7 +49,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.6</version>
+				<version>3.0.2</version>
 				<configuration>
 					<jarName>infogen_core-${project.version}</jarName>
 					<archive>
