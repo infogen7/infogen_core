@@ -13,7 +13,7 @@
 	<name>infogen_core</name>
 	<url>https://github.com/infogen7/infogen_core</url>
 	<description>提供最基础的工具类</description>
-		<issueManagement>
+	<issueManagement>
 		<system>Github Issue</system>
 		<url>https://github.com/infogen7/infogen_core/issues</url>
 	</issueManagement>
