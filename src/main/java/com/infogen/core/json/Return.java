@@ -8,8 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.infogen.core.tools.Tool_Core;
 import com.infogen.core.tools.Tool_Jackson;
+import com.infogen.core.tools.Tool_Throwable;
 import com.infogen.core.util.CODE;
 
 /**
@@ -85,7 +85,7 @@ public class Return extends JSONObject {
 	}
 
 	public static Return FAIL(CODE code, Exception e) {
-		return FAIL(code.code, Tool_Core.stacktrace(e));
+		return FAIL(code.code, Tool_Throwable.stacktrace(e));
 	}
 
 	//////////////////////////////////// GETTER SETTER///////////////////////////
