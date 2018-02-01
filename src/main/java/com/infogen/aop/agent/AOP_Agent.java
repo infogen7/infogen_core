@@ -11,7 +11,7 @@ import java.lang.reflect.Modifier;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import com.infogen.core.tools.Tool_Jackson;
+import com.infogen.core.json.Jackson;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年2月27日 上午11:47:39
@@ -37,7 +37,7 @@ public class AOP_Agent {
 						@SuppressWarnings("unchecked")
 						Map<String, String> class_advice_map = (Map<String, String>) field.get(loadedClasse);
 						for (String infogen_advice : class_advice_map.values()) {
-							infogen_agent_advice_class = Tool_Jackson.toObject(infogen_advice, Agent_Advice_Class.class);
+							infogen_agent_advice_class = Jackson.toObject(infogen_advice, Agent_Advice_Class.class);
 							for (Class<?> clazz : allLoadedClasses) {
 								String class_name = infogen_agent_advice_class.getClass_name();
 								if (clazz.getName().equals(class_name)) {

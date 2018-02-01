@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * @since 1.0
  * @version 1.0
  */
-public class Tool_String {
+public class Trim {
 	/**
 	 * @param string
 	 *            输入字符串

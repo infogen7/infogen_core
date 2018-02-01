@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.infogen.core.tools;
+package com.infogen.core.json;
 
 import java.io.IOException;
 
@@ -21,8 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @since 1.0
  * @version 1.0
  */
-public class Tool_Jackson {
-	private static final Logger LOGGER = LogManager.getLogger(Tool_Jackson.class.getName());
+public class Jackson {
+	private static final Logger LOGGER = LogManager.getLogger(Jackson.class.getName());
 	private final static ObjectMapper objectMapper = new ObjectMapper();
 
 	static {
@@ -36,7 +36,7 @@ public class Tool_Jackson {
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
-	private Tool_Jackson() {
+	private Jackson() {
 	}
 
 	public static String toJson(Object object) {

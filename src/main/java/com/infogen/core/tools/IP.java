@@ -15,7 +15,7 @@ import java.util.Enumeration;
  * @since 1.0
  * @version 1.0
  */
-public class Tool_IP {
+public class IP {
 	/**
 	 * 
 	 * @param string_ip
@@ -39,7 +39,7 @@ public class Tool_IP {
 	 *            网卡名称的前缀，以","分隔 eg:eth,wlan
 	 * @return 获取本机IP
 	 */
-	public static String getLocalIP(String... nic_names) {
+	public static String get_local_iP(String... nic_names) {
 		String ip = null;
 		try {
 			if (System.getProperty("os.name").indexOf("Linux") != -1) {
@@ -52,7 +52,7 @@ public class Tool_IP {
 						break;
 					}
 				}
-			}else {
+			} else {
 				ip = InetAddress.getLocalHost().getHostAddress().toString();
 			}
 		} catch (SocketException | UnknownHostException e) {
@@ -84,7 +84,7 @@ public class Tool_IP {
 	/**
 	 * @return 获取本机主机名
 	 */
-	public static String getHostName() {
+	public static String get_hostname() {
 		if (System.getenv("COMPUTERNAME") != null) {
 			return System.getenv("COMPUTERNAME");
 		} else {

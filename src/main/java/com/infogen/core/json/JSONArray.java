@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.infogen.core.tools.Tool_Jackson;
 
 /**
  * HTTP协议调用端json处理类
@@ -56,7 +55,7 @@ public class JSONArray extends ArrayList<Object> {
 			return _default;
 		}
 		try {
-			return (T) Tool_Jackson.toObject(Tool_Jackson.toJson(object), typereference);
+			return (T) Jackson.toObject(Jackson.toJson(object), typereference);
 		} catch (IOException e) {
 			LOGGER.error("json 转换对象失败:", e);
 			return _default;
@@ -69,7 +68,7 @@ public class JSONArray extends ArrayList<Object> {
 			return _default;
 		}
 		try {
-			return (T) Tool_Jackson.toObject(Tool_Jackson.toJson(object), clazz);
+			return (T) Jackson.toObject(Jackson.toJson(object), clazz);
 		} catch (IOException e) {
 			LOGGER.error("json 转换对象失败:", e);
 			return _default;
@@ -88,7 +87,7 @@ public class JSONArray extends ArrayList<Object> {
 
 	public String toJson(String _default) {
 		try {
-			return Tool_Jackson.toJson(this);
+			return Jackson.toJson(this);
 		} catch (Exception e) {
 			LOGGER.error("json 解析失败:", e);
 			return _default;

@@ -28,8 +28,8 @@ import com.infogen.aop.agent.Agent_Advice_Field;
 import com.infogen.aop.agent.Agent_Advice_Method;
 import com.infogen.aop.agent.Agent_Cache;
 import com.infogen.aop.agent.Agent_Path;
+import com.infogen.core.json.Jackson;
 import com.infogen.core.path.NativePath;
-import com.infogen.core.tools.Tool_Jackson;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年4月30日 下午2:03:45
@@ -148,7 +148,7 @@ public class AOP {
 		infogen_advice_class.setMethods(methods);
 		infogen_advice_class.setFields(fields);
 
-		Agent_Cache.class_advice_map.put(class_name, Tool_Jackson.toJson(infogen_advice_class));
+		Agent_Cache.class_advice_map.put(class_name, Jackson.toJson(infogen_advice_class));
 	}
 
 	public Boolean isadvice = false;

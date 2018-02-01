@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
  * @since 1.0
  * @version 1.0
  */
-public class Tool_MD5 {
+public class MD5 {
 
 	/**
 	 * @param password
@@ -23,7 +23,7 @@ public class Tool_MD5 {
 	 * @throws NoSuchAlgorithmException
 	 *             加密异常
 	 */
-	public static String MD5(String password, String salt) throws NoSuchAlgorithmException {
+	public static String create(String password, String salt) throws NoSuchAlgorithmException {
 		MessageDigest instance = MessageDigest.getInstance("MD5");
 		instance.update((password + "{" + salt.toString() + "}").getBytes(Charset.forName("UTF-8")));
 		char hexDigits[] = { // 用来将字节转换成 16 进制表示的字符
@@ -39,7 +39,7 @@ public class Tool_MD5 {
 		return new String(str);
 	}
 
-	public static String MD5(String password) throws NoSuchAlgorithmException {
+	public static String create(String password) throws NoSuchAlgorithmException {
 		MessageDigest instance = MessageDigest.getInstance("MD5");
 		instance.update((password).getBytes(Charset.forName("UTF-8")));
 		char hexDigits[] = { // 用来将字节转换成 16 进制表示的字符
