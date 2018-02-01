@@ -28,8 +28,8 @@ import com.infogen.aop.agent.Agent_Advice_Field;
 import com.infogen.aop.agent.Agent_Advice_Method;
 import com.infogen.aop.agent.Agent_Cache;
 import com.infogen.aop.agent.Agent_Path;
+import com.infogen.core.path.NativePath;
 import com.infogen.core.tools.Tool_Jackson;
-import com.infogen.core.util.NativePath;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年4月30日 下午2:03:45
