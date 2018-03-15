@@ -48,27 +48,33 @@ public class JSONObject extends HashMap<String, Object> {
 	///////////////////////////////////////////////////////////// json工具//////////////////////////////////////////
 
 	public String getAsString(String key, String _default) {
-		return this.getOrDefault(key, _default).toString();
+		Object object = this.get(key);
+		return object != null ? object.toString() : _default;
 	}
 
 	public Boolean getAsBoolean(String key, Boolean _default) {
-		return Boolean.valueOf(this.getOrDefault(key, _default).toString());
+		Object object = this.get(key);
+		return object != null ? Boolean.valueOf(object.toString()) : _default;
 	}
 
 	public Long getAsLong(String key, Long _default) {
-		return Long.valueOf(this.getOrDefault(key, _default).toString());
+		Object object = this.get(key);
+		return object != null ? Long.valueOf(object.toString()) : _default;
 	}
 
 	public Integer getAsInteger(String key, Integer _default) {
-		return Integer.valueOf(this.getOrDefault(key, _default).toString());
+		Object object = this.get(key);
+		return object != null ? Integer.valueOf(object.toString()) : _default;
 	}
 
 	public Double getAsDouble(String key, Double _default) {
-		return Double.valueOf(this.getOrDefault(key, _default).toString());
+		Object object = this.get(key);
+		return object != null ? Double.valueOf(object.toString()) : _default;
 	}
 
 	public Float getAsFloat(String key, Float _default) {
-		return Float.valueOf(this.getOrDefault(key, _default).toString());
+		Object object = this.get(key);
+		return object != null ? Float.valueOf(object.toString()) : _default;
 	}
 
 	public <T> T getAsMapOrList(String key, TypeReference<T> typereference, T _default) {
@@ -109,13 +115,8 @@ public class JSONObject extends HashMap<String, Object> {
 
 	///////////////////////////////////////////////////////////////////
 	public static JSONObject toObject(String json) throws JsonParseException, JsonMappingException, IOException {
-		JSONObject jo = new JSONObject();
-		Map<String, Object> fromJson = Jackson.toObject(json, new TypeReference<HashMap<String, Object>>() {
+		return Jackson.toObject(json, new TypeReference<JSONObject>() {
 		});
-		for (Entry<String, Object> entry : fromJson.entrySet()) {
-			jo.put(entry.getKey(), entry.getValue());
-		}
-		return jo;
 	}
 
 	public String toJson(String _default) {

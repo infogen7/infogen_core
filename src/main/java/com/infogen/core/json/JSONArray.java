@@ -2,11 +2,14 @@ package com.infogen.core.json;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 /**
  * HTTP协议调用端json处理类
@@ -18,6 +21,29 @@ import com.fasterxml.jackson.core.type.TypeReference;
 public class JSONArray extends ArrayList<Object> {
 	private static final long serialVersionUID = -1975539711595702789L;
 	private static final Logger LOGGER = LogManager.getLogger(JSONArray.class.getName());
+
+	public static JSONArray create() {
+		return new JSONArray();
+	}
+
+	public static JSONArray create(List<String> list) {
+		JSONArray json_array = new JSONArray();
+		list.forEach(value -> {
+			json_array.add(value);
+		});
+		return json_array;
+	}
+
+	public static JSONArray create(String value) {
+		JSONArray json_array = new JSONArray();
+		json_array.add(value);
+		return json_array;
+	}
+
+	public boolean add(Object value) {
+		return super.add(value);
+	}
+	///////////////////////////////////////////////////////////// json工具//////////////////////////////////////////
 
 	public String getAsString(Integer index, String _default) {
 		Object object = this.get(index);
@@ -83,6 +109,12 @@ public class JSONArray extends ArrayList<Object> {
 	public JSONArray getAsJSONArray(Integer index, JSONArray _default) {
 		return getAsMapOrList(index, new TypeReference<JSONArray>() {
 		}, _default);
+	}
+
+	///////////////////////////////////////////////////////////////////
+	public static JSONArray toArray(String json_array) throws JsonParseException, JsonMappingException, IOException {
+		return Jackson.toObject(json_array, new TypeReference<JSONArray>() {
+		});
 	}
 
 	public String toJson(String _default) {
