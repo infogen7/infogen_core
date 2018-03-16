@@ -190,8 +190,7 @@ public class AOP {
 			while (entries.hasMoreElements()) {
 				JarEntry entry = entries.nextElement();
 				String class_name = entry.getName();
-				if (!class_name.toString().endsWith(".class")
-						&& !anonymous_inner_class_compile.matcher(class_name).find()) {
+				if (!class_name.toString().endsWith(".class") && !anonymous_inner_class_compile.matcher(class_name).find()) {
 					continue;
 				}
 				class_name = class_name.replace(".class", "").replace("/", ".");
@@ -208,11 +207,9 @@ public class AOP {
 			}).forEach((name) -> {
 				String class_name = name.toString();
 				if (System.getProperty("os.name").indexOf("Windows") != -1) {
-					class_name = class_name.substring(class_name.indexOf("\\classes\\") + 9).replace(".class", "")
-							.replace("\\", ".");
+					class_name = class_name.substring(class_name.indexOf("\\classes\\") + 9).replace(".class", "").replace("\\", ".");
 				} else {
-					class_name = class_name.substring(class_name.indexOf("/classes/") + 9).replace(".class", "")
-							.replace("/", ".");
+					class_name = class_name.substring(class_name.indexOf("/classes/") + 9).replace(".class", "").replace("/", ".");
 				}
 				try {
 					classes.add(Thread.currentThread().getContextClassLoader().loadClass(class_name));
