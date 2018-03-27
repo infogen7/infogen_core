@@ -10,8 +10,8 @@ package com.infogen.aop.agent;
  */
 public class Agent_Path {
 
-	// file:/home/xxx/.m2/repository/com/infogen/infogen_agent/V1.0.00R150210/infogen_agent-V1.0.00R150210.jar
-	// file:/home/xxx/workspace/infogen/lib/infogen_agent.jar!xxxx.class
+	// file:/home/xxx/.m2/repository/com/infogen/infogen_core/V1.0.00R150210/infogen_core-V1.0.00R150210.jar
+	// file:/home/xxx/workspace/infogen/lib/infogen_core.jar!xxxx.class
 	public static String path() {
 		String location = Agent_Path.class.getProtectionDomain().getCodeSource().getLocation().getFile();
 		location = location.replace("file:", "");

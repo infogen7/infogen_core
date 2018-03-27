@@ -51,6 +51,10 @@ public class AOP {
 	private Method loadAgent = null;
 	private Object virtualmachine_instance = null;
 
+	public Boolean isadvice = false;
+
+	private Set<Class<?>> classes = new LinkedHashSet<>();
+
 	private AOP() {
 		try {
 			classes = auto_scan_absolute(NativePath.get_class_path());
@@ -107,8 +111,34 @@ public class AOP {
 		map_autowireds.put(class_name, orDefault);
 	}
 
+	////////////////////////////////////////////////////////////////////////
+	public Set<Class<?>> getClasses() {
+		return classes;
+	}
+
+	public void addClasses(Class<?> clazz) {
+		classes.add(clazz);
+	}
+	///////////////////////////////////////////////////////////////////////
+
+	private final byte[] advice_lock = new byte[0];
+
+	public void advice() {
+		isadvice = true;
+		synchronized (advice_lock) {
+			classes.forEach((clazz) -> {
+				generate_agent_advice(clazz);
+			});
+		}
+		try {
+			loadAgent.invoke(virtualmachine_instance, new Object[] { Agent_Path.path(), "" });
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			LOGGER.error("注入代码失败", e);
+		}
+	}
+
 	////////////////////////////////////////////////////////////////////////////////////
-	public void generate_agent_advice_class(Class<?> clazz) {
+	private void generate_agent_advice(Class<?> clazz) {
 		String class_name = clazz.getName();
 		Set<Agent_Advice_Field> fields = map_autowireds.getOrDefault(class_name, new HashSet<Agent_Advice_Field>());
 		Set<Agent_Advice_Method> methods = new HashSet<>();
@@ -151,35 +181,7 @@ public class AOP {
 		Agent_Cache.class_advice_map.put(class_name, Jackson.toJson(infogen_advice_class));
 	}
 
-	public Boolean isadvice = false;
-	private final byte[] advice_lock = new byte[0];
-
-	///////////////////////////////////////////////////////////////////////
-	public void advice() {
-		isadvice = true;
-		synchronized (advice_lock) {
-			classes.forEach((clazz) -> {
-				generate_agent_advice_class(clazz);
-			});
-		}
-		try {
-			loadAgent.invoke(virtualmachine_instance, new Object[] { Agent_Path.path(), "" });
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			LOGGER.error("注入代码失败", e);
-		}
-	}
-
 	// ///////////////////////////////////////////////////////////component_scan/////////////////////////////////////////////////
-	private Set<Class<?>> classes = new LinkedHashSet<>();
-
-	public Set<Class<?>> getClasses() {
-		return classes;
-	}
-
-	public void addClasses(Class<?> clazz) {
-		classes.add(clazz);
-	}
-
 	private Pattern anonymous_inner_class_compile = Pattern.compile("^*[$][0-9]+\\.class$");
 
 	@SuppressWarnings("resource")
