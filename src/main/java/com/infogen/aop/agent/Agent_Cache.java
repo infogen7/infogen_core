@@ -13,4 +13,8 @@ import java.util.Map;
  */
 public class Agent_Cache {
 	public static Map<String, String> class_advice_map = new HashMap<>();
+
+	public static void load_class() {
+		// 加载 Agent_Cache 的 Class 到 JVM
+	}
 }
