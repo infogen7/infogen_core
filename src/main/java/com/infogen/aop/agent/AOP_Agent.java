@@ -21,7 +21,7 @@ import com.infogen.core.json.Jackson;
  * @version 1.0
  */
 public class AOP_Agent {
-	private final static Logger LOGGER = LogManager.getLogger(AOP_Transformer.class.getName());
+	private final static Logger LOGGER = LogManager.getLogger(AOP_Agent.class.getName());
 
 	private transient static String add_transformer_lock = "";
 
