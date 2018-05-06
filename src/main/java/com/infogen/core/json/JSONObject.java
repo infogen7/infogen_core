@@ -2,7 +2,6 @@ package com.infogen.core.json;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -27,20 +26,19 @@ public class JSONObject extends HashMap<String, Object> {
 		return new JSONObject();
 	}
 
-	public static JSONObject create(Map<String, List<String>> name_value_pair) {
-		JSONObject map = new JSONObject();
-		name_value_pair.forEach((key, values) -> {
-			values.forEach(value -> {
-				map.put(new String(key), value);
-			});
-		});
-		return map;
-	}
-
 	public static JSONObject create(String key, String value) {
 		return new JSONObject().put(key, value);
 	}
 
+	public static JSONObject create(Map<String, Object> map) {
+		JSONObject jo = new JSONObject();
+		for (String key : map.keySet()) {
+			jo.put(key, map.get(key));
+		}
+		return jo;
+	}
+
+	@Override
 	public JSONObject put(String key, Object value) {
 		super.put(key, value);
 		return this;
@@ -77,6 +75,17 @@ public class JSONObject extends HashMap<String, Object> {
 		return object != null ? Float.valueOf(object.toString()) : _default;
 	}
 
+	public JSONObject getAsJSONObject(String key, JSONObject _default) {
+		return getAsMapOrList(key, new TypeReference<JSONObject>() {
+		}, _default);
+	}
+
+	public JSONArray getAsJSONArray(String key, JSONArray _default) {
+		return getAsMapOrList(key, new TypeReference<JSONArray>() {
+		}, _default);
+	}
+
+	///////////////////////////////////////////////////////////////////
 	public <T> T getAsMapOrList(String key, TypeReference<T> typereference, T _default) {
 		Object object = this.get(key);
 		if (object == null) {
@@ -101,16 +110,6 @@ public class JSONObject extends HashMap<String, Object> {
 			LOGGER.error("json 转换对象失败:", e);
 			return _default;
 		}
-	}
-
-	public JSONObject getAsJSONObject(String key, JSONObject _default) {
-		return getAsMapOrList(key, new TypeReference<JSONObject>() {
-		}, _default);
-	}
-
-	public JSONArray getAsJSONArray(String key, JSONArray _default) {
-		return getAsMapOrList(key, new TypeReference<JSONArray>() {
-		}, _default);
 	}
 
 	///////////////////////////////////////////////////////////////////

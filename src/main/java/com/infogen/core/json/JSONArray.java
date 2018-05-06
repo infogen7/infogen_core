@@ -26,20 +26,21 @@ public class JSONArray extends ArrayList<Object> {
 		return new JSONArray();
 	}
 
-	public static JSONArray create(List<String> list) {
-		JSONArray json_array = new JSONArray();
-		list.forEach(value -> {
-			json_array.add(value);
-		});
-		return json_array;
-	}
-
 	public static JSONArray create(String value) {
-		JSONArray json_array = new JSONArray();
-		json_array.add(value);
-		return json_array;
+		JSONArray ja = new JSONArray();
+		ja.add(value);
+		return ja;
 	}
 
+	public static JSONArray create(List<String> list) {
+		JSONArray ja = new JSONArray();
+		for (String item : list) {
+			ja.add(item);
+		}
+		return ja;
+	}
+
+	@Override
 	public boolean add(Object value) {
 		return super.add(value);
 	}
@@ -75,6 +76,17 @@ public class JSONArray extends ArrayList<Object> {
 		return object != null ? Float.valueOf(object.toString()) : _default;
 	}
 
+	public JSONObject getAsJSONObject(Integer index, JSONObject _default) {
+		return getAsMapOrList(index, new TypeReference<JSONObject>() {
+		}, _default);
+	}
+
+	public JSONArray getAsJSONArray(Integer index, JSONArray _default) {
+		return getAsMapOrList(index, new TypeReference<JSONArray>() {
+		}, _default);
+	}
+
+	/////////////////////////////////////////////////////////////////////
 	public <T> T getAsMapOrList(Integer index, TypeReference<T> typereference, T _default) {
 		Object object = this.get(index);
 		if (object == null) {
@@ -99,16 +111,6 @@ public class JSONArray extends ArrayList<Object> {
 			LOGGER.error("json 转换对象失败:", e);
 			return _default;
 		}
-	}
-
-	public JSONObject getAsJSONObject(Integer index, JSONObject _default) {
-		return getAsMapOrList(index, new TypeReference<JSONObject>() {
-		}, _default);
-	}
-
-	public JSONArray getAsJSONArray(Integer index, JSONArray _default) {
-		return getAsMapOrList(index, new TypeReference<JSONArray>() {
-		}, _default);
 	}
 
 	///////////////////////////////////////////////////////////////////

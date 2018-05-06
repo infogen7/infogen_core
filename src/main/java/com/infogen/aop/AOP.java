@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.infogen.aop.advice.event_handle.AOP_Handle;
 import com.infogen.aop.agent.Agent_Advice_Class;
 import com.infogen.aop.agent.Agent_Advice_Field;
@@ -178,7 +179,12 @@ public class AOP {
 		infogen_advice_class.setMethods(methods);
 		infogen_advice_class.setFields(fields);
 
-		Agent_Cache.class_advice_map.put(class_name, Jackson.toJson(infogen_advice_class));
+		try {
+			Agent_Cache.class_advice_map.put(class_name, Jackson.toJson(infogen_advice_class));
+		} catch (JsonProcessingException e) {
+			LOGGER.error("生成AOP 参数失败", e);
+		}
+
 	}
 
 	// ///////////////////////////////////////////////////////////component_scan/////////////////////////////////////////////////

@@ -5,9 +5,6 @@ package com.infogen.core.json;
 
 import java.io.IOException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -22,7 +19,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @version 1.0
  */
 public class Jackson {
-	private static final Logger LOGGER = LogManager.getLogger(Jackson.class.getName());
 	private final static ObjectMapper objectMapper = new ObjectMapper();
 
 	static {
@@ -39,13 +35,8 @@ public class Jackson {
 	private Jackson() {
 	}
 
-	public static String toJson(Object object) {
-		try {
-			return objectMapper.writeValueAsString(object);
-		} catch (JsonProcessingException e) {
-			LOGGER.error("对象转json失败", e);
-		}
-		return "";
+	public static String toJson(Object object) throws JsonProcessingException {
+		return objectMapper.writeValueAsString(object);
 	}
 
 	public static <T> T toObject(String json, Class<T> valueType) throws IOException {
@@ -53,7 +44,7 @@ public class Jackson {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T toObject(String json, TypeReference<T> typeReference) throws  IOException {
+	public static <T> T toObject(String json, TypeReference<T> typeReference) throws IOException {
 		return (T) objectMapper.readValue(json, typeReference);
 	}
 }
