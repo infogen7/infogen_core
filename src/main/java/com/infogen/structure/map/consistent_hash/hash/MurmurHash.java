@@ -1,4 +1,4 @@
-package com.infogen.core.structure.map.consistent_hash.hash;
+package com.infogen.structure.map.consistent_hash.hash;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;

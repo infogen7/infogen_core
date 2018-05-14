@@ -1,4 +1,4 @@
-package com.infogen.core.structure.map.consistent_hash;
+package com.infogen.structure.map.consistent_hash;
 
 import java.io.Serializable;
 

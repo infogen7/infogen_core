@@ -1,4 +1,4 @@
-package com.infogen.core.structure.map.consistent_hash;
+package com.infogen.structure.map.consistent_hash;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -12,7 +12,7 @@ import java.util.TreeMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.infogen.core.structure.map.consistent_hash.hash.HashFunction;
+import com.infogen.structure.map.consistent_hash.hash.HashFunction;
 
 /**
  * 一致性hash

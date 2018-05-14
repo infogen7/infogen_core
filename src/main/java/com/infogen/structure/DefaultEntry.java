@@ -1,4 +1,4 @@
-package com.infogen.core.structure;
+package com.infogen.structure;
 
 import java.util.Map.Entry;
 
