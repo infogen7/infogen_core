@@ -2,10 +2,7 @@ package com.infogen.aop;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.lang.management.ManagementFactory;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Enumeration;
@@ -23,12 +20,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.infogen.Infogen_Attach_Path;
 import com.infogen.aop.advice.event_handle.AOP_Handle;
 import com.infogen.aop.agent.Agent_Advice_Class;
 import com.infogen.aop.agent.Agent_Advice_Field;
 import com.infogen.aop.agent.Agent_Advice_Method;
 import com.infogen.aop.agent.Agent_Cache;
-import com.infogen.aop.agent.Agent_Path;
 import com.infogen.json.Jackson;
 import com.infogen.path.NativePath;
 
@@ -48,49 +45,19 @@ public class AOP {
 		return InnerInstance.instance;
 	}
 
-	private static final AOP_ClassLoader classLoader = new AOP_ClassLoader(new URL[] {}, null);
-	private Method loadAgent = null;
-	private Object virtualmachine_instance = null;
-
-	public Boolean isadvice = false;
-
+	// Scan Class
 	private Set<Class<?>> classes = new LinkedHashSet<>();
 
 	private AOP() {
 		try {
 			classes = auto_scan_absolute(NativePath.get_class_path());
-
-			String java_home = System.getProperty("java.home");
-			LOGGER.info("java.home  => " + java_home);
-			if (System.getProperty("os.name").indexOf("Windows") != -1) {
-				if (java_home.contains("jdk")) {
-					java_home = java_home.replace("jre", "").concat("lib/tools.jar");
-				} else {
-					java_home = java_home.replace("jre", "jdk").concat("/lib/tools.jar");
-				}
-			} else {
-				java_home = java_home.replace("jre", "").concat("lib/tools.jar");
-			}
-			LOGGER.info("jdk home dir => " + java_home);
-			classLoader.addJar(Paths.get(java_home).toUri().toURL());
-
-			Class<?> clazz = classLoader.loadClass("com.sun.tools.attach.VirtualMachine");
-			Method attach = clazz.getMethod("attach", new Class[] { String.class });
-			String port = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
-			virtualmachine_instance = attach.invoke(null, new Object[] { port });
-			loadAgent = clazz.getMethod("loadAgent", new Class[] { String.class, String.class });
-			// TODO 如果只加载一次应该在使用完成后close
-			// detach = clazz.getMethod("detach", new Class[] {});
 		} catch (Exception e) {
-			LOGGER.error("初始化AOP失败-如遇到找不到VirtualMachine类,请检查是否只安装了JRE没有安装JDK", e);
+			LOGGER.error("加载class失败:", e);
 		}
 	}
 
-	///////////////////////////////////////////////////////////////
-	// 面向切面
+	// AOP
 	private Map<Class<? extends Annotation>, AOP_Handle> advice_methods = new HashMap<>();
-	// 依赖注入
-	private Map<String, Set<Agent_Advice_Field>> map_autowireds = new HashMap<>();
 
 	public void add_advice_method(Class<? extends Annotation> clazz, AOP_Handle instance) {
 		Objects.requireNonNull(clazz);
@@ -102,46 +69,49 @@ public class AOP {
 		}
 	}
 
+	// IOC
+	private Map<String, Set<Agent_Advice_Field>> advice_fields = new HashMap<>();
+
 	public void add_autowired_field(String class_name, String field_name, String value) {
 		Agent_Advice_Field infogen_agent_advice_field = new Agent_Advice_Field();
 		infogen_agent_advice_field.setField_name(field_name);
 		infogen_agent_advice_field.setValue(value);
 
-		Set<Agent_Advice_Field> orDefault = map_autowireds.getOrDefault(class_name, new HashSet<Agent_Advice_Field>());
+		Set<Agent_Advice_Field> orDefault = advice_fields.getOrDefault(class_name, new HashSet<Agent_Advice_Field>());
 		orDefault.add(infogen_agent_advice_field);
-		map_autowireds.put(class_name, orDefault);
+		advice_fields.put(class_name, orDefault);
 	}
 
-	////////////////////////////////////////////////////////////////////////
-	public Set<Class<?>> getClasses() {
-		return classes;
-	}
-
-	public void addClasses(Class<?> clazz) {
-		classes.add(clazz);
-	}
 	///////////////////////////////////////////////////////////////////////
-
-	private final byte[] advice_lock = new byte[0];
+	public Boolean isadvice = false;
 
 	public void advice() {
 		isadvice = true;
-		synchronized (advice_lock) {
-			classes.forEach((clazz) -> {
-				generate_agent_advice(clazz);
-			});
-		}
+
+		classes.forEach((clazz) -> {
+			generate_agent_advice(clazz);
+		});
+
+		String attach_path = Infogen_Attach_Path.path().replaceAll(" ", "\" \"");
+		String agent_Path = Infogen_Core_Path.path().replaceAll(" ", "\" \"");
+		Long pid = ProcessHandle.current().pid();
+		Runtime runtime = Runtime.getRuntime();
+		Process process = null;
 		try {
-			loadAgent.invoke(virtualmachine_instance, new Object[] { Agent_Path.path(), "" });
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			process = runtime.exec("java -jar " + attach_path + " " + agent_Path + " " + pid);
+			int exitVal = process.waitFor();
+			if (exitVal != 0) {
+				LOGGER.error("注入代码失败:" + exitVal);
+			}
+		} catch (InterruptedException | IOException e) {
 			LOGGER.error("注入代码失败", e);
 		}
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////
 	private void generate_agent_advice(Class<?> clazz) {
 		String class_name = clazz.getName();
-		Set<Agent_Advice_Field> fields = map_autowireds.getOrDefault(class_name, new HashSet<Agent_Advice_Field>());
+		Set<Agent_Advice_Field> fields = advice_fields.getOrDefault(class_name, new HashSet<Agent_Advice_Field>());
 		Set<Agent_Advice_Method> methods = new HashSet<>();
 
 		Method[] declaredMethods = clazz.getDeclaredMethods();
@@ -227,5 +197,15 @@ public class AOP {
 			});
 		}
 		return classes;
+	}
+
+	////////////////////////////////////////////////////////////////////////
+
+	public Set<Class<?>> getClasses() {
+		return classes;
+	}
+
+	public void addClasses(Class<?> clazz) {
+		classes.add(clazz);
 	}
 }
