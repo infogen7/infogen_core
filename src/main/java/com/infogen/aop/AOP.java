@@ -86,8 +86,6 @@ public class AOP {
 	public Boolean isadvice = false;
 
 	public void advice() {
-		isadvice = true;
-
 		classes.forEach((clazz) -> {
 			generate_agent_advice(clazz);
 		});
@@ -106,6 +104,8 @@ public class AOP {
 		} catch (InterruptedException | IOException e) {
 			LOGGER.error("注入代码失败", e);
 		}
+		
+		isadvice = true;
 	}
 
 	//////////////////////////
