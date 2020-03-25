@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.github.infogen7</groupId>
@@ -41,11 +39,11 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.github.infogen7</groupId>
-			<artifactId>infogen_attach</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>com.github.infogen7</groupId> -->
+		<!-- <artifactId>infogen_attach</artifactId> -->
+		<!-- <version>${project.version}</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
@@ -65,6 +63,10 @@
 						<manifest>
 							<!-- 往Manifest.MF文件中添加ClassPath -->
 							<addClasspath>true</addClasspath>
+							<!-- classpath前缀 -->
+							<classpathPrefix>lib/</classpathPrefix>
+							<!-- 主程序入口 -->
+							<mainClass>com.infogen.attach.Attach</mainClass>
 						</manifest>
 						<manifestEntries>
 							<Manifest-Version>${project.version}-SNAPSHOT</Manifest-Version>

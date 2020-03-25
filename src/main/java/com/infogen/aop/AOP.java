@@ -20,12 +20,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.infogen.Infogen_Attach_Path;
 import com.infogen.aop.advice.event_handle.AOP_Handle;
 import com.infogen.aop.agent.Agent_Advice_Class;
 import com.infogen.aop.agent.Agent_Advice_Field;
 import com.infogen.aop.agent.Agent_Advice_Method;
 import com.infogen.aop.agent.Agent_Cache;
+import com.infogen.attach.Infogen_Attach_Path;
 import com.infogen.json.Jackson;
 import com.infogen.path.NativePath;
 
@@ -91,12 +91,11 @@ public class AOP {
 		});
 
 		String attach_path = Infogen_Attach_Path.path().replaceAll(" ", "\" \"");
+
 		String agent_Path = Infogen_Core_Path.path().replaceAll(" ", "\" \"");
 		Long pid = ProcessHandle.current().pid();
-		Runtime runtime = Runtime.getRuntime();
-		Process process = null;
 		try {
-			process = runtime.exec("java -jar " + attach_path + " " + agent_Path + " " + pid);
+			Process process = Runtime.getRuntime().exec("java -jar " + attach_path + " " + agent_Path + " " + pid);
 			int exitVal = process.waitFor();
 			if (exitVal != 0) {
 				LOGGER.error("注入代码失败:" + exitVal);
@@ -104,7 +103,7 @@ public class AOP {
 		} catch (InterruptedException | IOException e) {
 			LOGGER.error("注入代码失败", e);
 		}
-		
+
 		isadvice = true;
 	}
 
