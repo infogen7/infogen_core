@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.infogen.aop.agent;
+package com.infogen.agent;
 
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
@@ -13,6 +13,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.infogen.agent.advice.Agent_Advice_Class;
 import com.infogen.json.Jackson;
 
 /**
@@ -20,8 +21,8 @@ import com.infogen.json.Jackson;
  * @since 1.0
  * @version 1.0
  */
-public class AOP_Agent {
-	private final static Logger LOGGER = LogManager.getLogger(AOP_Agent.class.getName());
+public class Agent_Main {
+	private final static Logger LOGGER = LogManager.getLogger(Agent_Main.class.getName());
 
 	private transient static String add_transformer_lock = "";
 
@@ -67,7 +68,7 @@ public class AOP_Agent {
 					String advice_class_name = agent_advice_class.getClass_name();
 					if (clazz.getName().equals(advice_class_name)) {
 						try {
-							AOP_Transformer transformer = new AOP_Transformer(agent_advice_class, clazz);
+							Agent_Transformer transformer = new Agent_Transformer(agent_advice_class, clazz);
 							inst.addTransformer(transformer, true);
 							LOGGER.info("重新加载class文件 -> " + advice_class_name);
 							inst.retransformClasses(clazz);

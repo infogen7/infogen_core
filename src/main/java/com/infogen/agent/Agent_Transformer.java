@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.infogen.aop.agent;
+package com.infogen.agent;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
@@ -10,6 +10,10 @@ import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.infogen.agent.advice.Agent_Advice_Class;
+import com.infogen.agent.advice.Agent_Advice_Field;
+import com.infogen.agent.advice.Agent_Advice_Method;
 
 import javassist.ClassClassPath;
 import javassist.ClassPool;
@@ -22,14 +26,14 @@ import javassist.CtMethod;
  * @since 1.0
  * @version 1.0
  */
-public class AOP_Transformer implements ClassFileTransformer {
-	private final static Logger LOGGER = LogManager.getLogger(AOP_Transformer.class.getName());
+public class Agent_Transformer implements ClassFileTransformer {
+	private final static Logger LOGGER = LogManager.getLogger(Agent_Transformer.class.getName());
 
 	private Agent_Advice_Class infogen_advice = null;
 	private Class<?> reload_class = null;
 	private ClassPool class_pool = ClassPool.getDefault();
 
-	public AOP_Transformer(Agent_Advice_Class infogen_advice, Class<?> reload_class) {
+	public Agent_Transformer(Agent_Advice_Class infogen_advice, Class<?> reload_class) {
 		this.infogen_advice = infogen_advice;
 		this.reload_class = reload_class;
 	}

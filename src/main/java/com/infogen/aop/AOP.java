@@ -20,11 +20,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.infogen.aop.advice.event_handle.AOP_Handle;
-import com.infogen.aop.agent.Agent_Advice_Class;
-import com.infogen.aop.agent.Agent_Advice_Field;
-import com.infogen.aop.agent.Agent_Advice_Method;
-import com.infogen.aop.agent.Agent_Cache;
+import com.infogen.agent.Agent_Cache;
+import com.infogen.agent.Infogen_Agent_Path;
+import com.infogen.agent.advice.Agent_Advice_Class;
+import com.infogen.agent.advice.Agent_Advice_Field;
+import com.infogen.agent.advice.Agent_Advice_Method;
+import com.infogen.aop.event_handle.AOP_Handle;
 import com.infogen.attach.Infogen_Attach_Path;
 import com.infogen.json.Jackson;
 import com.infogen.path.NativePath;
@@ -90,9 +91,9 @@ public class AOP {
 			generate_agent_advice(clazz);
 		});
 
-		String attach_path = Infogen_Attach_Path.path().replaceAll(" ", "\" \"");
+		String attach_path = Infogen_Attach_Path.path().replace(" ", "\" \"");
 
-		String agent_Path = Infogen_Core_Path.path().replaceAll(" ", "\" \"");
+		String agent_Path = Infogen_Agent_Path.path().replace(" ", "\" \"");
 		Long pid = ProcessHandle.current().pid();
 		try {
 			Process process = Runtime.getRuntime().exec("java -jar " + attach_path + " " + agent_Path + " " + pid);

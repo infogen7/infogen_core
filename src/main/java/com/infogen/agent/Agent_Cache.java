@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.infogen.aop.agent;
+package com.infogen.agent;
 
 import java.util.HashMap;
 import java.util.Map;

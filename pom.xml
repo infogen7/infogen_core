@@ -74,6 +74,13 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>4.0.1</version>
 		</dependency>
+
+		<!-- http -->
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.9.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -96,10 +103,10 @@
 						<manifestEntries>
 							<Manifest-Version>${project.version}-SNAPSHOT</Manifest-Version>
 							<Archiver-Version>${project.version}-Release</Archiver-Version>
-							<Agent-Class>com.infogen.aop.agent.AOP_Agent</Agent-Class>
+							<Agent-Class>com.infogen.agent.Agent_Main</Agent-Class>
 							<Can-Redefine-Classes>true</Can-Redefine-Classes>
 							<Can-Retransform-Classes>true</Can-Retransform-Classes>
-							<Premain-Class>com.infogen.aop.agent.AOP_Agent</Premain-Class>
+							<Premain-Class>com.infogen.agent.Agent_Main</Premain-Class>
 						</manifestEntries>
 					</archive>
 				</configuration>

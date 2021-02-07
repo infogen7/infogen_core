@@ -1,9 +1,9 @@
-package com.infogen.aop.advice.event_handle;
+package com.infogen.aop.event_handle;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import com.infogen.aop.agent.Agent_Advice_Method;
+import com.infogen.agent.advice.Agent_Advice_Method;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年4月29日 下午3:35:56
