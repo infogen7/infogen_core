@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,7 +28,7 @@ public class Jackson {
 		// 允许单引号
 		objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
 		// 允许反斜杆等字符
-		objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+		objectMapper.configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true);
 		// 允许出现对象中没有的字段
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
@@ -43,7 +44,6 @@ public class Jackson {
 		return objectMapper.readValue(json, valueType);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> T toObject(String json, TypeReference<T> typeReference) throws IOException {
 		return (T) objectMapper.readValue(json, typeReference);
 	}
