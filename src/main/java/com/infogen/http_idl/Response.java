@@ -34,6 +34,20 @@ public class Response extends JSONObject {
 		return jo;
 	}
 
+	public static Response success() {
+		Response jo = new Response();
+		jo.put(Response_Fields.code.name(), CODE.success.code);
+		jo.put(Response_Fields.message.name(), CODE.success.message);
+		return jo;
+	}
+
+	public static Response fail(String message) {
+		Response jo = new Response();
+		jo.put(Response_Fields.code.name(), CODE.error.code);
+		jo.put(Response_Fields.message.name(), message);
+		return jo;
+	}
+
 	//////////////////////////////////// GETTER SETTER///////////////////////////
 
 	public Integer getCode() {
