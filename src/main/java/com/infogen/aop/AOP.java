@@ -16,8 +16,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.infogen.agent.Agent_Cache;
@@ -36,7 +36,7 @@ import com.infogen.path.NativePath;
  * @version 1.0
  */
 public class AOP {
-	private final static Logger LOGGER = LogManager.getLogger(AOP.class.getName());
+	private final static Logger LOGGER = LoggerFactory.getLogger(AOP.class);
 
 	private static class InnerInstance {
 		public static final AOP instance = new AOP();

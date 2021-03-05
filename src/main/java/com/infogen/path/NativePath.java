@@ -3,8 +3,8 @@ package com.infogen.path;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 获取linux和windows平台下各种发布测试环境下基于classpath的路径 测试过jetty和tomcat
@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
  * @version 1.0
  */
 public class NativePath {
-	private static final Logger LOGGER = LogManager.getLogger(NativePath.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(NativePath.class);
 
 	/**
 	 * 获取配置文件路径

@@ -1,7 +1,7 @@
 package com.infogen.logger;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.infogen.structure.map.LRULinkedHashMap;
 
@@ -13,7 +13,7 @@ import com.infogen.structure.map.LRULinkedHashMap;
  * @version 1.0
  */
 public class Logger_Once {
-	private static final Logger LOGGER = LogManager.getLogger(Logger_Once.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(Logger_Once.class);
 	private static final LRULinkedHashMap<String, Boolean> map = new LRULinkedHashMap<>(10000);
 
 	private static Boolean has(String message) {

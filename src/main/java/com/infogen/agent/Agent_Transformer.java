@@ -8,8 +8,8 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.infogen.agent.advice.Agent_Advice_Class;
 import com.infogen.agent.advice.Agent_Advice_Field;
@@ -27,7 +27,7 @@ import javassist.CtMethod;
  * @version 1.0
  */
 public class Agent_Transformer implements ClassFileTransformer {
-	private final static Logger LOGGER = LogManager.getLogger(Agent_Transformer.class.getName());
+	private final static Logger LOGGER = LoggerFactory.getLogger(Agent_Transformer.class);
 
 	private Agent_Advice_Class infogen_advice = null;
 	private Class<?> reload_class = null;
@@ -118,7 +118,7 @@ public class Agent_Transformer implements ClassFileTransformer {
 			LOGGER.info("javassist.CannotCompileException: [source error] insert_after_call_back(boolean) not found in com.infogen.tracking.event_handle.InfoGen_AOP_Handle_Execution");
 			LOGGER.info("的错误.");
 			e.printStackTrace();
-			LOGGER.error(e);
+			LOGGER.error("", e);
 			return classfileBuffer;
 		}
 

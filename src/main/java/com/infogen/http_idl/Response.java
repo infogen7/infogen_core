@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.infogen.json.JSONObject;
@@ -19,8 +19,8 @@ import com.infogen.json.Jackson;
  * @version 1.0
  */
 public class Response extends JSONObject {
-	private static final Logger LOGGER = LogManager.getLogger(Response.class.getName());
 	private static final long serialVersionUID = 2203513787220720192L;
+	private static final Logger LOGGER = LoggerFactory.getLogger(Response.class);
 
 	private enum Response_Fields {
 		code, message

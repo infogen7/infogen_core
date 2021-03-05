@@ -5,8 +5,8 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年6月16日 下午12:11:25
@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
  * @version 1.0
  */
 public class MD5Hash implements HashFunction {
-	private static final Logger LOGGER = LogManager.getLogger(MD5Hash.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(MD5Hash.class);
 	public ThreadLocal<MessageDigest> md5Holder = new ThreadLocal<MessageDigest>();
 
 	@Override

@@ -5,8 +5,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -22,7 +22,7 @@ import com.infogen.json.Jackson;
  */
 public class Parameter extends IdentityHashMap<String, Object> {
 	private static final long serialVersionUID = -5436768657673377874L;
-	private static final Logger LOGGER = LogManager.getLogger(Parameter.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(Parameter.class);
 
 	public static Parameter create() {
 		return new Parameter();

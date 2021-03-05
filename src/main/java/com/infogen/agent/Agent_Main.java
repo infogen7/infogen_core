@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.infogen.agent.advice.Agent_Advice_Class;
 import com.infogen.json.Jackson;
@@ -22,7 +22,7 @@ import com.infogen.json.Jackson;
  * @version 1.0
  */
 public class Agent_Main {
-	private final static Logger LOGGER = LogManager.getLogger(Agent_Main.class.getName());
+	private final static Logger LOGGER = LoggerFactory.getLogger(Agent_Main.class);
 
 	private transient static String add_transformer_lock = "";
 

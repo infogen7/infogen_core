@@ -3,8 +3,8 @@ package com.infogen.tracking.event_handle;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.infogen.agent.advice.Agent_Advice_Method;
 import com.infogen.aop.event_handle.AOP_Handle;
@@ -18,7 +18,7 @@ import com.infogen.tracking.annotation.Execution;
  * @version 1.0
  */
 public class InfoGen_AOP_Handle_Execution extends AOP_Handle {
-	private static final Logger LOGGER = LogManager.getLogger(InfoGen_AOP_Handle_Execution.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(InfoGen_AOP_Handle_Execution.class);
 
 	@Override
 	public Agent_Advice_Method attach_method(String class_name, Method method, Annotation annotation) {
