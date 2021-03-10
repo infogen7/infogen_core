@@ -1,9 +1,8 @@
 package com.infogen.logger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.infogen.structure.map.LRULinkedHashMap;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 只会打印一次的日志
@@ -12,8 +11,8 @@ import com.infogen.structure.map.LRULinkedHashMap;
  * @since 1.0
  * @version 1.0
  */
-public class Logger_Once {
-	private static final Logger LOGGER = LoggerFactory.getLogger(Logger_Once.class);
+@Slf4j
+public class LoggerOnce {
 	private static final LRULinkedHashMap<String, Boolean> map = new LRULinkedHashMap<>(10000);
 
 	private static Boolean has(String message) {
@@ -28,55 +27,55 @@ public class Logger_Once {
 		if (has(message)) {
 			return;
 		}
-		LOGGER.debug(message);
+		log.debug(message);
 	}
 
 	public static void info(String message) {
 		if (has(message)) {
 			return;
 		}
-		LOGGER.info(message);
+		log.info(message);
 	}
 
 	public static void warn(String message) {
 		if (has(message)) {
 			return;
 		}
-		LOGGER.warn(message);
+		log.warn(message);
 	}
 
 	public static void error(String message) {
 		if (has(message)) {
 			return;
 		}
-		LOGGER.error(message);
+		log.error(message);
 	}
 
 	public static void debug(String message, Throwable e) {
 		if (has(message)) {
 			return;
 		}
-		LOGGER.debug(message, e);
+		log.debug(message, e);
 	}
 
 	public static void info(String message, Throwable e) {
 		if (has(message)) {
 			return;
 		}
-		LOGGER.info(message, e);
+		log.info(message, e);
 	}
 
 	public static void warn(String message, Throwable e) {
 		if (has(message)) {
 			return;
 		}
-		LOGGER.warn(message, e);
+		log.warn(message, e);
 	}
 
 	public static void error(String message, Throwable e) {
 		if (has(message)) {
 			return;
 		}
-		LOGGER.error(message, e);
+		log.error(message, e);
 	}
 }

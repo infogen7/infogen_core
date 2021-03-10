@@ -11,8 +11,8 @@ import java.util.Map;
  * @since 1.0
  * @version 1.0
  */
-public class Agent_Cache {
-	public static Map<String, String> class_advice_map = new HashMap<>();
+public class InfogenAgentCache {
+	public static Map<String, String> injection_class_map = new HashMap<>();
 
 	public static void load_class() {
 		// 加载 Agent_Cache 的 Class 到 JVM

@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.infogen.json.JSONObject;
 import com.infogen.json.Jackson;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * HTTP协议返回值封装
@@ -18,9 +17,9 @@ import com.infogen.json.Jackson;
  * @since 1.0
  * @version 1.0
  */
+@Slf4j
 public class Response extends JSONObject {
 	private static final long serialVersionUID = 2203513787220720192L;
-	private static final Logger LOGGER = LoggerFactory.getLogger(Response.class);
 
 	private enum Response_Fields {
 		code, message
@@ -61,10 +60,10 @@ public class Response extends JSONObject {
 	@Override
 	public Response put(String key, Object value) {
 		if (key.equals(Response_Fields.code.name()) && this.get(Response_Fields.code.name()) != null) {
-			LOGGER.warn("#！！！Response 中已存在属性 code ！！！");
+			log.warn("#！！！Response 中已存在属性 code ！！！");
 		}
 		if (key.equals(Response_Fields.message.name()) && this.get(Response_Fields.message.name()) != null) {
-			LOGGER.warn("#！！！Response 中已存在属性 message ！！！");
+			log.warn("#！！！Response 中已存在属性 message ！！！");
 		}
 		super.put(key, value);
 		return this;

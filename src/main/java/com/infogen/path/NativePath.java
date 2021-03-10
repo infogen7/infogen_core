@@ -3,8 +3,7 @@ package com.infogen.path;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 获取linux和windows平台下各种发布测试环境下基于classpath的路径 测试过jetty和tomcat
@@ -13,9 +12,8 @@ import org.slf4j.LoggerFactory;
  * @since 1.0
  * @version 1.0
  */
+@Slf4j
 public class NativePath {
-	private static final Logger LOGGER = LoggerFactory.getLogger(NativePath.class);
-
 	/**
 	 * 获取配置文件路径
 	 * 
@@ -43,7 +41,7 @@ public class NativePath {
 			java_class_path = java_class_path.concat("/");
 		}
 		java_class_path = java_class_path.concat(path);
-		LOGGER.info("final path ---> :".concat(java_class_path));
+		log.info("final path ---> :".concat(java_class_path));
 		return Paths.get(java_class_path);
 	}
 
@@ -69,8 +67,8 @@ public class NativePath {
 	 */
 	public static String get_class_path() {
 		String java_class_path = System.getProperty("java.class.path");
-		LOGGER.debug("java_class_path -> :".concat(java_class_path));
-		LOGGER.debug(System.getProperty("os.name"));
+		log.debug("java_class_path -> :".concat(java_class_path));
+		log.debug(System.getProperty("os.name"));
 		if (System.getProperty("os.name").indexOf("Windows") != -1) {
 			int indexof_classes = java_class_path.indexOf("\\classes");
 			if (indexof_classes != -1) {
@@ -80,7 +78,7 @@ public class NativePath {
 				if (indexof_separator != -1) {
 					java_class_path = java_class_path.substring(indexof_separator + 1);
 				}
-				LOGGER.debug("windows code start --> :".concat(java_class_path));
+				log.debug("windows code start --> :".concat(java_class_path));
 			} else {
 				String webroot = NativePath.class.getResource("").getFile();
 				webroot = webroot.replace("file:/", "");
@@ -88,14 +86,14 @@ public class NativePath {
 				if (indexof_web_inf != -1) {
 					// WEB容器启动
 					java_class_path = webroot.substring(0, indexof_web_inf).concat("/WEB-INF/classes");
-					LOGGER.debug("windows server start --> :".concat(java_class_path));
+					log.debug("windows server start --> :".concat(java_class_path));
 				} else {
 					int comma = java_class_path.indexOf(";");
 					if (comma > 0) {
 						java_class_path = java_class_path.substring(0, comma);
 					}
 					// JAR包启动
-					LOGGER.debug("windows jar start --> :".concat(java_class_path));
+					log.debug("windows jar start --> :".concat(java_class_path));
 				}
 			}
 		} else {// LINUX
@@ -107,7 +105,7 @@ public class NativePath {
 				if (indexof_separator != -1) {
 					java_class_path = java_class_path.substring(indexof_separator + 1);
 				}
-				LOGGER.debug("linux code start --> :".concat(java_class_path));
+				log.debug("linux code start --> :".concat(java_class_path));
 			} else {
 				String webroot = NativePath.class.getResource("").getFile();
 				webroot = webroot.replace("file:", "");
@@ -115,14 +113,14 @@ public class NativePath {
 				if (indexof_web_inf != -1) {
 					// WEB容器启动
 					java_class_path = webroot.substring(0, indexof_web_inf).concat("/WEB-INF/classes");
-					LOGGER.debug("linux server start --> :".concat(java_class_path));
+					log.debug("linux server start --> :".concat(java_class_path));
 				} else {
 					int comma = java_class_path.indexOf(":");
 					if (comma > 0) {
 						java_class_path = java_class_path.substring(0, comma);
 					}
 					// JAR包启动
-					LOGGER.debug("linux jar start --> :".concat(java_class_path));
+					log.debug("linux jar start --> :".concat(java_class_path));
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.infogen.agent.advice;
+package com.infogen.agent.injection;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @since 1.0
  * @version 1.0
  */
-public class Agent_Advice_Method implements Serializable {
+public class InjectionMethod implements Serializable {
 	private static final long serialVersionUID = -57940195739144408L;
 	private String method_name;
 	private String method_parameters;

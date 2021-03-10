@@ -5,13 +5,12 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.infogen.json.Jackson;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * HTTP协议调用端输入参数类
@@ -20,9 +19,9 @@ import com.infogen.json.Jackson;
  * @since 1.0
  * @version 1.0
  */
+@Slf4j
 public class Parameter extends IdentityHashMap<String, Object> {
 	private static final long serialVersionUID = -5436768657673377874L;
-	private static final Logger LOGGER = LoggerFactory.getLogger(Parameter.class);
 
 	public static Parameter create() {
 		return new Parameter();
@@ -64,7 +63,7 @@ public class Parameter extends IdentityHashMap<String, Object> {
 		try {
 			return Jackson.toJson(this);
 		} catch (Exception e) {
-			LOGGER.error("json 解析失败:", e);
+			log.error("json 解析失败:", e);
 			return _default;
 		}
 	}

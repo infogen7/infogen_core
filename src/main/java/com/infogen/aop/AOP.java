@@ -20,13 +20,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.infogen.agent.Agent_Cache;
-import com.infogen.agent.Infogen_Agent_Path;
-import com.infogen.agent.advice.Agent_Advice_Class;
-import com.infogen.agent.advice.Agent_Advice_Field;
-import com.infogen.agent.advice.Agent_Advice_Method;
-import com.infogen.aop.event_handle.AOP_Handle;
-import com.infogen.attach.Infogen_Attach_Path;
+import com.infogen.agent.InfogenAgentCache;
+import com.infogen.agent.InfogenAgentPath;
+import com.infogen.agent.injection.InjectionClass;
+import com.infogen.agent.injection.InjectionField;
+import com.infogen.agent.injection.InjectionMethod;
+import com.infogen.aop.event_handle.AnnotationHandle;
+import com.infogen.attach.InfogenAttachPath;
 import com.infogen.json.Jackson;
 import com.infogen.path.NativePath;
 
@@ -58,42 +58,41 @@ public class AOP {
 	}
 
 	// AOP
-	private Map<Class<? extends Annotation>, AOP_Handle> advice_methods = new HashMap<>();
+	private Map<Class<? extends Annotation>, AnnotationHandle> annotation_handles = new HashMap<>();
 
-	public void add_advice_method(Class<? extends Annotation> clazz, AOP_Handle instance) {
-		Objects.requireNonNull(clazz);
-		Objects.requireNonNull(instance);
+	public void add_annotation_handle(Class<? extends Annotation> annotation, AnnotationHandle handle) {
+		Objects.requireNonNull(annotation);
+		Objects.requireNonNull(handle);
 		try {
-			advice_methods.put(clazz, instance);
+			annotation_handles.put(annotation, handle);
 		} catch (java.lang.ClassCastException e) {
 			LOGGER.error("clazz 不是注解类型", e);
 		}
 	}
 
 	// IOC
-	private Map<String, Set<Agent_Advice_Field>> advice_fields = new HashMap<>();
+	private Map<String, Set<InjectionField>> injection_fields = new HashMap<>();
 
-	public void add_autowired_field(String class_name, String field_name, String value) {
-		Agent_Advice_Field infogen_agent_advice_field = new Agent_Advice_Field();
-		infogen_agent_advice_field.setField_name(field_name);
-		infogen_agent_advice_field.setValue(value);
+	public void add_injection_field(String class_name, String field_name, String value) {
+		InjectionField injection_field = new InjectionField();
+		injection_field.setField_name(field_name);
+		injection_field.setValue(value);
 
-		Set<Agent_Advice_Field> orDefault = advice_fields.getOrDefault(class_name, new HashSet<Agent_Advice_Field>());
-		orDefault.add(infogen_agent_advice_field);
-		advice_fields.put(class_name, orDefault);
+		Set<InjectionField> orDefault = injection_fields.getOrDefault(class_name, new HashSet<InjectionField>());
+		orDefault.add(injection_field);
+		injection_fields.put(class_name, orDefault);
 	}
 
 	///////////////////////////////////////////////////////////////////////
 	public Boolean isadvice = false;
 
 	public void advice() {
-		classes.forEach((clazz) -> {
-			generate_agent_advice(clazz);
+		classes.forEach(clazz -> {
+			generate_injection_class(clazz);
 		});
 
-		String attach_path = Infogen_Attach_Path.path().replace(" ", "\" \"");
-
-		String agent_Path = Infogen_Agent_Path.path().replace(" ", "\" \"");
+		String attach_path = InfogenAttachPath.path().replace(" ", "\" \"");
+		String agent_Path = InfogenAgentPath.path().replace(" ", "\" \"");
 		Long pid = ProcessHandle.current().pid();
 		try {
 			Process process = Runtime.getRuntime().exec("java -jar " + attach_path + " " + agent_Path + " " + pid);
@@ -109,23 +108,25 @@ public class AOP {
 	}
 
 	//////////////////////////
-	private void generate_agent_advice(Class<?> clazz) {
+	private void generate_injection_class(Class<?> clazz) {
 		String class_name = clazz.getName();
-		Set<Agent_Advice_Field> fields = advice_fields.getOrDefault(class_name, new HashSet<Agent_Advice_Field>());
-		Set<Agent_Advice_Method> methods = new HashSet<>();
 
-		Method[] declaredMethods = clazz.getDeclaredMethods();
-		for (Method method : declaredMethods) {
-			for (Class<? extends Annotation> key : advice_methods.keySet()) {
-				AOP_Handle handle = advice_methods.get(key);
+		// field
+		Set<InjectionField> fields = injection_fields.getOrDefault(class_name, new HashSet<InjectionField>());
 
+		// method
+		Set<InjectionMethod> methods = new HashSet<>();
+		for (Class<? extends Annotation> key : annotation_handles.keySet()) {
+			AnnotationHandle handle = annotation_handles.get(key);
+
+			for (Method method : clazz.getDeclaredMethods()) {
 				Annotation[] annotations = method.getAnnotationsByType(key);
 				if (annotations.length == 0) {
 					continue;
 				}
 
-				Agent_Advice_Method attach_method = handle.attach_method(class_name, method, annotations[0]);
-				if (attach_method == null) {
+				InjectionMethod injection_method = handle.injection_method(class_name, method, annotations[0]);
+				if (injection_method == null) {
 					continue;
 				}
 
@@ -134,9 +135,9 @@ public class AOP {
 				for (Class<?> type : parameterTypes) {
 					stringbuilder.append(type.getName()).append(" ");
 				}
-				attach_method.setMethod_parameters(stringbuilder.toString().trim());
+				injection_method.setMethod_parameters(stringbuilder.toString().trim());
 
-				methods.add(attach_method);
+				methods.add(injection_method);
 			}
 		}
 
@@ -144,13 +145,13 @@ public class AOP {
 			return;
 		}
 
-		Agent_Advice_Class infogen_advice_class = new Agent_Advice_Class();
-		infogen_advice_class.setClass_name(class_name);
-		infogen_advice_class.setMethods(methods);
-		infogen_advice_class.setFields(fields);
+		InjectionClass infogen_injection_class = new InjectionClass();
+		infogen_injection_class.setClass_name(class_name);
+		infogen_injection_class.setFields(fields);
+		infogen_injection_class.setMethods(methods);
 
 		try {
-			Agent_Cache.class_advice_map.put(class_name, Jackson.toJson(infogen_advice_class));
+			InfogenAgentCache.injection_class_map.put(class_name, Jackson.toJson(infogen_injection_class));
 		} catch (JsonProcessingException e) {
 			LOGGER.error("生成AOP 参数失败", e);
 		}
@@ -179,7 +180,7 @@ public class AOP {
 				}
 			}
 		} else {
-			Files.walk(Paths.get(class_path)).filter((path) -> {
+			Files.walk(Paths.get(class_path)).filter(path -> {
 				String path_string = path.toString();
 				return path_string.endsWith(".class") && !anonymous_inner_class_compile.matcher(path_string).find();
 			}).forEach((name) -> {

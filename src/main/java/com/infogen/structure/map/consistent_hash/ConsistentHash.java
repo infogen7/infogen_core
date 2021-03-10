@@ -9,10 +9,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.infogen.structure.map.consistent_hash.hash.HashFunction;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 一致性hash
@@ -21,8 +20,8 @@ import com.infogen.structure.map.consistent_hash.hash.HashFunction;
  * @since 1.0
  * @version 1.0
  */
+@Slf4j
 public class ConsistentHash<T extends ShardInfo> {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ConsistentHash.class);
 	public static final Charset charset = StandardCharsets.UTF_8;
 
 	private HashFunction algo = HashFunction.MURMUR_HASH;
@@ -54,7 +53,7 @@ public class ConsistentHash<T extends ShardInfo> {
 			try {
 				nodes.put(this.algo.hash(new StringBuilder(shardInfo.getName()).append("*").append(shardInfo.getRatio()).append("*").append(n).toString(), charset), shardInfo);
 			} catch (UnsupportedEncodingException e) {
-				LOGGER.error("添加节点失败", e);
+				log.error("添加节点失败", e);
 			}
 		}
 	}
@@ -64,7 +63,7 @@ public class ConsistentHash<T extends ShardInfo> {
 			try {
 				nodes.remove(this.algo.hash(new StringBuilder(shardInfo.getName()).append("*").append(shardInfo.getRatio()).append("*").append(n).toString(), charset));
 			} catch (UnsupportedEncodingException e) {
-				LOGGER.error("删除节点失败", e);
+				log.error("删除节点失败", e);
 			}
 		}
 	}

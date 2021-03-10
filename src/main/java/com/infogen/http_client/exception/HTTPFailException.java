@@ -7,12 +7,12 @@ package com.infogen.http_client.exception;
  * @since 1.0
  * @version 1.0
  */
-public class HTTP_Fail_Exception extends Exception {
+public class HTTPFailException extends Exception {
 	private static final long serialVersionUID = 153970941852883330L;
 	private Integer code;
 	private String message;
 
-	public HTTP_Fail_Exception(Integer code, String message) {
+	public HTTPFailException(Integer code, String message) {
 		super();
 		this.code = code;
 		this.message = message;

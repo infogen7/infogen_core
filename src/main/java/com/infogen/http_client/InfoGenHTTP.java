@@ -6,11 +6,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.infogen.http_client.exception.HTTPFailException;
 
-import com.infogen.http_client.exception.HTTP_Fail_Exception;
-
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -27,8 +25,8 @@ import okhttp3.Response;
  * @since 1.0
  * @version 1.0
  */
-public class InfoGen_HTTP {
-	private static final Logger LOGGER = LoggerFactory.getLogger(InfoGen_HTTP.class);
+@Slf4j
+public class InfoGenHTTP {
 	// 当使用长轮循时需要注意不能超过此时间
 	public static Integer connect_timeout = 3_000;// 连接时间
 	public static Integer socket_timeout = 30_000;// 数据传输时间
@@ -45,12 +43,12 @@ public class InfoGen_HTTP {
 	}
 
 	static {
-		LOGGER.info("初始化HTTP CLIENT");
+		log.info("初始化HTTP CLIENT");
 	}
 
 	// /////////////////////////////////////////////////////////////////get/////////////////////////////////////////////////////////////
 	// get 获取 rest 资源
-	public static String do_get(String url, Map<String, Object> params, Map<String, Object> headers) throws IOException, HTTP_Fail_Exception {
+	public static String do_get(String url, Map<String, Object> params, Map<String, Object> headers) throws IOException, HTTPFailException {
 		Builder builder = new Request.Builder().url(concat_url_params(url, params));
 		add_headers(builder, headers);
 		Request request = builder.build();
@@ -58,7 +56,7 @@ public class InfoGen_HTTP {
 		if (response.isSuccessful()) {
 			return response.body().string();
 		} else {
-			throw new HTTP_Fail_Exception(response.code(), response.message());
+			throw new HTTPFailException(response.code(), response.message());
 		}
 	}
 
@@ -74,7 +72,7 @@ public class InfoGen_HTTP {
 
 	// ////////////////////////////////////////////////////////post: form json xml///////////////////////////////////////////////////////////////////////////
 
-	public static String do_post(String url, Map<String, Object> params, Map<String, Object> headers) throws IOException, HTTP_Fail_Exception {
+	public static String do_post(String url, Map<String, Object> params, Map<String, Object> headers) throws IOException, HTTPFailException {
 		okhttp3.Request.Builder builder = new okhttp3.Request.Builder().url(url);
 		add_headers(builder, headers);
 		okhttp3.FormBody.Builder form_builder = new FormBody.Builder();
@@ -86,7 +84,7 @@ public class InfoGen_HTTP {
 		if (response.isSuccessful()) {
 			return response.body().string();
 		} else {
-			throw new HTTP_Fail_Exception(response.code(), response.message());
+			throw new HTTPFailException(response.code(), response.message());
 		}
 	}
 
@@ -107,7 +105,7 @@ public class InfoGen_HTTP {
 	/////////////////////////////////////////////////////////////////////////////////
 	public static final okhttp3.MediaType MEDIA_TYPE_JSON = okhttp3.MediaType.parse("application/json; charset=utf-8");//
 
-	public static String do_post_json(String url, String json, Map<String, Object> headers) throws IOException, HTTP_Fail_Exception {
+	public static String do_post_json(String url, String json, Map<String, Object> headers) throws IOException, HTTPFailException {
 		Builder builder = new Request.Builder().url(url);
 		add_headers(builder, headers);
 		Request request = builder.post(RequestBody.create(json, MEDIA_TYPE_JSON)).build();
@@ -115,7 +113,7 @@ public class InfoGen_HTTP {
 		if (response.isSuccessful()) {
 			return response.body().string();
 		} else {
-			throw new HTTP_Fail_Exception(response.code(), response.message());
+			throw new HTTPFailException(response.code(), response.message());
 		}
 	}
 
@@ -132,7 +130,7 @@ public class InfoGen_HTTP {
 	//
 	public static final okhttp3.MediaType MEDIA_TYPE_XML = okhttp3.MediaType.parse("text/xml;charset=UTF-8");//
 
-	public static String do_post_xml(String url, String xml, Map<String, Object> headers) throws IOException, HTTP_Fail_Exception {
+	public static String do_post_xml(String url, String xml, Map<String, Object> headers) throws IOException, HTTPFailException {
 		Builder builder = new Request.Builder().url(url);
 		add_headers(builder, headers);
 		Request request = builder.post(RequestBody.create(xml, MEDIA_TYPE_XML)).build();
@@ -140,7 +138,7 @@ public class InfoGen_HTTP {
 		if (response.isSuccessful()) {
 			return response.body().string();
 		} else {
-			throw new HTTP_Fail_Exception(response.code(), response.message());
+			throw new HTTPFailException(response.code(), response.message());
 		}
 	}
 
@@ -187,14 +185,14 @@ public class InfoGen_HTTP {
 		@Override
 		public void onFailure(Call call, IOException e) {
 			Request request = call.request();
-			LOGGER.error("do_async_post_bytype 报错:".concat(request.url().toString()), e);
+			log.error("do_async_post_bytype 报错:".concat(request.url().toString()), e);
 		}
 
 		@Override
 		public void onResponse(Call call, Response response) throws IOException {
 			if (response.isSuccessful()) {
 			} else {
-				LOGGER.error("do_async_post_bytype 错误-返回非2xx:".concat(response.request().url().toString()));
+				log.error("do_async_post_bytype 错误-返回非2xx:".concat(response.request().url().toString()));
 			}
 		}
 	};
@@ -203,14 +201,14 @@ public class InfoGen_HTTP {
 		@Override
 		public void onFailure(Call call, IOException e) {
 			Request request = call.request();
-			LOGGER.error("do_async_get 报错:".concat(request.url().toString()), e);
+			log.error("do_async_get 报错:".concat(request.url().toString()), e);
 		}
 
 		@Override
 		public void onResponse(Call call, Response response) throws IOException {
 			if (response.isSuccessful()) {
 			} else {
-				LOGGER.error("do_async_get 错误-返回非2xx:".concat(response.request().url().toString()));
+				log.error("do_async_get 错误-返回非2xx:".concat(response.request().url().toString()));
 			}
 		}
 	};

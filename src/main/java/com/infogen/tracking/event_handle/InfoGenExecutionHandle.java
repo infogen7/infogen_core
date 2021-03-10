@@ -3,12 +3,11 @@ package com.infogen.tracking.event_handle;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.infogen.agent.advice.Agent_Advice_Method;
-import com.infogen.aop.event_handle.AOP_Handle;
+import com.infogen.agent.injection.InjectionMethod;
+import com.infogen.aop.event_handle.AnnotationHandle;
 import com.infogen.tracking.annotation.Execution;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 统计方法执行时间和调用链记录的处理器
@@ -17,11 +16,11 @@ import com.infogen.tracking.annotation.Execution;
  * @since 1.0
  * @version 1.0
  */
-public class InfoGen_AOP_Handle_Execution extends AOP_Handle {
-	private static final Logger LOGGER = LoggerFactory.getLogger(InfoGen_AOP_Handle_Execution.class);
+@Slf4j
+public class InfoGenExecutionHandle extends AnnotationHandle {
 
 	@Override
-	public Agent_Advice_Method attach_method(String class_name, Method method, Annotation annotation) {
+	public InjectionMethod injection_method(String class_name, Method method, Annotation annotation) {
 		String method_name = method.getName();
 
 		Class<?>[] parameterTypes = method.getParameterTypes();
@@ -34,28 +33,28 @@ public class InfoGen_AOP_Handle_Execution extends AOP_Handle {
 		String user_definition = ((Execution) annotation).user_definition();
 		if (user_definition.contains(",")) {
 			user_definition.replaceAll(",", "|");
-			LOGGER.warn("注解Execution中user_definition字段不能出现 ',' 将被替换成 '|' ".concat(class_name).concat(".").concat(method_name));
+			log.warn("注解Execution中user_definition字段不能出现 ',' 将被替换成 '|' ".concat(class_name).concat(".").concat(method_name));
 		}
 
-		Agent_Advice_Method advice_method = new Agent_Advice_Method();
+		InjectionMethod advice_method = new InjectionMethod();
 		advice_method.setMethod_name(method_name);
-		advice_method.setLong_local_variable("infogen_logger_attach_start_millis");
+		advice_method.setLong_local_variable("infogen_logger_injection_start_millis");
 
 		StringBuilder insert_before = new StringBuilder();
-		insert_before.append("infogen_logger_attach_start_millis = System.currentTimeMillis();");
+		insert_before.append("infogen_logger_injection_start_millis = System.currentTimeMillis();");
 		advice_method.setInsert_before(insert_before.toString());
 
 		StringBuilder insert_after = new StringBuilder();
-		insert_after.append("com.infogen.tracking.event_handle.InfoGen_AOP_Handle_Execution.insert_after_call_back(");
+		insert_after.append("com.infogen.tracking.event_handle.InfoGenExecutionHandle.insert_after_call_back(");
 		insert_after.append("\"").append(class_name).append("\"").append(",");
 		insert_after.append("\"").append(method_name).append("\"").append(",");
 		insert_after.append("\"").append(user_definition).append("\"").append(",");
 		insert_after.append("\"").append(full_method_name).append("\"").append(",");
-		insert_after.append("infogen_logger_attach_start_millis, System.currentTimeMillis(),$_);");
+		insert_after.append("infogen_logger_injection_start_millis, System.currentTimeMillis(),$_);");
 		advice_method.setInsert_after(insert_after.toString());
 
 		StringBuilder add_catch = new StringBuilder();
-		add_catch.append("com.infogen.tracking.event_handle.InfoGen_AOP_Handle_Execution.add_catch_call_back(");
+		add_catch.append("com.infogen.tracking.event_handle.InfoGenExecutionHandle.add_catch_call_back(");
 		add_catch.append("\"").append(class_name).append("\"").append(",");
 		add_catch.append("\"").append(method_name).append("\"").append(",");
 		add_catch.append("\"").append(user_definition).append("\"").append(",");
@@ -66,12 +65,12 @@ public class InfoGen_AOP_Handle_Execution extends AOP_Handle {
 		return advice_method;
 	}
 
-	public InfoGen_AOP_Handle_Execution(Tracking_Handle handle) {
+	public InfoGenExecutionHandle(TrackingHandle handle) {
 		super();
-		InfoGen_AOP_Handle_Execution.tracking_handle = handle;
+		InfoGenExecutionHandle.tracking_handle = handle;
 	}
 
-	private static Tracking_Handle tracking_handle = null;
+	private static TrackingHandle tracking_handle = null;
 
 	public static void insert_after_call_back(String class_name, String method_name, String user_definition, String full_method_name, long start_millis, long end_millis, Object return0) {
 		if (tracking_handle != null) {

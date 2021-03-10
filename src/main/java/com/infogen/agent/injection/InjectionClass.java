@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.infogen.agent.advice;
+package com.infogen.agent.injection;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -12,11 +12,11 @@ import java.util.Set;
  * @since 1.0
  * @version 1.0
  */
-public class Agent_Advice_Class implements Serializable {
+public class InjectionClass implements Serializable {
 	private static final long serialVersionUID = -8990106273196548492L;
 	private String class_name;
-	private Set<Agent_Advice_Method> methods = new HashSet<>();
-	private Set<Agent_Advice_Field> fields = new HashSet<>();
+	private Set<InjectionMethod> methods = new HashSet<>();
+	private Set<InjectionField> fields = new HashSet<>();
 
 	public String getClass_name() {
 		return class_name;
@@ -26,19 +26,19 @@ public class Agent_Advice_Class implements Serializable {
 		this.class_name = class_name;
 	}
 
-	public Set<Agent_Advice_Method> getMethods() {
+	public Set<InjectionMethod> getMethods() {
 		return methods;
 	}
 
-	public void setMethods(Set<Agent_Advice_Method> methods) {
+	public void setMethods(Set<InjectionMethod> methods) {
 		this.methods = methods;
 	}
 
-	public Set<Agent_Advice_Field> getFields() {
+	public Set<InjectionField> getFields() {
 		return fields;
 	}
 
-	public void setFields(Set<Agent_Advice_Field> fields) {
+	public void setFields(Set<InjectionField> fields) {
 		this.fields = fields;
 	}
 
