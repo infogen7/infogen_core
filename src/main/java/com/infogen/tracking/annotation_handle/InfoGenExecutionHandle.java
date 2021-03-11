@@ -1,10 +1,10 @@
-package com.infogen.tracking.event_handle;
+package com.infogen.tracking.annotation_handle;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import com.infogen.agent.injection.InjectionMethod;
-import com.infogen.aop.event_handle.AnnotationHandle;
+import com.infogen.aop.AnnotationHandle;
 import com.infogen.tracking.annotation.Execution;
 
 import lombok.extern.slf4j.Slf4j;

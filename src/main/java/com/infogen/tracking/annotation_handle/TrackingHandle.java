@@ -1,4 +1,4 @@
-package com.infogen.tracking.event_handle;
+package com.infogen.tracking.annotation_handle;
 
 /**
  * @author larry/larrylv@outlook.com/创建时间 2015年4月29日 下午3:35:56

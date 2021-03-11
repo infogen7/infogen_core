@@ -25,7 +25,6 @@ import com.infogen.agent.InfogenAgentPath;
 import com.infogen.agent.injection.InjectionClass;
 import com.infogen.agent.injection.InjectionField;
 import com.infogen.agent.injection.InjectionMethod;
-import com.infogen.aop.event_handle.AnnotationHandle;
 import com.infogen.attach.InfogenAttachPath;
 import com.infogen.json.Jackson;
 import com.infogen.path.NativePath;

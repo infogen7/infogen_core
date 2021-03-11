@@ -70,6 +70,22 @@ public class InfoGenHTTP {
 		client.newCall(request).enqueue(callback);
 	}
 
+	private static String concat_url_params(String url, Map<String, Object> params) {
+		if (params == null || params.isEmpty()) {
+			return url;
+		}
+		Iterator<String> iterator = params.keySet().iterator();
+		StringBuilder do_get_sbf = new StringBuilder();
+
+		String first_key = iterator.next();
+		do_get_sbf.append(url).append("?").append(first_key).append("=").append(params.get(first_key));
+		while (iterator.hasNext()) {
+			String key = iterator.next();
+			do_get_sbf.append("&").append(key).append("=").append(params.get(key));
+		}
+		url = do_get_sbf.toString();
+		return url;
+	}
 	// ////////////////////////////////////////////////////////post: form json xml///////////////////////////////////////////////////////////////////////////
 
 	public static String do_post(String url, Map<String, Object> params, Map<String, Object> headers) throws IOException, HTTPFailException {
@@ -153,23 +169,6 @@ public class InfoGenHTTP {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
-	private static String concat_url_params(String url, Map<String, Object> params) {
-		if (params == null || params.isEmpty()) {
-			return url;
-		}
-		Iterator<String> iterator = params.keySet().iterator();
-		StringBuilder do_get_sbf = new StringBuilder();
-
-		String first_key = iterator.next();
-		do_get_sbf.append(url).append("?").append(first_key).append("=").append(params.get(first_key));
-		while (iterator.hasNext()) {
-			String key = iterator.next();
-			do_get_sbf.append("&").append(key).append("=").append(params.get(key));
-		}
-		url = do_get_sbf.toString();
-		return url;
-	}
-
 	private static void add_headers(okhttp3.Request.Builder builder, Map<String, Object> headers) {
 		if (headers == null) {
 			return;
