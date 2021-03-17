@@ -1,4 +1,4 @@
-package com.infogen.http_idl;
+package com.infogen.structure;
 
 import java.io.IOException;
 import java.util.IdentityHashMap;

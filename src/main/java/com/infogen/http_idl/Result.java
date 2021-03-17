@@ -27,10 +27,14 @@ public class Result<T> implements Serializable {
 
 	//////////////////////////////// create//////////////////////////////////
 	public static <T> Result<T> success(T data) {
-		return new Result<T>(CODE.success.code, "success", data);
+		return new Result<T>(CODE.success.code, "", data);
 	}
 
 	public static <T> Result<T> fail(String message) {
 		return new Result<T>(CODE.error.code, message, null);
+	}
+
+	public Boolean isSuccess() {
+		return this.code == CODE.success.code;
 	}
 }
