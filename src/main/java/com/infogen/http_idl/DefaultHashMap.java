@@ -20,19 +20,19 @@ import lombok.extern.slf4j.Slf4j;
  * @version 1.0
  */
 @Slf4j
-public class Parameter extends IdentityHashMap<String, Object> {
+public class DefaultHashMap extends IdentityHashMap<String, Object> {
 	private static final long serialVersionUID = -5436768657673377874L;
 
-	public static Parameter create() {
-		return new Parameter();
+	public static DefaultHashMap create() {
+		return new DefaultHashMap();
 	}
 
-	public static Parameter create(String key, Object value) {
-		return new Parameter().put(key, value);
+	public static DefaultHashMap create(String key, Object value) {
+		return new DefaultHashMap().put(key, value);
 	}
 
-	public static Parameter create(Map<String, List<String>> name_value_pair) {
-		Parameter parameter = new Parameter();
+	public static DefaultHashMap create(Map<String, List<String>> name_value_pair) {
+		DefaultHashMap parameter = new DefaultHashMap();
 		name_value_pair.forEach((key, values) -> {
 			values.forEach(value -> {
 				parameter.put(new String(key), value);
@@ -41,8 +41,8 @@ public class Parameter extends IdentityHashMap<String, Object> {
 		return parameter;
 	}
 
-	public static Parameter create(String json) throws JsonParseException, JsonMappingException, IOException {
-		Parameter parameter = new Parameter();
+	public static DefaultHashMap create(String json) throws JsonParseException, JsonMappingException, IOException {
+		DefaultHashMap parameter = new DefaultHashMap();
 		Map<String, Object> fromJson = Jackson.toObject(json, new TypeReference<IdentityHashMap<String, Object>>() {
 		});
 		for (Entry<String, Object> entry : fromJson.entrySet()) {
@@ -53,7 +53,7 @@ public class Parameter extends IdentityHashMap<String, Object> {
 
 	//////////////////////// @Override/////////////////////////////////////
 	@Override
-	public Parameter put(String key, Object value) {
+	public DefaultHashMap put(String key, Object value) {
 		super.put(key, value);
 		return this;
 	}
