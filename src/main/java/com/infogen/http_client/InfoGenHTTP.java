@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Request.Builder;
@@ -28,18 +29,13 @@ import okhttp3.Response;
 @Slf4j
 public class InfoGenHTTP {
 	// 当使用长轮循时需要注意不能超过此时间
-	public static Integer connect_timeout = 3_000;// 连接时间
-	public static Integer socket_timeout = 30_000;// 数据传输时间
+	private static Integer connect_timeout = 3_000;// 连接时间
+	private static Integer socket_timeout = 30_000;// 数据传输时间
 	private static OkHttpClient client = new OkHttpClient.Builder()//
-			// TODO WARN util.UrlEncoded : org.eclipse.jetty.util.Utf8Appendable$NotUtf8Exception: Not valid UTF8! byte 8b in state 0
-			// .addInterceptor(new GzipRequestInterceptor())
-			.connectTimeout(connect_timeout, TimeUnit.MILLISECONDS).writeTimeout(socket_timeout, TimeUnit.MILLISECONDS).readTimeout(socket_timeout, TimeUnit.MILLISECONDS).build();
+			.addInterceptor(new GzipRequestInterceptor()).connectTimeout(connect_timeout, TimeUnit.MILLISECONDS).writeTimeout(socket_timeout, TimeUnit.MILLISECONDS).readTimeout(socket_timeout, TimeUnit.MILLISECONDS).build();
 
-	public static void set_timeout(Integer connect_timeout, Integer socket_timeout) {
-		client = new OkHttpClient.Builder()//
-				// TODO WARN util.UrlEncoded : org.eclipse.jetty.util.Utf8Appendable$NotUtf8Exception: Not valid UTF8! byte 8b in state 0
-				// .addInterceptor(new GzipRequestInterceptor())
-				.connectTimeout(connect_timeout, TimeUnit.MILLISECONDS).writeTimeout(socket_timeout, TimeUnit.MILLISECONDS).readTimeout(socket_timeout, TimeUnit.MILLISECONDS).build();
+	public static void create(OkHttpClient client) {
+		InfoGenHTTP.client = client;
 	}
 
 	static {
@@ -60,13 +56,11 @@ public class InfoGenHTTP {
 		}
 	}
 
-	public static void do_get_async(String url, Map<String, Object> params, Callback callback, Map<String, Object> headers) {
+	public static void do_get_async(String url, Map<String, Object> params, Map<String, Object> headers, Callback callback) {
 		Builder builder = new Request.Builder().url(concat_url_params(url, params));
 		add_headers(builder, headers);
+		callback = callback == null ? async_get_callback : callback;
 		Request request = builder.build();
-		if (callback == null) {
-			callback = async_get_callback;
-		}
 		client.newCall(request).enqueue(callback);
 	}
 
@@ -75,27 +69,25 @@ public class InfoGenHTTP {
 			return url;
 		}
 		Iterator<String> iterator = params.keySet().iterator();
-		StringBuilder do_get_sbf = new StringBuilder();
+		StringBuilder sbd = new StringBuilder();
 
 		String first_key = iterator.next();
-		do_get_sbf.append(url).append("?").append(first_key).append("=").append(params.get(first_key));
+		sbd.append(url).append("?").append(first_key).append("=").append(params.get(first_key));
 		while (iterator.hasNext()) {
 			String key = iterator.next();
-			do_get_sbf.append("&").append(key).append("=").append(params.get(key));
+			sbd.append("&").append(key).append("=").append(params.get(key));
 		}
-		url = do_get_sbf.toString();
+		url = sbd.toString();
 		return url;
 	}
 	// ////////////////////////////////////////////////////////post: form json xml///////////////////////////////////////////////////////////////////////////
 
 	public static String do_post(String url, Map<String, Object> params, Map<String, Object> headers) throws IOException, HTTPFailException {
-		okhttp3.Request.Builder builder = new okhttp3.Request.Builder().url(url);
+		FormBody body = concat_form_params(params);
+
+		Builder builder = new Request.Builder().url(url);
 		add_headers(builder, headers);
-		okhttp3.FormBody.Builder form_builder = new FormBody.Builder();
-		for (Entry<String, Object> entry : params.entrySet()) {
-			form_builder.add(entry.getKey(), String.valueOf(entry.getValue()));
-		}
-		Request request = builder.post(form_builder.build()).build();
+		Request request = builder.post(body).build();
 		Response response = client.newCall(request).execute();
 		if (response.isSuccessful()) {
 			return response.body().string();
@@ -104,27 +96,38 @@ public class InfoGenHTTP {
 		}
 	}
 
-	public static void do_post_async(String url, Map<String, Object> params, Callback callback, Map<String, Object> headers) throws IOException {
+	public static void do_post_async(String url, Map<String, Object> params, Map<String, Object> headers, Callback callback) throws IOException {
+		FormBody body = concat_form_params(params);
+
 		Builder builder = new Request.Builder().url(url);
 		add_headers(builder, headers);
-		okhttp3.FormBody.Builder form_builder = new FormBody.Builder();
-		for (Entry<String, Object> entry : params.entrySet()) {
-			form_builder.add(entry.getKey(), String.valueOf(entry.getValue()));
-		}
-		Request request = builder.post(form_builder.build()).build();
-		if (callback == null) {
-			callback = async_post_callback;
-		}
+		Request request = builder.post(body).build();
+		callback = callback == null ? async_post_callback : callback;
 		client.newCall(request).enqueue(callback);
 	}
 
+	private static FormBody concat_form_params(Map<String, Object> params) {
+		FormBody.Builder form_builder = new FormBody.Builder();
+
+		if (params == null || params.isEmpty()) {
+			return form_builder.build();
+		}
+
+		for (Entry<String, Object> entry : params.entrySet()) {
+			form_builder.add(entry.getKey(), String.valueOf(entry.getValue()));
+		}
+		return form_builder.build();
+	}
+
 	/////////////////////////////////////////////////////////////////////////////////
-	public static final okhttp3.MediaType MEDIA_TYPE_JSON = okhttp3.MediaType.parse("application/json; charset=utf-8");//
+	public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");//
 
 	public static String do_post_json(String url, String json, Map<String, Object> headers) throws IOException, HTTPFailException {
+		RequestBody body = RequestBody.create(json, MEDIA_TYPE_JSON);
+
 		Builder builder = new Request.Builder().url(url);
 		add_headers(builder, headers);
-		Request request = builder.post(RequestBody.create(json, MEDIA_TYPE_JSON)).build();
+		Request request = builder.post(body).build();
 		Response response = client.newCall(request).execute();
 		if (response.isSuccessful()) {
 			return response.body().string();
@@ -133,10 +136,12 @@ public class InfoGenHTTP {
 		}
 	}
 
-	public static void do_post_json_async(String url, String json, Callback callback, Map<String, Object> headers) throws IOException {
+	public static void do_post_json_async(String url, String json, Map<String, Object> headers, Callback callback) throws IOException {
+		RequestBody body = RequestBody.create(json, MEDIA_TYPE_JSON);
+
 		Builder builder = new Request.Builder().url(url);
 		add_headers(builder, headers);
-		Request request = builder.post(RequestBody.create(json, MEDIA_TYPE_JSON)).build();
+		Request request = builder.post(body).build();
 		if (callback == null) {
 			callback = async_post_callback;
 		}
@@ -144,12 +149,14 @@ public class InfoGenHTTP {
 	}
 
 	//
-	public static final okhttp3.MediaType MEDIA_TYPE_XML = okhttp3.MediaType.parse("text/xml;charset=UTF-8");//
+	public static final MediaType MEDIA_TYPE_XML = MediaType.parse("text/xml;charset=UTF-8");//
 
 	public static String do_post_xml(String url, String xml, Map<String, Object> headers) throws IOException, HTTPFailException {
+		RequestBody body = RequestBody.create(xml, MEDIA_TYPE_XML);
+
 		Builder builder = new Request.Builder().url(url);
 		add_headers(builder, headers);
-		Request request = builder.post(RequestBody.create(xml, MEDIA_TYPE_XML)).build();
+		Request request = builder.post(body).build();
 		Response response = client.newCall(request).execute();
 		if (response.isSuccessful()) {
 			return response.body().string();
@@ -158,10 +165,12 @@ public class InfoGenHTTP {
 		}
 	}
 
-	public static void do_post_xml_async(String url, String xml, Callback callback, Map<String, Object> headers) throws IOException {
+	public static void do_post_xml_async(String url, String xml, Map<String, Object> headers, Callback callback) throws IOException {
+		RequestBody body = RequestBody.create(xml, MEDIA_TYPE_XML);
+
 		Builder builder = new Request.Builder().url(url);
 		add_headers(builder, headers);
-		Request request = builder.post(RequestBody.create(xml, MEDIA_TYPE_XML)).build();
+		Request request = builder.post(body).build();
 		if (callback == null) {
 			callback = async_post_callback;
 		}
@@ -169,7 +178,7 @@ public class InfoGenHTTP {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
-	private static void add_headers(okhttp3.Request.Builder builder, Map<String, Object> headers) {
+	private static void add_headers(Request.Builder builder, Map<String, Object> headers) {
 		if (headers == null) {
 			return;
 		}
@@ -179,22 +188,6 @@ public class InfoGenHTTP {
 			}
 		});
 	}
-
-	private static final Callback async_post_callback = new Callback() {
-		@Override
-		public void onFailure(Call call, IOException e) {
-			Request request = call.request();
-			log.error("do_async_post_bytype 报错:".concat(request.url().toString()), e);
-		}
-
-		@Override
-		public void onResponse(Call call, Response response) throws IOException {
-			if (response.isSuccessful()) {
-			} else {
-				log.error("do_async_post_bytype 错误-返回非2xx:".concat(response.request().url().toString()));
-			}
-		}
-	};
 
 	private static final Callback async_get_callback = new Callback() {
 		@Override
@@ -208,6 +201,22 @@ public class InfoGenHTTP {
 			if (response.isSuccessful()) {
 			} else {
 				log.error("do_async_get 错误-返回非2xx:".concat(response.request().url().toString()));
+			}
+		}
+	};
+
+	private static final Callback async_post_callback = new Callback() {
+		@Override
+		public void onFailure(Call call, IOException e) {
+			Request request = call.request();
+			log.error("do_async_post_bytype 报错:".concat(request.url().toString()), e);
+		}
+
+		@Override
+		public void onResponse(Call call, Response response) throws IOException {
+			if (response.isSuccessful()) {
+			} else {
+				log.error("do_async_post_bytype 错误-返回非2xx:".concat(response.request().url().toString()));
 			}
 		}
 	};
