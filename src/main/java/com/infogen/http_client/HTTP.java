@@ -31,10 +31,9 @@ public class HTTP {
 	// 当使用长轮循时需要注意不能超过此时间
 	private static Integer connect_timeout = 3_000;// 连接时间
 	private static Integer socket_timeout = 30_000;// 数据传输时间
-	private static OkHttpClient client = new OkHttpClient.Builder()//
-			.addInterceptor(new GzipRequestInterceptor()).connectTimeout(connect_timeout, TimeUnit.MILLISECONDS).writeTimeout(socket_timeout, TimeUnit.MILLISECONDS).readTimeout(socket_timeout, TimeUnit.MILLISECONDS).build();
+	private static OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new GzipRequestInterceptor()).connectTimeout(connect_timeout, TimeUnit.MILLISECONDS).writeTimeout(socket_timeout, TimeUnit.MILLISECONDS).readTimeout(socket_timeout, TimeUnit.MILLISECONDS).build();
 
-	public static void create(OkHttpClient client) {
+	public static void update(OkHttpClient client) {
 		HTTP.client = client;
 	}
 
