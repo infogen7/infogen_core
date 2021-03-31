@@ -20,12 +20,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.infogen.agent.InfogenAgentCache;
-import com.infogen.agent.InfogenAgentPath;
+import com.infogen.agent.AgentCache;
+import com.infogen.agent.AgentPath;
 import com.infogen.agent.injection.InjectionClass;
 import com.infogen.agent.injection.InjectionField;
 import com.infogen.agent.injection.InjectionMethod;
-import com.infogen.attach.InfogenAttachPath;
+import com.infogen.attach.AttachPath;
 import com.infogen.json.Jackson;
 import com.infogen.path.NativePath;
 
@@ -57,9 +57,9 @@ public class AOP {
 	}
 
 	// AOP
-	private Map<Class<? extends Annotation>, AnnotationHandle> annotation_handles = new HashMap<>();
+	private Map<Class<? extends Annotation>, AnnotationImpl> annotation_handles = new HashMap<>();
 
-	public void add_annotation_handle(Class<? extends Annotation> annotation, AnnotationHandle handle) {
+	public void add_annotation_handle(Class<? extends Annotation> annotation, AnnotationImpl handle) {
 		Objects.requireNonNull(annotation);
 		Objects.requireNonNull(handle);
 		try {
@@ -90,8 +90,8 @@ public class AOP {
 			generate_injection_class(clazz);
 		});
 
-		String attach_path = InfogenAttachPath.path().replace(" ", "\" \"");
-		String agent_Path = InfogenAgentPath.path().replace(" ", "\" \"");
+		String attach_path = AttachPath.path().replace(" ", "\" \"");
+		String agent_Path = AgentPath.path().replace(" ", "\" \"");
 		Long pid = ProcessHandle.current().pid();
 		try {
 			Process process = Runtime.getRuntime().exec("java -jar " + attach_path + " " + agent_Path + " " + pid);
@@ -116,7 +116,7 @@ public class AOP {
 		// method
 		Set<InjectionMethod> methods = new HashSet<>();
 		for (Class<? extends Annotation> key : annotation_handles.keySet()) {
-			AnnotationHandle handle = annotation_handles.get(key);
+			AnnotationImpl handle = annotation_handles.get(key);
 
 			for (Method method : clazz.getDeclaredMethods()) {
 				Annotation[] annotations = method.getAnnotationsByType(key);
@@ -150,7 +150,7 @@ public class AOP {
 		infogen_injection_class.setMethods(methods);
 
 		try {
-			InfogenAgentCache.injection_class_map.put(class_name, Jackson.toJson(infogen_injection_class));
+			AgentCache.injection_class_map.put(class_name, Jackson.toJson(infogen_injection_class));
 		} catch (JsonProcessingException e) {
 			LOGGER.error("生成AOP 参数失败", e);
 		}

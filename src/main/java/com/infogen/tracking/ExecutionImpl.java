@@ -1,11 +1,10 @@
-package com.infogen.tracking.annotation_handle;
+package com.infogen.tracking;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import com.infogen.agent.injection.InjectionMethod;
-import com.infogen.aop.AnnotationHandle;
-import com.infogen.tracking.annotation.Execution;
+import com.infogen.aop.AnnotationImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  * @version 1.0
  */
 @Slf4j
-public class InfoGenExecutionHandle extends AnnotationHandle {
+public class ExecutionImpl extends AnnotationImpl {
 
 	@Override
 	public InjectionMethod injection_method(String class_name, Method method, Annotation annotation) {
@@ -65,9 +64,9 @@ public class InfoGenExecutionHandle extends AnnotationHandle {
 		return advice_method;
 	}
 
-	public InfoGenExecutionHandle(TrackingHandle handle) {
+	public ExecutionImpl(TrackingHandle handle) {
 		super();
-		InfoGenExecutionHandle.tracking_handle = handle;
+		ExecutionImpl.tracking_handle = handle;
 	}
 
 	private static TrackingHandle tracking_handle = null;

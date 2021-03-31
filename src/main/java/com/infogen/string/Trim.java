@@ -1,4 +1,4 @@
-package com.infogen.tools;
+package com.infogen.string;
 
 import java.util.regex.Pattern;
 

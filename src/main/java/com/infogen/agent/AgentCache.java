@@ -11,7 +11,7 @@ import java.util.Map;
  * @since 1.0
  * @version 1.0
  */
-public class InfogenAgentCache {
+public class AgentCache {
 	public static Map<String, String> injection_class_map = new HashMap<>();
 
 	public static void load_class() {

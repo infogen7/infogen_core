@@ -34,7 +34,7 @@ public class AgentMain {
 
 			Class<?> agent_cache = null;
 			for (Class<?> clazz : all_loaded_classes) {
-				if (clazz.getName().equals(InfogenAgentCache.class.getName())) {
+				if (clazz.getName().equals(AgentCache.class.getName())) {
 					agent_cache = clazz;
 				}
 			}

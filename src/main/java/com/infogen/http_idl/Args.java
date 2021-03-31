@@ -1,4 +1,4 @@
-package com.infogen.tools;
+package com.infogen.http_idl;
 
 /**
  * 判断参数的空值情况

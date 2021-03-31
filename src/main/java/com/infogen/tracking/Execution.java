@@ -1,4 +1,4 @@
-package com.infogen.tracking.annotation;
+package com.infogen.tracking;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
