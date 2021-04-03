@@ -29,12 +29,20 @@ import okhttp3.Response;
 @Slf4j
 public class HTTP {
 	// 当使用长轮循时需要注意不能超过此时间
-	private static Integer connect_timeout = 3_000;// 连接时间
-	private static Integer socket_timeout = 30_000;// 数据传输时间
-	private static OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new GzipRequestInterceptor()).connectTimeout(connect_timeout, TimeUnit.MILLISECONDS).writeTimeout(socket_timeout, TimeUnit.MILLISECONDS).readTimeout(socket_timeout, TimeUnit.MILLISECONDS).build();
+	private Integer connect_timeout = 3_000;// 连接时间
+	private Integer socket_timeout = 30_000;// 数据传输时间
+	private OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new GzipRequestInterceptor()).connectTimeout(connect_timeout, TimeUnit.MILLISECONDS).writeTimeout(socket_timeout, TimeUnit.MILLISECONDS).readTimeout(socket_timeout, TimeUnit.MILLISECONDS).build();
 
-	public static void update(OkHttpClient client) {
-		HTTP.client = client;
+	private static class SingletonHolder {
+		private static final HTTP INSTANCE = new HTTP();
+	}
+
+	public static final HTTP getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+
+	public void update(OkHttpClient client) {
+		this.client = client;
 	}
 
 	static {
@@ -43,7 +51,7 @@ public class HTTP {
 
 	// /////////////////////////////////////////////////////////////////get/////////////////////////////////////////////////////////////
 	// get 获取 rest 资源
-	public static String do_get(String url, Map<String, Object> params, Map<String, Object> headers) throws IOException, HTTPFailException {
+	public String do_get(String url, Map<String, Object> params, Map<String, Object> headers) throws IOException, HTTPFailException {
 		Builder builder = new Request.Builder().url(concat_url_params(url, params));
 		add_headers(builder, headers);
 		Request request = builder.build();
@@ -55,7 +63,7 @@ public class HTTP {
 		}
 	}
 
-	public static void do_get_async(String url, Map<String, Object> params, Map<String, Object> headers, Callback callback) {
+	public void do_get_async(String url, Map<String, Object> params, Map<String, Object> headers, Callback callback) {
 		Builder builder = new Request.Builder().url(concat_url_params(url, params));
 		add_headers(builder, headers);
 		callback = callback == null ? async_get_callback : callback;
@@ -63,7 +71,7 @@ public class HTTP {
 		client.newCall(request).enqueue(callback);
 	}
 
-	private static String concat_url_params(String url, Map<String, Object> params) {
+	private String concat_url_params(String url, Map<String, Object> params) {
 		if (params == null || params.isEmpty()) {
 			return url;
 		}
@@ -81,7 +89,7 @@ public class HTTP {
 	}
 	// ////////////////////////////////////////////////////////post: form json xml///////////////////////////////////////////////////////////////////////////
 
-	public static String do_post(String url, Map<String, Object> params, Map<String, Object> headers) throws IOException, HTTPFailException {
+	public String do_post(String url, Map<String, Object> params, Map<String, Object> headers) throws IOException, HTTPFailException {
 		FormBody body = concat_form_params(params);
 
 		Builder builder = new Request.Builder().url(url);
@@ -95,7 +103,7 @@ public class HTTP {
 		}
 	}
 
-	public static void do_post_async(String url, Map<String, Object> params, Map<String, Object> headers, Callback callback) throws IOException {
+	public void do_post_async(String url, Map<String, Object> params, Map<String, Object> headers, Callback callback) throws IOException {
 		FormBody body = concat_form_params(params);
 
 		Builder builder = new Request.Builder().url(url);
@@ -105,7 +113,7 @@ public class HTTP {
 		client.newCall(request).enqueue(callback);
 	}
 
-	private static FormBody concat_form_params(Map<String, Object> params) {
+	private FormBody concat_form_params(Map<String, Object> params) {
 		FormBody.Builder form_builder = new FormBody.Builder();
 
 		if (params == null || params.isEmpty()) {
@@ -119,9 +127,9 @@ public class HTTP {
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////
-	public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");//
+	public final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");//
 
-	public static String do_post_json(String url, String json, Map<String, Object> headers) throws IOException, HTTPFailException {
+	public String do_post_json(String url, String json, Map<String, Object> headers) throws IOException, HTTPFailException {
 		RequestBody body = RequestBody.create(json, MEDIA_TYPE_JSON);
 
 		Builder builder = new Request.Builder().url(url);
@@ -135,7 +143,7 @@ public class HTTP {
 		}
 	}
 
-	public static void do_post_json_async(String url, String json, Map<String, Object> headers, Callback callback) throws IOException {
+	public void do_post_json_async(String url, String json, Map<String, Object> headers, Callback callback) throws IOException {
 		RequestBody body = RequestBody.create(json, MEDIA_TYPE_JSON);
 
 		Builder builder = new Request.Builder().url(url);
@@ -148,9 +156,9 @@ public class HTTP {
 	}
 
 	//
-	public static final MediaType MEDIA_TYPE_XML = MediaType.parse("text/xml;charset=UTF-8");//
+	public final MediaType MEDIA_TYPE_XML = MediaType.parse("text/xml;charset=UTF-8");//
 
-	public static String do_post_xml(String url, String xml, Map<String, Object> headers) throws IOException, HTTPFailException {
+	public String do_post_xml(String url, String xml, Map<String, Object> headers) throws IOException, HTTPFailException {
 		RequestBody body = RequestBody.create(xml, MEDIA_TYPE_XML);
 
 		Builder builder = new Request.Builder().url(url);
@@ -164,7 +172,7 @@ public class HTTP {
 		}
 	}
 
-	public static void do_post_xml_async(String url, String xml, Map<String, Object> headers, Callback callback) throws IOException {
+	public void do_post_xml_async(String url, String xml, Map<String, Object> headers, Callback callback) throws IOException {
 		RequestBody body = RequestBody.create(xml, MEDIA_TYPE_XML);
 
 		Builder builder = new Request.Builder().url(url);
@@ -177,7 +185,7 @@ public class HTTP {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
-	private static void add_headers(Request.Builder builder, Map<String, Object> headers) {
+	private void add_headers(Request.Builder builder, Map<String, Object> headers) {
 		if (headers == null) {
 			return;
 		}
@@ -188,7 +196,7 @@ public class HTTP {
 		});
 	}
 
-	private static final Callback async_get_callback = new Callback() {
+	private final Callback async_get_callback = new Callback() {
 		@Override
 		public void onFailure(Call call, IOException e) {
 			Request request = call.request();
@@ -204,7 +212,7 @@ public class HTTP {
 		}
 	};
 
-	private static final Callback async_post_callback = new Callback() {
+	private final Callback async_post_callback = new Callback() {
 		@Override
 		public void onFailure(Call call, IOException e) {
 			Request request = call.request();
