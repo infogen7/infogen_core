@@ -33,12 +33,12 @@ public class HTTP {
 	private Integer socket_timeout = 30_000;// 数据传输时间
 	private OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new GzipRequestInterceptor()).connectTimeout(connect_timeout, TimeUnit.MILLISECONDS).writeTimeout(socket_timeout, TimeUnit.MILLISECONDS).readTimeout(socket_timeout, TimeUnit.MILLISECONDS).build();
 
-	private static class SingletonHolder {
-		private static final HTTP INSTANCE = new HTTP();
+	private static class InnerInstance {
+		public static final HTTP instance = new HTTP();
 	}
 
-	public static final HTTP getInstance() {
-		return SingletonHolder.INSTANCE;
+	public static HTTP getInstance() {
+		return InnerInstance.instance;
 	}
 
 	public void update(OkHttpClient client) {
