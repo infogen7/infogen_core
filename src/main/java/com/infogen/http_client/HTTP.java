@@ -41,12 +41,16 @@ public class HTTP {
 		return InnerInstance.instance;
 	}
 
-	public void update(OkHttpClient client) {
-		this.client = client;
+	private HTTP() {
+
 	}
 
 	static {
 		log.info("初始化HTTP CLIENT");
+	}
+
+	public void update(OkHttpClient client) {
+		this.client = client;
 	}
 
 	// /////////////////////////////////////////////////////////////////get/////////////////////////////////////////////////////////////
