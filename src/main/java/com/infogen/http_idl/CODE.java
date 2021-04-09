@@ -84,9 +84,9 @@ public enum CODE {
 
 	error(500, "服务器内部错误"), //
 	error_unavailable(503, "服务不可用"), //
-	error_auth(511, "用户认证失败"), //
+	error_timeout(504, "调用超时"), //
 	error_version(505, "版本不受支持"), //
-	error_timeout(504, "调用超时");
+	error_auth(511, "用户认证失败");
 
 	public Integer code;
 	public String message;
