@@ -5,12 +5,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class SHA256 {
+
 	/**
-	 *
-	 * @param str
-	 *            参数拼接的字符串
-	 * @return
+	 * @param text
+	 *            密码
+	 * @return MD5
 	 * @throws NoSuchAlgorithmException
+	 *             加密异常
 	 */
 	public static String sha256DigestAsHex(String text) throws NoSuchAlgorithmException {
 		MessageDigest instance = MessageDigest.getInstance("SHA-256");
