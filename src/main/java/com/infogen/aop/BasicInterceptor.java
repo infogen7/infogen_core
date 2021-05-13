@@ -10,6 +10,6 @@ import com.infogen.agent.injection.InjectionMethod;
  * @since 1.0
  * @version 1.0
  */
-public abstract class AnnotationImpl {
+public abstract class BasicInterceptor {
 	public abstract InjectionMethod injection_method(String class_name, Method method, Annotation annotation);
 }

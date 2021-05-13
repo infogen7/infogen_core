@@ -57,9 +57,9 @@ public class AOP {
 	}
 
 	// AOP
-	private Map<Class<? extends Annotation>, AnnotationImpl> annotation_handles = new HashMap<>();
+	private Map<Class<? extends Annotation>, BasicInterceptor> annotation_handles = new HashMap<>();
 
-	public void add_annotation_handle(Class<? extends Annotation> annotation, AnnotationImpl handle) {
+	public void add_annotation_handle(Class<? extends Annotation> annotation, BasicInterceptor handle) {
 		Objects.requireNonNull(annotation);
 		Objects.requireNonNull(handle);
 		try {
@@ -116,7 +116,7 @@ public class AOP {
 		// method
 		Set<InjectionMethod> methods = new HashSet<>();
 		for (Class<? extends Annotation> key : annotation_handles.keySet()) {
-			AnnotationImpl handle = annotation_handles.get(key);
+			BasicInterceptor handle = annotation_handles.get(key);
 
 			for (Method method : clazz.getDeclaredMethods()) {
 				Annotation[] annotations = method.getAnnotationsByType(key);

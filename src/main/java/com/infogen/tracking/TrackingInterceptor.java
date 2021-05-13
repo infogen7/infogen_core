@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import com.infogen.agent.injection.InjectionMethod;
-import com.infogen.aop.AnnotationImpl;
+import com.infogen.aop.BasicInterceptor;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  * @version 1.0
  */
 @Slf4j
-public class ExecutionImpl extends AnnotationImpl {
+public class TrackingInterceptor extends BasicInterceptor {
 
 	@Override
 	public InjectionMethod injection_method(String class_name, Method method, Annotation annotation) {
@@ -29,7 +29,7 @@ public class ExecutionImpl extends AnnotationImpl {
 		}
 		String full_method_name = stringbuilder.toString();
 
-		String user_definition = ((Execution) annotation).user_definition();
+		String user_definition = ((Tracking) annotation).user_definition();
 		if (user_definition.contains(",")) {
 			user_definition.replaceAll(",", "|");
 			log.warn("注解Execution中user_definition字段不能出现 ',' 将被替换成 '|' ".concat(class_name).concat(".").concat(method_name));
@@ -44,7 +44,7 @@ public class ExecutionImpl extends AnnotationImpl {
 		advice_method.setInsert_before(insert_before.toString());
 
 		StringBuilder insert_after = new StringBuilder();
-		insert_after.append("com.infogen.tracking.event_handle.InfoGenExecutionHandle.insert_after_call_back(");
+		insert_after.append("com.infogen.tracking.TrackingInterceptor.insert_after_call_back(");
 		insert_after.append("\"").append(class_name).append("\"").append(",");
 		insert_after.append("\"").append(method_name).append("\"").append(",");
 		insert_after.append("\"").append(user_definition).append("\"").append(",");
@@ -53,7 +53,7 @@ public class ExecutionImpl extends AnnotationImpl {
 		advice_method.setInsert_after(insert_after.toString());
 
 		StringBuilder add_catch = new StringBuilder();
-		add_catch.append("com.infogen.tracking.event_handle.InfoGenExecutionHandle.add_catch_call_back(");
+		add_catch.append("com.infogen.tracking.TrackingInterceptor.add_catch_call_back(");
 		add_catch.append("\"").append(class_name).append("\"").append(",");
 		add_catch.append("\"").append(method_name).append("\"").append(",");
 		add_catch.append("\"").append(user_definition).append("\"").append(",");
@@ -64,12 +64,12 @@ public class ExecutionImpl extends AnnotationImpl {
 		return advice_method;
 	}
 
-	public ExecutionImpl(TrackingHandle handle) {
+	public TrackingInterceptor(BasicTrackingHandle handle) {
 		super();
-		ExecutionImpl.tracking_handle = handle;
+		TrackingInterceptor.tracking_handle = handle;
 	}
 
-	private static TrackingHandle tracking_handle = null;
+	private static BasicTrackingHandle tracking_handle = null;
 
 	public static void insert_after_call_back(String class_name, String method_name, String user_definition, String full_method_name, long start_millis, long end_millis, Object return0) {
 		if (tracking_handle != null) {
